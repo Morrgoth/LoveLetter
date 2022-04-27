@@ -69,6 +69,12 @@
                             <noHeaderFiles>true</noHeaderFiles>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>server</id>
+                        <configuration>
+                            <mainClass>bb.love_letter.Server</mainClass>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
