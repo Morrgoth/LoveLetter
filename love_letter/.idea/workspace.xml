@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="655bba1e-2855-44a7-8a63-0f88aec13925" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,11 +65,6 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
-    </configuration>
-    <configuration name="Client-Server" type="CompoundRunConfigurationType">
-      <toRun name="Server" type="Application" />
-      <toRun name="bb.love_letter.Client" type="Application" />
-      <method v="2" />
     </configuration>
     <configuration name="bb.love_letter in love_letter" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="love_letter" />
