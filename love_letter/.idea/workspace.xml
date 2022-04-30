@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="655bba1e-2855-44a7-8a63-0f88aec13925" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/bb/love_letter/NameList.java" afterDir="false" />
+    <list default="true" id="655bba1e-2855-44a7-8a63-0f88aec13925" name="Changes" comment="testPush">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -109,6 +106,14 @@
       <option name="presentableId" value="Default" />
       <updated>1651081995705</updated>
     </task>
+    <task id="LOCAL-00001" summary="testPush">
+      <created>1651336848025</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1651336848025</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -122,7 +127,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="pk-1" />
+                        <option value="main" />
                       </list>
                     </value>
                   </entry>

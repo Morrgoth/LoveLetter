@@ -9,7 +9,7 @@ public class NameList {
 adden
 l;schen
 vergleichen
-        auf searaten branch
+
 
 public void String Name
 if name .equals(String)
