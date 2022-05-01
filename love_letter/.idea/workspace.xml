@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="655bba1e-2855-44a7-8a63-0f88aec13925" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/bb/love_letter/ClientHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bb/love_letter/ClientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bb/love_letter/ClientController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bb/love_letter/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bb/love_letter/Server.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +54,20 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
 }</component>
-  <component name="RunManager" selected="Compound.Client-Server">
+  <component name="RunManager" selected="Compound.Client-Client-Server">
+    <configuration name="Client" type="Application" factoryName="Application" singleton="false" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="bb.love_letter.Client" />
+      <module name="love_letter" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="bb.love_letter.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Server" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="bb.love_letter.Server" />
       <module name="love_letter" />
@@ -71,18 +81,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="bb.love_letter.Client" type="Application" factoryName="Application" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="bb.love_letter.Client" />
-      <module name="love_letter" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="bb.love_letter.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
+    <configuration name="Client-Client-Server" type="CompoundRunConfigurationType">
+      <toRun name="Server" type="Application" />
+      <toRun name="Client" type="Application" />
+      <method v="2" />
     </configuration>
     <configuration name="bb.love_letter in love_letter" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="love_letter" />
@@ -110,9 +112,10 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.bb.love_letter.Client" />
+      <item itemvalue="Application.Client" />
       <item itemvalue="Application.Server" />
       <item itemvalue="Compound.Client-Server" />
+      <item itemvalue="Compound.Client-Client-Server" />
       <item itemvalue="JUnit.bb.love_letter in love_letter" />
     </list>
     <recent_temporary>
