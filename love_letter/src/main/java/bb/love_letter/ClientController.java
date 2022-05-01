@@ -3,10 +3,7 @@ package bb.love_letter;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -18,9 +15,8 @@ public class ClientController {
     @FXML
     protected void onHelloButtonClick() {
         try(Socket socket = new Socket("localhost", PORT)) {
-            InputStream input = socket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-            String msg = reader.readLine();
+            DataInputStream inputStream = new DataInputStream(socket.getInputStream());
+            String msg = inputStream.readUTF();
             welcomeText.setText(msg);
 
         } catch (UnknownHostException ex) {

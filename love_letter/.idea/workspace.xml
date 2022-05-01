@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="655bba1e-2855-44a7-8a63-0f88aec13925" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/bb/love_letter/ClientHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/bb/love_letter/ClientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bb/love_letter/ClientController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/bb/love_letter/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bb/love_letter/Server.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,7 +37,9 @@
     </option>
   </component>
   <component name="ProjectId" id="28OK3dfQkhrbjR5kCfwjS2zL6rO" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="false" id="Update" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -133,7 +137,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="ba-1" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
