@@ -11,7 +11,7 @@ public class NameList {
         if(nameList.contains(clientName)) {
 
             System.out.println("This name is already taken.\nChoose another name, please.");
-            break;
+            //break;
         }
         else {
             nameList.add(clientName);
@@ -26,7 +26,7 @@ public class NameList {
         if (nameList.contains(clientName)) {
             System.out.println(clientName + " " + "has left the chat.");
             nameList.remove(clientName);
-            break;
+            //break;
         }
         //test purpose
         else {
