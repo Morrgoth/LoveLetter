@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="655bba1e-2855-44a7-8a63-0f88aec13925" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/bb/love_letter/ListClientNames.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/bb/love_letter/ListClientNames.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bb/love_letter/ListClientNames.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +32,9 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="28OK3dfQkhrbjR5kCfwjS2zL6rO" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="false" id="Update" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -48,7 +49,14 @@
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Veronika/Documents/Studium/Projekte/blinde_bonbons/love_letter&quot;
   }
 }</component>
-  <component name="RunManager" selected="Compound.Client-Server">
+  <component name="RunManager" selected="Application.ClientList">
+    <configuration name="ClientList" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="bb.love_letter.ListClientNames" />
+      <module name="love_letter" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Server" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="bb.love_letter.Server" />
       <module name="love_letter" />
@@ -90,6 +98,7 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.ClientList" />
       <item itemvalue="Application.bb.love_letter.Client" />
       <item itemvalue="Application.Server" />
       <item itemvalue="Compound.Client-Server" />
@@ -97,6 +106,7 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.bb.love_letter in love_letter" />
         <item itemvalue="JUnit.bb.love_letter in love_letter" />
       </list>
     </recent_temporary>
@@ -112,6 +122,7 @@
       <workItem from="1651333867571" duration="1485000" />
       <workItem from="1651390706330" duration="1661000" />
       <workItem from="1651394563781" duration="5778000" />
+      <workItem from="1651495166653" duration="906000" />
     </task>
     <servers />
   </component>
