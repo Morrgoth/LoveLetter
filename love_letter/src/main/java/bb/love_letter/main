@@ -5,36 +5,26 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static boolean checkNames(ArrayList<String> players, String testName) {
-        return !players.contains(testName);
-    }
-
-    public static void nameChecker(ArrayList<String> players, String testName) {
-        //size of the set
-        int n = players.size();
-
-        for (int i = 0; i < n - 1; i++) {
-            try {
-                players.get(n).equals(players.get(i));
-            } catch (Exception sameName) {
-                System.out.println("This name is already included as a player in the list");
-            }
-        }
-    }
-
     public static void main(String args[]) {
         //array list delivered from different module
         ArrayList<String> players = new ArrayList<>();
+        //test variables
         players.add("abcd");
         players.add("agsgdh");
         players.add("qwerty");
         players.add("hahah");
 
         while (true) {
+            System.out.print("Please enter your nickname: ");
             Scanner sc = new Scanner(System.in);
-            System.out.print("Please enter your nickname.");
-
             String newName = sc.nextLine();
-
-            nameChecker(players, newName);
+            if(players.contains(newName)){
+                System.out.println("This name is already taken");
+            }
+            else{
+                players.add(newName);
+                System.out.println(players);
+            }
         }
+    }
+}
