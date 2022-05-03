@@ -7,10 +7,16 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class ClientController {
+public class LoginController {
     static final int PORT = 6868;
     @FXML
     private Label welcomeText;
+    public LoginModel model;
+
+    public LoginController (LoginModel model) {
+        this.model = model;
+    }
+
 
     @FXML
     protected void onHelloButtonClick() {
