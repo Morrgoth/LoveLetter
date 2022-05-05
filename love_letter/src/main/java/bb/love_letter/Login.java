@@ -16,7 +16,7 @@ public class Login extends Application {
         LoginController loginController = new LoginController(loginModel);
         LoginView loginView = new LoginView(loginModel, loginController);
 
-        Scene scene = new Scene(loginView.asParent(), 800, 600);
+        Scene scene = new Scene(loginView.asParent(), 300, 350);
         stage.setTitle("Login");
         stage.setScene(scene);
         stage.show();
