@@ -1,5 +1,9 @@
 package bb.love_letter;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -7,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 public class LoginView {
@@ -22,6 +27,8 @@ public class LoginView {
         this.model = model;
         this.controller = controller;
         buildUI();
+        setupListeners();
+        observeModelandUpdate();
     }
 
     private void buildUI() {
@@ -49,6 +56,30 @@ public class LoginView {
         view.addRow(4, usernameField);
         view.addRow(5, button);
         view.addRow(6, errorLabel);
+    }
+
+    private void setupListeners() {
+        button.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                System.out.println("Clicked");
+                String ip = ipField.getText();
+                int port = Integer.parseInt(portField.getText());
+                String username = usernameField.getText();
+                controller.connectToServer(ip, port, username);
+            }
+        });
+    }
+
+    private void observeModelandUpdate() {
+        model.errorMessageProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                if (!t1.equals(s) && !t1.equals("")) {
+                    errorLabel.setText(t1);
+                }
+            }
+        });
     }
 
     public Parent asParent() {
