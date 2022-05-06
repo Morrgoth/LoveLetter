@@ -15,6 +15,8 @@ public class Server {
             serverSocket.setReuseAddress(true);
             InetAddress inetAddress = InetAddress.getLocalHost();
             System.out.println("The server is running on " + inetAddress.getHostAddress() + ":" + PORT);
+
+            //while -Schleife + Switch - Case - Fälle wurden von Veronika Heckel bearbeitet
             while (true) {
                 try {
                     Socket socket = serverSocket.accept();

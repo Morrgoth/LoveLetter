@@ -2,6 +2,8 @@ package bb.love_letter;
 import java.util.ArrayList;
 import java.util.Scanner;
 // Create an ArrayList object
+
+//Diese Klasse wurde von Veronika Heckel bearbeitet
 public class UserList {
      private ArrayList<User> userList = new ArrayList<>();
 
