@@ -2,7 +2,7 @@ package bb.love_letter;
 import java.util.ArrayList;
 
 // Create an ArrayList object
-public class NameList {
+public class UserList {
     ArrayList<String> nameList = new ArrayList<>();
 
     // adds a clientName to NameList-array
