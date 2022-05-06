@@ -12,7 +12,6 @@ public class ChatView {
 
 
     private GridPane view;
-
     private TextField messageField;
     private Label sumLabel;
     private Button button;
@@ -27,7 +26,6 @@ public class ChatView {
 
     private void buildUI() {
         view = new GridPane();
-
         messageField = new TextField();
         messageField.setPromptText("Type your message here...");
         button = new Button("Send");
@@ -35,10 +33,7 @@ public class ChatView {
         view.setVgap(8);
 
         view.addRow(3, new Label(), messageField);
-
         view.addRow(3, button);
-
-        view.addColumn(0);
     }
 
     public Parent asParent() {
