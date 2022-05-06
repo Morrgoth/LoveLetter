@@ -13,7 +13,7 @@ public class Chat extends Application {
         ChatModel loginModel = new ChatModel();
         ChatController loginController = new ChatController(loginModel);
         ChatView loginView = new ChatView(loginModel, loginController);
-        Scene scene = new Scene(loginView.asParent(), 800, 600);
+        Scene scene = new Scene(loginView.asParent(), 700, 500);
         stage.setTitle("Chat");
         stage.setScene(scene);
         stage.show();

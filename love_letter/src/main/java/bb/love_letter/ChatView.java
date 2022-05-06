@@ -12,8 +12,8 @@ public class ChatView {
 
 
     private GridPane view;
-    private TextField xField;
-    private TextField yField;
+
+    private TextField messageField;
     private Label sumLabel;
     private Button button;
 
@@ -27,13 +27,15 @@ public class ChatView {
 
     private void buildUI() {
         view = new GridPane();
-        xField = new TextField();
-        yField = new TextField();
+
+        messageField = new TextField();
+        messageField.setPromptText("Type your message here...");
         button = new Button("Send");
 
-        view.setVgap(80);
-        view.addRow(0, new Label("X:"), xField);
-        view.addRow(1, new Label("Y:"), yField);
+        view.setVgap(8);
+
+        view.addRow(3, new Label(), messageField);
+
         view.addRow(3, button);
 
         view.addColumn(0);
