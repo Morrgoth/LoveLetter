@@ -1,15 +1,13 @@
 package bb.love_letter;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 public class LoginModel {
     private final StringProperty ip = new SimpleStringProperty();
     private final IntegerProperty port = new SimpleIntegerProperty();
     private final StringProperty username = new SimpleStringProperty();
     private final StringProperty errorMessage = new SimpleStringProperty();
+    private final BooleanProperty successfulLogin = new SimpleBooleanProperty(false);
     public final StringProperty ipProperty() {
         return this.ip;
     }
@@ -45,5 +43,14 @@ public class LoginModel {
     }
     public final void setErrorMessage(String errorMessage) {
         this.errorMessageProperty().set(errorMessage);
+    }
+    public final BooleanProperty successfulLoginProperty() {
+        return successfulLogin;
+    }
+    public final boolean getSuccessfulLogin() {
+        return this.successfulLoginProperty().get();
+    }
+    public final void setSuccessfulLogin(boolean successfulLogin) {
+        this.successfulLoginProperty().set(successfulLogin);
     }
 }
