@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 // Create an ArrayList object
 public class NameList {
-    ArrayList<String> nameList = new ArrayList<String>();
+    ArrayList<String> nameList = new ArrayList<>();
 
     // adds a clientName to NameList-array
     public void addName(String clientName){
