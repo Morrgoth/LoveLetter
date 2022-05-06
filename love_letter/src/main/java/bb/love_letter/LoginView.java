@@ -6,13 +6,18 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class LoginView {
     private GridPane view;
@@ -74,9 +79,27 @@ public class LoginView {
     private void observeModelandUpdate() {
         model.errorMessageProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                if (!t1.equals(s) && !t1.equals("")) {
-                    errorLabel.setText(t1);
+            public void changed(ObservableValue<? extends String> observableValue, String oldVal, String newVal) {
+                if (!newVal.equals(oldVal) && !newVal.equals("")) {
+                    errorLabel.setText(newVal);
+                }
+            }
+        });
+
+        model.successfulLoginProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldVal, Boolean newVal) {
+                if (newVal) {
+                    // Successful login, open new window etc.
+                    ChatModel chatModel = new ChatModel();
+                    ChatController chatController = new ChatController(chatModel);
+                    ChatView chatView = new ChatView(chatModel, chatController);
+
+                    Stage stage = new Stage();
+                    stage.setTitle("Chat");
+                    stage.setScene(new Scene(chatView.asParent(), 700, 500));
+                    stage.show();
+                    view.getScene().getWindow().hide();
                 }
             }
         });

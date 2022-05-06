@@ -9,7 +9,6 @@ import java.io.IOException;
 public class ClientApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        //FXMLLoader fxmlLoader = new FXMLLoader(Login.class.getResource("client.fxml"));
         LoginModel loginModel = new LoginModel();
         LoginController loginController = new LoginController(loginModel);
         LoginView loginView = new LoginView(loginModel, loginController);

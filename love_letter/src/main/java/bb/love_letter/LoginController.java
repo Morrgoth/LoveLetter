@@ -23,6 +23,9 @@ public class LoginController {
             DataInputStream inputStream = new DataInputStream(socket.getInputStream());
             // The request to login with the provided username should be sent here
             String msg = inputStream.readUTF();
+            if (msg.equals("Hi there, I am the server! beep boop")) {
+                model.setSuccessfulLogin(true);
+            }
             model.setErrorMessage(msg);
 
         } catch (UnknownHostException ex) {
