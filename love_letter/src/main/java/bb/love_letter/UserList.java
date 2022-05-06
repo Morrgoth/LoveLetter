@@ -42,24 +42,24 @@ public class UserList {
         }
     }
 
-    public static void main(String[] args) {
-        while(true){
-            Scanner sc = new Scanner(System.in);
-            System.out.print("Please enter your nickname.");
-
-            String name = sc.nextLine();
-
-            boolean ifAcceptable = checkNames(players, name);
-            if(ifAcceptable){
-                players.add(name);
-                //System.out.println(players.toString());
-                System.out.println("The entered nickname is acceptable.");
-                break;
-            }else{
-                System.out.println("The entered nickname exists already. Please enter an another name:");
-            }
-        }
-    }
+    //public static void main(String[] args) {
+    //    while(true){
+    //        Scanner sc = new Scanner(System.in);
+    //        System.out.print("Please enter your nickname.");
+//
+    //        String name = sc.nextLine();
+//
+    //        boolean ifAcceptable = checkNames(players, name);
+    //        if(ifAcceptable){
+    //            players.add(name);
+    //            //System.out.println(players.toString());
+    //            System.out.println("The entered nickname is acceptable.");
+    //            break;
+    //        }else{
+    //            System.out.println("The entered nickname exists already. Please enter an another name:");
+    //        }
+    //    }
+    //}
 
 
 
