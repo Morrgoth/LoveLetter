@@ -4,15 +4,18 @@ package bb.love_letter;
 public class ChatController {
     public ChatModel model;
 
+
     public ChatController(ChatModel chatModel) {
+        this.model= chatModel;
     }
 
-    //public ChatController (ChatModel model) {
-        //this.model = model;
+    public void addChatMessage(ChatMessage chatMessage) {
+        this.model.addChatMessage(chatMessage);
     }
-
-    //private void getMessages(String username, String message){
-        //model.setUsername(username);
+    public void addUser(User user){
+        this.model.addUser(user);
+    }
+    }
 
 
 
