@@ -3,12 +3,12 @@ package bb.love_letter;
 import java.io.*;
 import java.net.Socket;
 
-public class ClientHandler implements Runnable{
+public class ServerSessionHandler implements Runnable {
     private final Socket clientSocket;
     private final DataOutput clientOutput;
     private final DataInput clientInput;
 
-    public ClientHandler(Socket socket, DataOutput output, DataInput input)
+    public ServerSessionHandler(Socket socket, DataOutput output, DataInput input)
     {
         this.clientSocket = socket;
         this.clientOutput = output;
