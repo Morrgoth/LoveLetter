@@ -17,7 +17,7 @@ public class Server {
                     Socket socket = serverSocket.accept();
                     DataOutput output = new DataOutputStream(socket.getOutputStream());
                     DataInput input = new DataInputStream(socket.getInputStream());
-                    ClientHandler clientSock = new ClientHandler(socket, output, input);
+                    ServerSessionHandler clientSock = new ServerSessionHandler(socket, output, input);
                     Thread thread = new Thread(clientSock);
                     thread.start();
                 } catch (IOException e) {
