@@ -2,6 +2,7 @@ package bb.love_letter;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class ServerSessionHandler implements Runnable{
     private Socket clientSocket;
@@ -21,6 +22,7 @@ public class ServerSessionHandler implements Runnable{
         try {
             clientOutput.writeUTF("Hi there, I am the server! beep boop");
             clientOutput.flush();
+
 
             //Receive message from client
             clientInput = (ObjectInputStream) clientSocket.getInputStream();

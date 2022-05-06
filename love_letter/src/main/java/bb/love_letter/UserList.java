@@ -6,7 +6,7 @@ public class UserList {
      private ArrayList<User> userList = new ArrayList<>();
 
     // adds a clientName to UserList-array
-    public  void addName(User user) {
+    public boolean addName(User user) {
         boolean foundName = false;
         for (User u : userList) {
             if (u.getName().equals(user.getName())) {
@@ -19,10 +19,11 @@ public class UserList {
             userList.add(user);
             System.out.println("You can keep this name.");
         }
+        return !foundName;
     }
 
     //removeName a clientName from UserList-array
-    public void removeName(User user) {
+    public boolean removeName(User user) {
         boolean foundName = true;
         for(User u: userList){
             if (u.getName().equals(user.getName())){
@@ -35,6 +36,7 @@ public class UserList {
             userList.remove(user);
             System.out.println(user.getName() + " " + "has left the chat.");
         }
+        return foundName;
     }
 
     //print whole userList to client
@@ -43,6 +45,7 @@ public class UserList {
             System.out.println(u.getName());
         }
     }
+
 
 
 
