@@ -6,8 +6,6 @@ import javafx.stage.Stage;
 
 public class Chat extends Application {
 
-
-
     @Override
     public void start(Stage stage) {
         ChatModel loginModel = new ChatModel();
