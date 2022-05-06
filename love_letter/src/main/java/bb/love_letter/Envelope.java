@@ -12,7 +12,7 @@ public class Envelope implements Serializable {
     }
 
     public Object getPayload(){
-        return this.payload;
+        return payload;
     }
 
     public String getType(){
