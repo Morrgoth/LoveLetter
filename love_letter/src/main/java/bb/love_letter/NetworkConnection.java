@@ -14,6 +14,9 @@ public class NetworkConnection {
 
     private NetworkConnection(){}
 
+    public User getUser(){
+        return user;
+    }
     public Socket getSocket(){
         return socket;
     }
