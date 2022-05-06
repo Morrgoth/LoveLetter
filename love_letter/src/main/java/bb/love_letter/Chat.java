@@ -17,6 +17,8 @@ public class Chat extends Application {
         ChatView chatView = new ChatView(chatModel, chatController);
 
         Scene scene = new Scene(chatView.asParent(), 700, 500);
+        String css = this.getClass().getResource("Chat.css").toExternalForm();
+        scene.getStylesheets().add(css);
         stage.setTitle("chat");
         stage.setScene(scene);
         stage.show();
