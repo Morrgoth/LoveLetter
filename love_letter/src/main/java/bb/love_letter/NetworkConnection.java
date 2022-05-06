@@ -7,11 +7,12 @@ import java.net.Socket;
 public class NetworkConnection {
     private static NetworkConnection instance = null;
 
+    User user;
     Socket socket;
     ObjectInputStream inputStream;
     ObjectOutputStream outputStream;
 
-    private NetworkConnection (){}
+    private NetworkConnection(){}
 
     public Socket getSocket(){
         return socket;
@@ -23,10 +24,11 @@ public class NetworkConnection {
         return outputStream;
     }
 
-    public void init(Socket socket,ObjectInputStream inputStream,ObjectOutputStream outputStream) {
+    public void init(Socket socket,ObjectInputStream inputStream,ObjectOutputStream outputStream,User user) {
         this.socket = socket;
         this.inputStream = inputStream;
         this.outputStream = outputStream;
+        this.user = user;
     }
 
     public static NetworkConnection getInstance() {
