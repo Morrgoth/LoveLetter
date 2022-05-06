@@ -1,7 +1,7 @@
 package bb.love_letter;
 
 public class User {
-    private final String name;
+    private String name;
 
     public User (String name){
         this.name = name;
