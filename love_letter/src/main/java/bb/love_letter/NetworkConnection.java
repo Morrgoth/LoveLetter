@@ -12,7 +12,7 @@ public class NetworkConnection {
     ObjectInputStream inputStream;
     ObjectOutputStream outputStream;
 
-    private NetworkConnection(){}
+    NetworkConnection(){}
 
     public User getUser(){
         return user;
