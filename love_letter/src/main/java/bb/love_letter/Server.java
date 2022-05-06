@@ -15,8 +15,8 @@ public class Server {
             while(true) {
                 try {
                     Socket socket = serverSocket.accept();
-                    DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-                    DataInputStream input = new DataInputStream(socket.getInputStream());
+                    ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+                    ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
                     ServerSessionHandler clientSock = new ServerSessionHandler(socket, output, input);
                     Thread thread = new Thread(clientSock);
                     thread.start();

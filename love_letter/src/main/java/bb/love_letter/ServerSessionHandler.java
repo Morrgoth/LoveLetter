@@ -5,10 +5,10 @@ import java.net.Socket;
 
 public class ServerSessionHandler implements Runnable{
     private Socket clientSocket;
-    private DataOutputStream clientOutput;
-    private DataInputStream clientInput;
+    private ObjectOutputStream clientOutput;
+    private ObjectInputStream clientInput;
 
-    public ServerSessionHandler(Socket socket, DataOutputStream output, DataInputStream input)
+    public ServerSessionHandler(Socket socket, ObjectOutputStream output, ObjectInputStream input)
     {
         clientSocket = socket;
         clientOutput = output;
@@ -23,21 +23,14 @@ public class ServerSessionHandler implements Runnable{
             clientOutput.flush();
 
             //Receive message from client
-            clientInput = (DataInputStream) clientSocket.getInputStream();
-            //create a read-buffer for message from client
-            byte[] readBuffer = new byte[64];
-            clientInput.read(readBuffer);
-            String msgFromClient = new String(readBuffer);
+            clientInput = (ObjectInputStream) clientSocket.getInputStream();
+            byte[] readObject = new byte[64];
+            clientInput.read(readObject);
+            String msgFromClient = new String(readObject);
             System.out.println("The message from client: "+ msgFromClient);
 
             //Deal with the message from client
-            clientOutput = (DataOutputStream) clientSocket.getOutputStream();
-            //create a buffer to write message for replying client
-            byte[] writeBuffer = new byte[64];
-            /*if(nameList.contains(msgFromClient)){
-                writeBuffer = "The entered nickname exists already".getBytes();
-                clientOutput.write(writeBuffer);
-            }*/
+            clientOutput = (ObjectOutputStream) clientSocket.getOutputStream();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
