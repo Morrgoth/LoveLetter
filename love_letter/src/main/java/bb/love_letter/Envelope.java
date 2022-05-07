@@ -6,7 +6,7 @@ public class Envelope implements Serializable {
     private  Object payload;
     private  String type;
 
-    public Envelope(final Object payload,String type){
+    public Envelope(Object payload,String type){
         this.payload = payload;
         this.type = type;
     }
