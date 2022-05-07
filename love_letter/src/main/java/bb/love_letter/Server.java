@@ -5,19 +5,33 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Server {
+public class Server implements Runnable{
     static final int PORT = 6868;
     private static UserList userList = new UserList();
     private static ArrayList<Thread> userThreads = new ArrayList<>();
 
+    //broadcast - Methode von Veronika Heckel bearbeitet
+    private void broadcast(Envelope envelope){
+        //sendet nachricht an alle clients + ruft Thread notify auf
+        /*
+        check von wem nachricht gekommen ist + check über userList
+        sende nachricht an alle anderen clients außer senderClient bzw. alle mit CLient
+         */
+        for(Thread thread: userThreads){
+            thread.notify(envelope);
+        }
+    }
 
-    //login -Methode wurde von Veronika Heckel bearbeitet
-    private static void login(Envelope envelope, Socket socket, ObjectOutputStream output, ObjectInputStream input){
+
+
+
+    //login -Methode von Veronika Heckel bearbeitet
+    private void login(Envelope envelope, Socket socket, ObjectOutputStream output, ObjectInputStream input){
         if (envelope.getType().equals("User")) {
             User user = (User)envelope.getPayload();
             if (userList.addName(user)) {
                 System.out.println(user.getName() + " has entered Chatroom!");
-                ServerSessionHandler serverSessionHandler = new ServerSessionHandler(socket, output, input);
+                ServerSessionHandler serverSessionHandler = new ServerSessionHandler(socket, output, input, server);
                 Thread thread = new Thread(serverSessionHandler);
                 thread.start();
                 userThreads.add(thread);
@@ -29,14 +43,12 @@ public class Server {
 
 
 
-    public static void main(String[] args) {
-
+    @Override
+    public void run() {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             serverSocket.setReuseAddress(true);
             InetAddress inetAddress = InetAddress.getLocalHost();
             System.out.println("The server is running on " + inetAddress.getHostAddress() + ":" + PORT);
-
-            //while -Schleife wurden von Veronika Heckel bearbeitet
             while (true) {
                 try {
                     Socket socket = serverSocket.accept();
