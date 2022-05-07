@@ -1,5 +1,7 @@
 package bb.love_letter;
 
+//Diese Klasse wurde von Veronika Heckel bearbeitet
+
 public class User {
     private String name;
 
