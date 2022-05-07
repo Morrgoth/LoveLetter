@@ -1,45 +1,46 @@
 package bb.love_letter;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
+import jdk.internal.org.objectweb.asm.ClassReader;
+
 import java.io.*;
-import java.net.*;
+//import java.net.*;
 
-public class ClientSessionHandler implements Runnable {
-
-
-    public ClientSessionHandler() {
+public class ClientSessionHandler implements Runnable{
+    private ObjectInputStream serverInput;
+    private ChatController chatController;
+/*
+im Envelope wird type user || chatMessage Type durch getType() an Switch gegeben;
+danach switch case von Type - wenn user mach USER || wenn chatMessage mach CHATMESSAGE
+Weiterleitung an chatController
+ */
+    public ClientSessionHandler(ChatController chatController) {
+        this.chatController = chatController;
     }
 
     @Override
     public void run() {
         System.out.println("Thread started running");
+
         while (true) {
             try {
                 //Receive message from server
-                NetworkConnection.getInstance().getObjectInputStream().readObject() = (ObjectInputStream) networkConnection.socket.getInputStream();
-                byte[] readObject = new byte[64];
-                serverInput.read(readObject);
-                String msgFromClient = new String(readObject);
-                System.out.println("The message from client: " + msgFromClient);
+                Envelope envelope =(Envelope) NetworkConnection.getInstance().getObjectInputStream().readObject();
 
-                try (
-                        Socket clientSocket = serverSocket.accept();
-                        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-                        BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                ) {
-
-
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                switch (Envelope.getType()) {
+                    case Envelope.TypeEnum.USER:
+                        //fill in action for ChatHandler
+                        break;
+                    case Envelope.TypeEnum.CHATMESSAGE:
+                        //fill in action for ChatHandler
+                        break;
                 }
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
+
         }
     }
 }

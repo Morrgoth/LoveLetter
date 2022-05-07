@@ -4,18 +4,25 @@ import java.io.*;
 
 public class Envelope implements Serializable {
     private  Object payload;
-    private  String type;
+    private  TypeEnum type;
+
+    //enum * user & chatMessage ) speichert in string type
+    public static enum TypeEnum{
+        USER,
+        CHATMESSAGE
+    }
 
     public Envelope(final Object payload,String type){
         this.payload = payload;
-        this.type = type;
+        this.Type = type;
     }
 
     public Object getPayload(){
         return payload;
     }
 
-    public String getType(){
+    public TypeEnum getType(){
+
         return type;
     }
 
