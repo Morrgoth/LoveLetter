@@ -13,7 +13,7 @@ public class Server implements Runnable{
     private static ArrayList<Pair<ServerSessionHandler, Thread>> sessionList= new ArrayList<>();
 
     //broadcast - Methode von Veronika Heckel bearbeitet
-    private void broadcast(Envelope envelope) throws IOException {
+    public void broadcast(Envelope envelope) throws IOException {
         //sendet nachricht an alle clients + ruft Thread notify auf
         /*
         check von wem nachricht gekommen ist + check über userList

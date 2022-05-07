@@ -39,4 +39,3 @@ public class ServerSessionHandler implements Runnable{
 }
 
 
-networkConnection(socket)
