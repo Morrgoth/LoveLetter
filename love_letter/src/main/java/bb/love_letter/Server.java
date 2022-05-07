@@ -18,7 +18,7 @@ public class Server implements Runnable{
         sende nachricht an alle anderen clients außer senderClient bzw. alle mit CLient
          */
         for(Thread thread: userThreads){
-            thread.notify(envelope);
+            thread.sendMessage(envelope);
         }
     }
 
@@ -26,7 +26,7 @@ public class Server implements Runnable{
 
 
     //login -Methode von Veronika Heckel bearbeitet
-    private void login(Envelope envelope, Socket socket, ObjectOutputStream output, ObjectInputStream input){
+    private void login(Envelope envelope, Socket socket, ObjectOutputStream output, ObjectInputStream input, Server server){
         if (envelope.getType().equals("User")) {
             User user = (User)envelope.getPayload();
             if (userList.addName(user)) {
@@ -55,7 +55,7 @@ public class Server implements Runnable{
                     ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
                     ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
                     Envelope envelope = (Envelope) input.readObject();
-                    login(envelope, socket, output, input);
+                    login(envelope, socket, output, input, this);
                 }catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);
                 }

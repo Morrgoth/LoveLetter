@@ -18,7 +18,7 @@ public class ServerSessionHandler implements Runnable{
         this.server = server;
     }
 
-    public void notify(Envelope envelope) throws IOException {
+    public void sendMessage(Envelope envelope) throws IOException {
         clientOutput.writeObject(envelope);
     }
 
