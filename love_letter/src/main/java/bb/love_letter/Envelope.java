@@ -7,14 +7,14 @@ public class Envelope implements Serializable {
     private  TypeEnum type;
 
     //enum * user & chatMessage ) speichert in string type
-    public static enum TypeEnum{
+    public enum TypeEnum{
         USER,
         CHATMESSAGE
     }
 
-    public Envelope(final Object payload,String type){
+    public Envelope(final Object payload, TypeEnum type){
         this.payload = payload;
-        this.Type = type;
+        this.type = type;
     }
 
     public Object getPayload(){
