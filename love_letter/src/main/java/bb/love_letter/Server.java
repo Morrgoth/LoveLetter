@@ -11,7 +11,7 @@ public class Server implements Runnable{
     private static ArrayList<Thread> userThreads = new ArrayList<>();
 
     //broadcast - Methode von Veronika Heckel bearbeitet
-    private void broadcast(Envelope envelope){
+    public void broadcast(Envelope envelope){
         //sendet nachricht an alle clients + ruft Thread notify auf
         /*
         check von wem nachricht gekommen ist + check über userList
