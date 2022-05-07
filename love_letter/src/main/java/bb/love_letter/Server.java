@@ -1,5 +1,7 @@
 package bb.love_letter;
 
+import javafx.util.Pair;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -8,17 +10,17 @@ import java.util.Scanner;
 public class Server implements Runnable{
     static final int PORT = 6868;
     private static UserList userList = new UserList();
-    private static ArrayList<Thread> userThreads = new ArrayList<>();
+    private static ArrayList<Pair<ServerSessionHandler, Thread>> sessionList= new ArrayList<>();
 
     //broadcast - Methode von Veronika Heckel bearbeitet
-    private void broadcast(Envelope envelope){
+    private void broadcast(Envelope envelope) throws IOException {
         //sendet nachricht an alle clients + ruft Thread notify auf
         /*
         check von wem nachricht gekommen ist + check über userList
         sende nachricht an alle anderen clients außer senderClient bzw. alle mit CLient
          */
-        for(Thread thread: userThreads){
-            thread.sendMessage(envelope);
+        for(Pair pair: sessionList){
+            ((ServerSessionHandler)pair.getKey()).sendMessage(envelope);
         }
     }
 
@@ -34,13 +36,17 @@ public class Server implements Runnable{
                 ServerSessionHandler serverSessionHandler = new ServerSessionHandler(socket, output, input, server);
                 Thread thread = new Thread(serverSessionHandler);
                 thread.start();
-                userThreads.add(thread);
+                sessionList.add(new Pair<>(serverSessionHandler, thread));
             }
         }else{
             System.out.println("Error: Unauthorized request!");
         }
     }
 
+    //Logout von User durch Message "bye"
+    private void logout(Envelope envelope){
+
+    }
 
 
     @Override
