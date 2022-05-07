@@ -1,6 +1,6 @@
 package bb.love_letter;
 
-import jdk.internal.org.objectweb.asm.ClassReader;
+import bb.love_letter.Envelope.TypeEnum;
 
 import java.io.*;
 //import java.net.*;
@@ -24,14 +24,16 @@ Weiterleitung an chatController
         while (true) {
             try {
                 //Receive message from server
-                Envelope envelope =(Envelope) NetworkConnection.getInstance().getObjectInputStream().readObject();
+                Envelope envelope = (Envelope) NetworkConnection.getInstance().getObjectInputStream().readObject();
 
-                switch (Envelope.getType()) {
-                    case Envelope.TypeEnum.USER:
-                        //fill in action for ChatHandler
+                switch (envelope.getType()) {
+                    case USER:
+                        User user = (User) envelope.getPayload();
+                        chatController.addUser(user);
                         break;
-                    case Envelope.TypeEnum.CHATMESSAGE:
-                        //fill in action for ChatHandler
+                    case CHATMESSAGE:
+                        ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
+                        chatController.addChatMessage(chatMessage);
                         break;
                 }
 
