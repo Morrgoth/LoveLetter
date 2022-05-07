@@ -24,16 +24,22 @@ public class LoginController {
             ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
             // The request to login with the provided username should be sent here
             User me = new User(username);
-            Envelope envelope = new Envelope(me, Envelope.TypeEnum.USER);
+            UserEvent login = new UserEvent(me, UserEvent.UserEventType.LOGIN_REQUEST);
+            Envelope envelope = new Envelope(login, Envelope.TypeEnum.USEREVENT);
             outputStream.writeObject(envelope);
-            //if (msg.equals("Hi there, I am the server! beep boop")) {
-            //    model.setSuccessfulLogin(true);
-            //}
+            // Wait for response
+            Envelope response = (Envelope) inputStream.readObject();
+            UserEvent loginResponse = (UserEvent) response.getPayload();
+            if (loginResponse.getUserEventType() == UserEvent.UserEventType.LOGIN_CONFIRMATION) {
+                model.setSuccessfulLogin(true);
+            }
 
         } catch (UnknownHostException ex) {
             model.setErrorMessage("Server was not found! (Check ip and port)");
         } catch (IOException ex) {
             model.setErrorMessage("An I/O exception occured! (Check ip and port)");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 }

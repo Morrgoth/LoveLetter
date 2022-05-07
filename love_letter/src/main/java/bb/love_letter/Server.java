@@ -28,9 +28,10 @@ public class Server implements Runnable{
 
 
     //login -Methode von Veronika Heckel bearbeitet
-    private void login(Envelope envelope, Socket socket, ObjectOutputStream output, ObjectInputStream input, Server server){
-        if (envelope.getType().equals("USER")) {
-            User user = (User)envelope.getPayload();
+    private void login(Envelope envelope, Socket socket, ObjectOutputStream output, ObjectInputStream input, Server server) throws IOException {
+        if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
+            UserEvent userEvent = (UserEvent) envelope.getPayload();
+            User user = userEvent.getUser();
             if (userList.addName(user)) {
                 System.out.println(user.getName() + " has entered Chatroom!");
                 ServerSessionHandler serverSessionHandler = new ServerSessionHandler(socket, output, input, server);
@@ -38,6 +39,8 @@ public class Server implements Runnable{
                 thread.start();
                 sessionList.add(new Pair<>(serverSessionHandler, thread));
                 UserEvent event  = new UserEvent(user, UserEvent.UserEventType.LOGIN_CONFIRMATION);
+                Envelope envelope1 = new Envelope(event, Envelope.TypeEnum.USEREVENT);
+                output.writeObject(envelope1);
             }
         }else{
             System.out.println("Error: Unauthorized request!");
@@ -62,6 +65,7 @@ public class Server implements Runnable{
                     ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
                     ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
                     Envelope envelope = (Envelope) input.readObject();
+
                     login(envelope, socket, output, input, this);
                 }catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);

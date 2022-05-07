@@ -1,7 +1,9 @@
 package bb.love_letter;
 
 
-public class ChatMessage {
+import java.io.Serializable;
+
+public class ChatMessage implements Serializable {
     private User sender;
     private String message;
 

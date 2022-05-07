@@ -1,6 +1,8 @@
 package bb.love_letter;
 
-public class UserEvent {
+import java.io.Serializable;
+
+public class UserEvent implements Serializable {
     //wrapper klasse für User
 
     //attributes

@@ -25,9 +25,9 @@ public class ClientSessionHandler implements Runnable {
                 //Receive message from server
                 Envelope envelope = (Envelope) NetworkConnection.getInstance().getObjectInputStream().readObject();
                 switch (envelope.getType()) {
-                    case USER:
-                        User user = (User) envelope.getPayload();
-                        chatController.addUser(user);
+                    case USEREVENT:
+                        UserEvent userEvent = (UserEvent) envelope.getPayload();
+                        chatController.addUser(userEvent.getUser());
                         break;
                     case CHATMESSAGE:
                         ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
