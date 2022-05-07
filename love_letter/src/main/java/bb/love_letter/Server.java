@@ -27,7 +27,7 @@ public class Server implements Runnable{
 
     //login -Methode von Veronika Heckel bearbeitet
     private void login(Envelope envelope, Socket socket, ObjectOutputStream output, ObjectInputStream input, Server server){
-        if (envelope.getType().equals("User")) {
+        if (envelope.getType().equals("USER")) {
             User user = (User)envelope.getPayload();
             if (userList.addName(user)) {
                 System.out.println(user.getName() + " has entered Chatroom!");
