@@ -22,6 +22,7 @@ public class LoginController {
         try(Socket socket = new Socket(model.getIp(), model.getPort())) {
             DataInputStream inputStream = new DataInputStream(socket.getInputStream());
             // The request to login with the provided username should be sent here
+            System.out.println("Connection");
             String msg = inputStream.readUTF();
             if (msg.equals("Hi there, I am the server! beep boop")) {
                 model.setSuccessfulLogin(true);
