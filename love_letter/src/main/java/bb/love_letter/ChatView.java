@@ -3,8 +3,12 @@ package bb.love_letter;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 
 public class ChatView {
     public ChatModel model;
@@ -13,8 +17,8 @@ public class ChatView {
 
     private GridPane view;
     private TextField messageField;
-    private Label sumLabel;
-    private Button button;
+    private Button sentbutton;
+    private ScrollPane scroll;
 
 
 
@@ -26,14 +30,30 @@ public class ChatView {
 
     private void buildUI() {
         view = new GridPane();
+        scroll = new ScrollPane();
         messageField = new TextField();
         messageField.setPromptText("Type your message here...");
-        button = new Button("Send");
+        sentbutton = new Button("Send");
+        HBox chatBox = new HBox();
+        HBox.setHgrow(messageField, Priority.ALWAYS);
+        RowConstraints regRow = new RowConstraints();
+        regRow.setVgrow(Priority.ALWAYS);
+        view.getRowConstraints().add(regRow);
 
-        view.setVgap(8);
+        //scroll.setStyle("-fx-background: #FF0000");
+        chatBox.getChildren().addAll(messageField, sentbutton);
+        messageField.setPrefWidth(600);
+        sentbutton.setPrefWidth(100);
+        view.addRow(0,scroll);
+        view.addRow(1, chatBox);
 
-        view.addRow(3, new Label(), messageField);
-        view.addRow(3, button);
+
+
+
+
+
+
+
     }
 
     public Parent asParent() {
