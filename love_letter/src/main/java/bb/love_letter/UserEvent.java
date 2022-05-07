@@ -25,7 +25,9 @@ public class UserEvent {
         LOGIN_REQUEST,
         LOGOUT_REQUEST,
         LOGIN_CONFIRMATION,
+        LOGOUT_CONFIRMATION,
         LOGIN_ERROR
+
     }
 
 }
