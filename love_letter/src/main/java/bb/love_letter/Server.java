@@ -37,6 +37,7 @@ public class Server implements Runnable{
                 Thread thread = new Thread(serverSessionHandler);
                 thread.start();
                 sessionList.add(new Pair<>(serverSessionHandler, thread));
+                UserEvent event  = new UserEvent(user, UserEvent.UserEventType.LOGIN_CONFIRMATION);
             }
         }else{
             System.out.println("Error: Unauthorized request!");
