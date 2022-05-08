@@ -1,5 +1,6 @@
 package bb.love_letter;
 
+import com.google.gson.Gson;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -66,8 +67,10 @@ public class ChatView {
                 String message = messageField.getText();
                 ChatMessage chatMessage = new ChatMessage(NetworkConnection.getInstance().getUser(), message);
                 Envelope envelope = new Envelope(chatMessage, Envelope.TypeEnum.CHATMESSAGE);
+                Gson gson = new Gson();
+                String json = gson.toJson(envelope);
                 try {
-                    NetworkConnection.getInstance().getObjectOutputStream().writeObject(envelope);
+                    NetworkConnection.getInstance().getOutputStream().write(json);
                     messageField.setText("");
                 } catch (IOException e) {
                     throw new RuntimeException(e);

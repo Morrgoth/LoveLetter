@@ -1,39 +1,46 @@
 package bb.love_letter;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
 public class ServerSessionHandler implements Runnable{
-    private Socket clientSocket;
-    private ObjectOutputStream clientOutput;
-    private ObjectInputStream clientInput;
+    private ServerSocket clientSocket;
+
     private Server server;
 
-    public ServerSessionHandler(Socket socket, ObjectOutputStream output, ObjectInputStream input, Server server)
+    public ServerSessionHandler(ServerSocket socket, Server server)
     {
         clientSocket = socket;
-        clientOutput = output;
-        clientInput = input;
         this.server = server;
     }
 
     public void sendMessage(Envelope envelope) throws IOException {
-        clientOutput.writeObject(envelope);
+        Socket socket = clientSocket.accept();
+        PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
+        Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
+        String json = gson.toJson(envelope);
+        printWriter.println(json);
     }
 
     @Override
     public void run() {
-        System.out.println("Thread started running");
-        try {
-            while(true){
-                Envelope envelope = (Envelope) clientInput.readObject();
+        System.out.println("ServerSessionHandler Thread started running");
+        while (true) {
+            try (Socket socket = this.clientSocket.accept()){
+                InputStream input = socket.getInputStream();
+                BufferedReader in = new BufferedReader(new InputStreamReader(input));
+                String json = in.readLine();
+                Envelope envelope = Util.jsonToEnvelope(json);
                 server.broadcast(envelope);
+                socket.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        } catch (EOFException e) {
-            System.out.println("BS");
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
     }
 }

@@ -21,23 +21,18 @@ public class ClientSessionHandler implements Runnable {
         System.out.println("Thread started running");
 
         while (true) {
-            try {
-                //Receive message from server
-                Envelope envelope = (Envelope) NetworkConnection.getInstance().getObjectInputStream().readObject();
-                switch (envelope.getType()) {
-                    case USEREVENT:
-                        UserEvent userEvent = (UserEvent) envelope.getPayload();
-                        chatController.addUser(userEvent.getUser());
-                        break;
-                    case CHATMESSAGE:
-                        ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
-                        chatController.addChatMessage(chatMessage);
-                        break;
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
+            //Receive message from server
+            Envelope envelope = null;
+            envelope = null;//Util.readEnvelopeFromInputStream(NetworkConnection.getInstance().getInputStream());
+            switch (envelope.getType()) {
+                case USEREVENT:
+                    UserEvent userEvent = (UserEvent) envelope.getPayload();
+                    chatController.addUser(userEvent.getUser());
+                    break;
+                case CHATMESSAGE:
+                    ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
+                    chatController.addChatMessage(chatMessage);
+                    break;
             }
         }
     }

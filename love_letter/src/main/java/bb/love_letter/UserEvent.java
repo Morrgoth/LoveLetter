@@ -6,8 +6,8 @@ public class UserEvent implements Serializable {
     //wrapper klasse für User
 
     //attributes
-    private User user;
-    private UserEventType userEventType;
+    public User user;
+    public UserEventType userEventType;
 
     //konstruktor
     public UserEvent(User user, UserEventType userEventType){

@@ -1,9 +1,12 @@
 package bb.love_letter;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import javafx.util.Pair;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -28,19 +31,23 @@ public class Server implements Runnable{
 
 
     //login -Methode von Veronika Heckel bearbeitet
-    private void login(Envelope envelope, Socket socket, ObjectOutputStream output, ObjectInputStream input, Server server) throws IOException {
-        if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
-            UserEvent userEvent = (UserEvent) envelope.getPayload();
+    private void login(Envelope requestEnvelope, ServerSocket serverSocket, Socket socket, Server server) throws IOException {
+        if (requestEnvelope.getType() == Envelope.TypeEnum.USEREVENT) {
+            UserEvent userEvent = (UserEvent) requestEnvelope.getPayload();
             User user = userEvent.getUser();
             if (userList.addName(user)) {
                 System.out.println(user.getName() + " has entered Chatroom!");
-                ServerSessionHandler serverSessionHandler = new ServerSessionHandler(socket, output, input, server);
+                ServerSessionHandler serverSessionHandler = new ServerSessionHandler(serverSocket, server);
                 Thread thread = new Thread(serverSessionHandler);
                 thread.start();
                 sessionList.add(new Pair<>(serverSessionHandler, thread));
                 UserEvent event  = new UserEvent(user, UserEvent.UserEventType.LOGIN_CONFIRMATION);
-                Envelope envelope1 = new Envelope(event, Envelope.TypeEnum.USEREVENT);
-                output.writeObject(envelope1);
+                Envelope responseEnvelope = new Envelope(event, Envelope.TypeEnum.USEREVENT);
+                Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
+                String json = gson.toJson(responseEnvelope);
+                PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
+                printWriter.println(json);
+                System.out.println(json);
             }
         }else{
             System.out.println("Error: Unauthorized request!");
@@ -52,7 +59,6 @@ public class Server implements Runnable{
 
     }
 
-
     @Override
     public void run() {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
@@ -60,16 +66,14 @@ public class Server implements Runnable{
             InetAddress inetAddress = InetAddress.getLocalHost();
             System.out.println("The server is running on " + inetAddress.getHostAddress() + ":" + PORT);
             while (true) {
-                try {
-                    Socket socket = serverSocket.accept();
-                    ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-                    ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-                    Envelope envelope = (Envelope) input.readObject();
-
-                    login(envelope, socket, output, input, this);
-                }catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
+                Socket socket = serverSocket.accept();
+                InputStream input = socket.getInputStream();
+                BufferedReader in = new BufferedReader(new InputStreamReader(input));
+                String json = in.readLine();
+                System.out.println("Request: " + json);
+                Envelope request = Util.deserializeJsontoEnvelope(json);
+                login(request, serverSocket, socket, this);
+                socket.close();
             }
         }catch (IOException e) {
             throw new RuntimeException(e);

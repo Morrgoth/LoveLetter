@@ -67,7 +67,6 @@ public class LoginView {
         button.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                System.out.println("Clicked");
                 String ip = ipField.getText();
                 int port = Integer.parseInt(portField.getText());
                 String username = usernameField.getText();
