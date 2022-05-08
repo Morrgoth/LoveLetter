@@ -4,8 +4,10 @@ import java.io.DataInputStream;
 
 class MyThreadRead extends Thread{
     DataInputStream is;
-    public MyThreadRead(DataInputStream i){
+    User user;
+    public MyThreadRead(DataInputStream i, User user){
         is=i;
+        this.user = user;
     }
     public void run()
     {
@@ -17,7 +19,11 @@ class MyThreadRead extends Thread{
                 if(json != null) {
                     Envelope envelope = Util.deserializeJsontoEnvelope(json);
                     if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
-                        System.out.println("UserEvent: TODO");
+                        UserEvent userEvent = (UserEvent) envelope.getPayload();
+                        User newUser = userEvent.getUser();
+                        if (!newUser.getName().equals(this.user.getName())) {
+                            System.out.println(user.getName() + " joined the room");
+                        }
                     } else if (envelope.getType() == Envelope.TypeEnum.CHATMESSAGE) {
                         ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
                         System.out.println(chatMessage.getSender().getName() + ": " + chatMessage.getMessage());

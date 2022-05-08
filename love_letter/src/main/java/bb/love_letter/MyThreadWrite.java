@@ -26,12 +26,15 @@ class MyThreadWrite extends Thread{
     public void run()
     {
         try{
+            UserEvent loginEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_CONFIRMATION);
+            Envelope loginNotification = new Envelope(loginEvent, Envelope.TypeEnum.USEREVENT);
+            Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
+            os.writeUTF(gson.toJson(loginNotification));
             while(true){
                 // SEND MESSAGE TO SERVER
                 String msg = br.readLine();
                 ChatMessage chatMessage = new ChatMessage(user, msg);
                 Envelope envelope = new Envelope(chatMessage, Envelope.TypeEnum.CHATMESSAGE);
-                Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
                 String json = gson.toJson(envelope);
                 os.writeUTF(json);
             }
