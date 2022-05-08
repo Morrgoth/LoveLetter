@@ -28,7 +28,8 @@ public class NetworkConnection {
         return outputStream;
     }
 
-    public void init(String ip, int port, User user) {
+    public void init(Socket socket, String ip, int port, User user) {
+        this.socket = socket;
         this.ip = ip;
         this.port = port;
         this.user = user;

@@ -74,11 +74,10 @@ public class ChatView {
                 Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
                 String json = gson.toJson(envelope);
                 try {
-                    Socket socket = new Socket(NetworkConnection.getInstance().getIp(), NetworkConnection.getInstance().getPort());
-                    PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
+                    PrintWriter printWriter = new PrintWriter(NetworkConnection.getInstance().getSocket().getOutputStream());
                     printWriter.println(json);
                     messageField.setText("");
-                    socket.close();
+                    System.out.println(json);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

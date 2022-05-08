@@ -27,11 +27,8 @@ public class Server implements Runnable{
         }
     }
 
-
-
-
     //login -Methode von Veronika Heckel bearbeitet
-    private void login(Envelope requestEnvelope, ServerSocket serverSocket, Socket socket, Server server) throws IOException {
+    private void login(Envelope requestEnvelope, ServerSocket serverSocket, Socket socket, InputStream inputStream, Server server) throws IOException {
         if (requestEnvelope.getType() == Envelope.TypeEnum.USEREVENT) {
             UserEvent userEvent = (UserEvent) requestEnvelope.getPayload();
             User user = userEvent.getUser();
@@ -46,7 +43,7 @@ public class Server implements Runnable{
                 System.out.println("Response:" + json);
                 System.out.println(user.getName() + " has entered Chatroom!");
                 //Start server thread
-                ServerSessionHandler serverSessionHandler = new ServerSessionHandler(serverSocket, server);
+                ServerSessionHandler serverSessionHandler = new ServerSessionHandler(socket, inputStream, server);
                 Thread thread = new Thread(serverSessionHandler);
                 thread.start();
                 sessionList.add(new Pair<>(serverSessionHandler, thread));
@@ -74,8 +71,8 @@ public class Server implements Runnable{
                 String json = in.readLine();
                 System.out.println("Request: " + json);
                 Envelope request = Util.deserializeJsontoEnvelope(json);
-                login(request, serverSocket, socket, this);
-                socket.close();
+                login(request, serverSocket, socket, input, this);
+
             }
         }catch (IOException e) {
             throw new RuntimeException(e);

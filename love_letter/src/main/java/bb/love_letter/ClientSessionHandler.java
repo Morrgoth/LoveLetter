@@ -21,12 +21,13 @@ public class ClientSessionHandler implements Runnable {
         System.out.println("ClientSessionHandler Thread started running");
 
         while (true) {
-            try (Socket socket = new Socket(NetworkConnection.getInstance().getIp(), NetworkConnection.getInstance().getPort())) {
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            try {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(NetworkConnection.getInstance().getSocket().getInputStream()));
                 String json = null;
                 while (json == null) {
                     json = bufferedReader.readLine();
                 }
+                System.out.println(json);
                 Envelope envelope = Util.deserializeJsontoEnvelope(json);
                 switch (envelope.getType()) {
                     case USEREVENT:

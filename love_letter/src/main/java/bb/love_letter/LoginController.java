@@ -23,7 +23,9 @@ public class LoginController {
         model.setPort(port);
         model.setUsername(username);
 
-        try(Socket socket = new Socket(model.getIp(), model.getPort())) {
+        try {
+            Socket socket = new Socket(model.getIp(), model.getPort());
+            socket.getKeepAlive();
             InputStream inputStream = socket.getInputStream();
             OutputStream outputStream = socket.getOutputStream();
             BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
@@ -41,7 +43,7 @@ public class LoginController {
             Envelope response = Util.deserializeJsontoEnvelope(responseJson);
             UserEvent loginResponse = (UserEvent) response.getPayload();
             if (loginResponse.getUserEventType() == UserEvent.UserEventType.LOGIN_CONFIRMATION) {
-                NetworkConnection.getInstance().init(model.getIp(), model.getPort(), me);
+                NetworkConnection.getInstance().init(socket, model.getIp(), model.getPort(), me);
                 model.setSuccessfulLogin(true);
             }
 
