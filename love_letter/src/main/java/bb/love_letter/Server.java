@@ -1,79 +1,59 @@
 package bb.love_letter;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import javafx.util.Pair;
-
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
-
-public class Server implements Runnable{
-    static final int PORT = 6868;
-    private static ClientList clientList = new ClientList();
-    private static ArrayList<Pair<ServerSessionHandler, Thread>> sessionList= new ArrayList<>();
-
-    //broadcast - Methode von Veronika Heckel bearbeitet
-    public void broadcast(Envelope envelope) throws IOException {
-        //sendet nachricht an alle clients + ruft Thread notify auf
-        /*
-        check von wem nachricht gekommen ist + check über userList
-        sende nachricht an alle anderen clients außer senderClient bzw. alle mit CLient
-         */
-        for(Pair pair: sessionList){
-            ((ServerSessionHandler)pair.getKey()).sendMessage(envelope);
-        }
+import java.util.*;
+public class Server {
+    public ServerSocket server;
+    public Socket client = null;
+    public DataOutputStream dataOutputStream;
+    public DataInputStream dataInputStream;
+    public HashMap<User, Socket> clientList = new HashMap<User,Socket>(); // use/rewrite UserList
+    public static void main(String[] args){
+        Server server = new Server();
+        server.doConnections();
     }
-
-    //login -Methode von Veronika Heckel bearbeitet
-    private void login(Envelope requestEnvelope, ServerSocket serverSocket, Socket socket, InputStream inputStream, Server server) throws IOException {
-        if (requestEnvelope.getType() == Envelope.TypeEnum.USEREVENT) {
-            UserEvent userEvent = (UserEvent) requestEnvelope.getPayload();
-            User user = userEvent.getUser();
-            if (clientList.addUser(user)) {
-                UserEvent event  = new UserEvent(user, UserEvent.UserEventType.LOGIN_CONFIRMATION);
-                Envelope responseEnvelope = new Envelope(event, Envelope.TypeEnum.USEREVENT);
-                Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
-                String json = gson.toJson(responseEnvelope);
-                PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
-                printWriter.println(json);
-                System.out.println("Error: " + printWriter.checkError());
-                System.out.println("Response:" + json);
-                System.out.println(user.getName() + " has entered Chatroom!");
-                //Start server thread
-                ServerSessionHandler serverSessionHandler = new ServerSessionHandler(socket, inputStream, server);
-                Thread thread = new Thread(serverSessionHandler);
-                thread.start();
-                sessionList.add(new Pair<>(serverSessionHandler, thread));
+    public void doConnections(){
+        try{
+            server = new ServerSocket(6556);
+            ServerThread messageRouterThread = new ServerThread(this);
+            messageRouterThread.start();
+            while(true)
+            {
+                client = server.accept();
+                if(client != null)
+                {
+                    dataOutputStream = new DataOutputStream(client.getOutputStream());
+                    dataInputStream = new DataInputStream(client.getInputStream());
+                    String json = dataInputStream.readUTF();
+                    Envelope envelope = Util.deserializeJsontoEnvelope(json);
+                    UserEvent userEvent = (UserEvent) envelope.getPayload();
+                    if (userEvent.getUserEventType() == UserEvent.UserEventType.LOGIN_REQUEST) {
+                        User user = userEvent.getUser();
+                        if (!clientList.containsKey(user)) {
+                            UserEvent loginConfirmationEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_CONFIRMATION);
+                            Envelope loginConfirmation = new Envelope(loginConfirmationEvent, Envelope.TypeEnum.USEREVENT);
+                            dataOutputStream.writeUTF(Util.getEnvelopGson().toJson(loginConfirmation)); // LOGIN_CONFIRMATION
+                            clientList.put(user, client);
+                            messageRouterThread.clientList.put(user,client);
+                        } else {
+                            UserEvent loginErrorEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_ERROR);
+                            Envelope loginError = new Envelope(loginErrorEvent, Envelope.TypeEnum.USEREVENT);
+                            dataOutputStream.writeUTF(Util.getEnvelopGson().toJson(loginError)); // LOGIN_ERROR
+                            clientList.put(user, client);
+                            messageRouterThread.clientList.put(user,client);
+                        }
+                    }
+                }
             }
-        }else{
-            System.out.println("Error: Unauthorized request!");
+        }
+        catch(Exception e){
+            System.out.println("Error Occured Oops!" +  e.getMessage());
         }
     }
 
-    //Logout von User durch Message "bye"
-    private void logout(Envelope envelope){
-
-    }
-
-    @Override
-    public void run() {
-        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            serverSocket.setReuseAddress(true);
-            InetAddress inetAddress = InetAddress.getLocalHost();
-            System.out.println("The server is running on " + inetAddress.getHostAddress() + ":" + PORT);
-            while (true) {
-                Socket socket = serverSocket.accept();
-                InputStream input = socket.getInputStream();
-                BufferedReader in = new BufferedReader(new InputStreamReader(input));
-                String json = in.readLine();
-                System.out.println("Request: " + json);
-                Envelope request = Util.deserializeJsontoEnvelope(json);
-                login(request, serverSocket, socket, input, this);
-
-            }
-        }catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void logoutUser(User user) throws IOException {
+        this.clientList.get(user).close();
+        this.clientList.remove(user);
     }
 }

@@ -12,9 +12,9 @@ public class ServerThread extends Thread{
     public HashMap<User, Socket> clientList = new HashMap<User,Socket>();
     public DataInputStream dataInputStream = null;
     public DataOutputStream dataOutputStream = null;
-    public NewServer parent;
+    public Server parent;
 
-    public ServerThread(NewServer parent) {
+    public ServerThread(Server parent) {
         this.parent = parent;
     }
     public void run(){
