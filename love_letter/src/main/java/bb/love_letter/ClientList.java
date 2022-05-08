@@ -1,14 +1,13 @@
 package bb.love_letter;
 import java.util.ArrayList;
-import java.util.Scanner;
 // Create an ArrayList object
 
 //Diese Klasse wurde von Veronika Heckel bearbeitet
-public class UserList {
+public class ClientList {
      private ArrayList<User> userList = new ArrayList<>();
 
     // adds a clientName to UserList-array
-    public boolean addName(User user) {
+    public boolean addUser(User user) {
         boolean foundName = false;
         for (User u : userList) {
             if (u.getName().equals(user.getName())) {
@@ -25,7 +24,7 @@ public class UserList {
     }
 
     //removeName a clientName from UserList-array
-    public boolean removeName(User user) {
+    public boolean removeUser(User user) {
         boolean foundName = true;
         for(User u: userList){
             if (u.getName().equals(user.getName())){
@@ -48,18 +47,15 @@ public class UserList {
         }
     }
 
-
-
-
     public static void main(String[] args) {
       //while(true)
-        UserList list = new UserList();
+        ClientList list = new ClientList();
         ArrayList<User> names = new ArrayList<>();
-        list.addName(new User("Linda"));
-        list.addName(new User("Alex"));
-        list.addName(new User("Lilly"));
-        list.addName(new User("Leon"));
-        list.addName((new User("Linda")));
+        list.addUser(new User("Linda"));
+        list.addUser(new User("Alex"));
+        list.addUser(new User("Lilly"));
+        list.addUser(new User("Leon"));
+        list.addUser((new User("Linda")));
 
         list.printUserList();
 

@@ -40,9 +40,9 @@ public class NewServer {
                             clientList.put(user, client);
                             messageRouterThread.clientList.put(user,client);
                         } else {
-                            UserEvent loginConfirmationEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_ERROR);
-                            Envelope loginConfirmation = new Envelope(loginConfirmationEvent, Envelope.TypeEnum.USEREVENT);
-                            dataOutputStream.writeUTF(Util.getEnvelopGson().toJson(loginConfirmation)); // LOGIN_ERROR
+                            UserEvent loginErrorEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_ERROR);
+                            Envelope loginError = new Envelope(loginErrorEvent, Envelope.TypeEnum.USEREVENT);
+                            dataOutputStream.writeUTF(Util.getEnvelopGson().toJson(loginError)); // LOGIN_ERROR
                             clientList.put(user, client);
                             messageRouterThread.clientList.put(user,client);
                         }

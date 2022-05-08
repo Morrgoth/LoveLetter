@@ -6,13 +6,11 @@ import javafx.util.Pair;
 
 import java.io.*;
 import java.net.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Server implements Runnable{
     static final int PORT = 6868;
-    private static UserList userList = new UserList();
+    private static ClientList clientList = new ClientList();
     private static ArrayList<Pair<ServerSessionHandler, Thread>> sessionList= new ArrayList<>();
 
     //broadcast - Methode von Veronika Heckel bearbeitet
@@ -32,7 +30,7 @@ public class Server implements Runnable{
         if (requestEnvelope.getType() == Envelope.TypeEnum.USEREVENT) {
             UserEvent userEvent = (UserEvent) requestEnvelope.getPayload();
             User user = userEvent.getUser();
-            if (userList.addName(user)) {
+            if (clientList.addUser(user)) {
                 UserEvent event  = new UserEvent(user, UserEvent.UserEventType.LOGIN_CONFIRMATION);
                 Envelope responseEnvelope = new Envelope(event, Envelope.TypeEnum.USEREVENT);
                 Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
