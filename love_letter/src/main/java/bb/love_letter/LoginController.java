@@ -27,6 +27,7 @@ public class LoginController {
             UserEvent login = new UserEvent(me, UserEvent.UserEventType.LOGIN_REQUEST);
             Envelope envelope = new Envelope(login, Envelope.TypeEnum.USEREVENT);
             outputStream.writeObject(envelope);
+            //Gson gson = new Gson();
             // Wait for response
             Envelope response = (Envelope) inputStream.readObject();
             UserEvent loginResponse = (UserEvent) response.getPayload();
