@@ -40,8 +40,8 @@ public class NewClient{
             os.writeUTF(json);
             String response = is.readUTF();
             // Parse Response to the Login Request
-            MyThreadRead read = new MyThreadRead(is, user);
-            MyThreadWrite write = new MyThreadWrite(os,user);
+            ClientReader read = new ClientReader(is, user);
+            ClientWriter write = new ClientWriter(os,user);
             if(response.equals("#accepted")){
                 System.out.println("Welcome "+ clientName +" !");
                 //now run the thread

@@ -2,10 +2,10 @@ package bb.love_letter;
 
 import java.io.DataInputStream;
 
-class MyThreadRead extends Thread{
+class ClientReader extends Thread{
     DataInputStream dataInputStream;
     User user;
-    public MyThreadRead(DataInputStream dataInputStream, User user){
+    public ClientReader(DataInputStream dataInputStream, User user){
         this.dataInputStream = dataInputStream;
         this.user = user;
     }

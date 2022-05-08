@@ -7,11 +7,11 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 
-class MyThreadWrite extends Thread{
+class ClientWriter extends Thread{
     private DataOutputStream dataOutputStream;
     public BufferedReader bufferedReader;
     public User user;
-    public MyThreadWrite(DataOutputStream dataOutputStream,User user){
+    public ClientWriter(DataOutputStream dataOutputStream, User user){
         this.dataOutputStream = dataOutputStream;
         this.user = user;
         try{

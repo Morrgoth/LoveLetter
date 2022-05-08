@@ -99,7 +99,6 @@ class MyThreadServer extends Thread{
                 System.out.println("Server Recovering Initialization Failure ...");
                 System.out.println("Server Up And Running ...");
             }
-            //goes through all clientList and reads the UTF and Writes to that Client
         }
     }
 }
