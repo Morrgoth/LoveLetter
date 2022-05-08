@@ -25,8 +25,10 @@ public class NewServer {
                 {
                     os = new DataOutputStream(client.getOutputStream());
                     is = new DataInputStream(client.getInputStream());
-                    String requestedClientName = is.readUTF();
-                    User user = new User(requestedClientName);
+                    String json = is.readUTF();
+                    Envelope envelope = Util.deserializeJsontoEnvelope(json);
+                    UserEvent userEvent = (UserEvent) envelope.getPayload();
+                    User user = userEvent.getUser();
                     clientList.put(user, client);
                     os.writeUTF("#accepted");
                     messageRouterThread.clientList.put(user,client);
@@ -54,12 +56,14 @@ class MyThreadServer extends Thread{
                         is= new DataInputStream(clientList.get(user).getInputStream());
                         if(is.available()>0)
                         {
-                            // RECEIVE MESSAGE
+                            // RECEIVE MESSAGE FROM USERS
                             msg=is.readUTF();
-                            System.out.println(user.getName() + ": " + msg);
+                            System.out.println(msg);
+                            // Code for logging in upon receiving "bye"
+                            //Envelope envelope = Util.deserializeJsontoEnvelope(msg);
                             for (User recepient: clientList.keySet()) {
                                 os= new DataOutputStream(clientList.get(recepient).getOutputStream());
-                                os.writeUTF( user.getName() + ": " + msg);
+                                os.writeUTF(msg);
                             }
                         }
                     }

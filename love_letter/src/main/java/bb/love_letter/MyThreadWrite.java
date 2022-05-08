@@ -7,10 +7,10 @@ import java.io.InputStreamReader;
 class MyThreadWrite extends Thread{
     private DataOutputStream os;
     public BufferedReader br;
-    public String clientName =  "@Client0";
-    public MyThreadWrite(DataOutputStream o,String name){
+    public User clientName;
+    public MyThreadWrite(DataOutputStream o,User user){
         os=o;
-        clientName = name;
+        clientName = user;
         try{
             InputStreamReader isr = new InputStreamReader(System.in);
             br = new BufferedReader(isr);
@@ -24,7 +24,7 @@ class MyThreadWrite extends Thread{
     {
         try{
             while(true){
-                // RECEIVE MESSAGE FROM SERVER
+                // SEND MESSAGE TO SERVER
                 String msg = br.readLine();
                 os.writeUTF(msg);
             }

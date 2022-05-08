@@ -1,4 +1,7 @@
 package bb.love_letter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.*;
 import java.net.*;
 
@@ -29,11 +32,15 @@ public class NewClient{
             os = new DataOutputStream(client.getOutputStream());
             is = new DataInputStream(client.getInputStream());
             //request as a client
-            String request=clientName;
-            os.writeUTF(request);
+            User user = new User(clientName);
+            UserEvent userEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_REQUEST);
+            Envelope request = new Envelope(userEvent, Envelope.TypeEnum.USEREVENT);
+            Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
+            String json = gson.toJson(request);
+            os.writeUTF(json);
             String response = is.readUTF();
             MyThreadRead read = new MyThreadRead(is);
-            MyThreadWrite write = new MyThreadWrite(os,clientName);
+            MyThreadWrite write = new MyThreadWrite(os,user);
             if(response.equals("#accepted")){
                 System.out.println("# Login Successful  as "+ clientName +" !");
                 System.out.println("Message Format");
