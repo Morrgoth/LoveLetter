@@ -8,7 +8,7 @@ public class NewServer {
     public Socket client = null;
     public DataOutputStream os;
     public DataInputStream is;
-    public HashMap<String ,Socket> clientList = new HashMap<String,Socket>();
+    public HashMap<User, Socket> clientList = new HashMap<User,Socket>();
     public static void main(String[] args){
         NewServer a = new NewServer();
         a.doConnections();
@@ -26,9 +26,10 @@ public class NewServer {
                     os = new DataOutputStream(client.getOutputStream());
                     is = new DataInputStream(client.getInputStream());
                     String requestedClientName = is.readUTF();
-                    clientList.put(requestedClientName,client);
+                    User user = new User(requestedClientName);
+                    clientList.put(user, client);
                     os.writeUTF("#accepted");
-                    messageRouterThread.clientList.put(requestedClientName,client);
+                    messageRouterThread.clientList.put(user,client);
                 }
             }
         }
@@ -38,7 +39,7 @@ public class NewServer {
     }
 }
 class MyThreadServer extends Thread{
-    public HashMap<String,Socket> clientList = new HashMap<String,Socket>();
+    public HashMap<User,Socket> clientList = new HashMap<User,Socket>();
     public DataInputStream is= null;
     public DataOutputStream os=null;
     public void run(){
@@ -48,17 +49,17 @@ class MyThreadServer extends Thread{
         while(true){
             try{
                 if(clientList != null){
-                    for(String key: clientList.keySet())
+                    for(User user: clientList.keySet())
                     {
-                        is= new DataInputStream(clientList.get(key).getInputStream());
+                        is= new DataInputStream(clientList.get(user).getInputStream());
                         if(is.available()>0)
                         {
                             // RECEIVE MESSAGE
                             msg=is.readUTF();
-                            System.out.println(key + ": " + msg);
-                            for (String recepient: clientList.keySet()) {
+                            System.out.println(user.getName() + ": " + msg);
+                            for (User recepient: clientList.keySet()) {
                                 os= new DataOutputStream(clientList.get(recepient).getOutputStream());
-                                os.writeUTF( key + ": " + msg);
+                                os.writeUTF( user.getName() + ": " + msg);
                             }
                         }
                     }
