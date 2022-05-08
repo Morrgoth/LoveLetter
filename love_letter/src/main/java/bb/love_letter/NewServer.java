@@ -3,7 +3,7 @@ package bb.love_letter;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-public class NewServer{
+public class NewServer {
     public ServerSocket server;
     public Socket client = null;
     public DataOutputStream os;
@@ -20,7 +20,6 @@ public class NewServer{
             messageRouterThread.start();
             while(true)
             {
-
                 client = server.accept();
                 if(client != null)
                 {
@@ -54,6 +53,7 @@ class MyThreadServer extends Thread{
                         is= new DataInputStream(clientList.get(key).getInputStream());
                         if(is.available()>0)
                         {
+                            // RECEIVE MESSAGE
                             msg=is.readUTF();
                             System.out.println(key + ": " + msg);
                             for (String recepient: clientList.keySet()) {
