@@ -25,6 +25,8 @@ public class Util {
             envelope.setPayload(userEvent);
         } else if (jsonObject.get("type").getAsString().equals("CHATMESSAGE")){
            ChatMessage chatMessage = gson.fromJson(jsonObject.get("payload").getAsString(), ChatMessage.class);
+           User user = gson.fromJson(jsonObject.get("user").getAsString(), User.class);
+           chatMessage.setSender(user);
            envelope.setType(Envelope.TypeEnum.CHATMESSAGE);
            envelope.setPayload(chatMessage);
         }

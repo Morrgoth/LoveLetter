@@ -11,7 +11,8 @@ public class NetworkConnection {
     Socket socket;
     InputStream inputStream;
     OutputStreamWriter outputStream;
-
+    String ip;
+    int port;
     NetworkConnection(){}
 
     public User getUser(){
@@ -27,9 +28,17 @@ public class NetworkConnection {
         return outputStream;
     }
 
-    public void init(Socket socket, User user) {
-        this.socket = socket;
+    public void init(String ip, int port, User user) {
+        this.ip = ip;
+        this.port = port;
         this.user = user;
+    }
+    public String getIp(){
+        return this.ip;
+    }
+
+    public int getPort() {
+        return port;
     }
 
     public static NetworkConnection getInstance() {

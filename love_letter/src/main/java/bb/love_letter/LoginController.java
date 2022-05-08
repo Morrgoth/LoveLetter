@@ -33,18 +33,16 @@ public class LoginController {
             Envelope request = new Envelope(login, Envelope.TypeEnum.USEREVENT);
             Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
             String requestJson = gson.toJson(request);
-            System.out.println("Request:" + requestJson);
             PrintWriter out = new PrintWriter(outputStream, true);
             out.println(requestJson);
             out.flush();
             // Wait for response of the Server
             String responseJson = in.readLine();
-            System.out.println("Response: " + responseJson);
             Envelope response = Util.deserializeJsontoEnvelope(responseJson);
             UserEvent loginResponse = (UserEvent) response.getPayload();
             if (loginResponse.getUserEventType() == UserEvent.UserEventType.LOGIN_CONFIRMATION) {
+                NetworkConnection.getInstance().init(model.getIp(), model.getPort(), me);
                 model.setSuccessfulLogin(true);
-                NetworkConnection.getInstance().init(socket, me);
             }
 
         } catch (UnknownHostException ex) {

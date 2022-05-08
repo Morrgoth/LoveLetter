@@ -1,6 +1,7 @@
 package bb.love_letter;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -12,6 +13,9 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 public class ChatView {
     public ChatModel model;
@@ -67,11 +71,14 @@ public class ChatView {
                 String message = messageField.getText();
                 ChatMessage chatMessage = new ChatMessage(NetworkConnection.getInstance().getUser(), message);
                 Envelope envelope = new Envelope(chatMessage, Envelope.TypeEnum.CHATMESSAGE);
-                Gson gson = new Gson();
+                Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
                 String json = gson.toJson(envelope);
                 try {
-                    NetworkConnection.getInstance().getOutputStream().write(json);
+                    Socket socket = new Socket(NetworkConnection.getInstance().getIp(), NetworkConnection.getInstance().getPort());
+                    PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
+                    printWriter.println(json);
                     messageField.setText("");
+                    socket.close();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

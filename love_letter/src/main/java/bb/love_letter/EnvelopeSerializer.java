@@ -16,8 +16,11 @@ public class EnvelopeSerializer implements JsonSerializer<Envelope> {
             result.add("payload", new JsonPrimitive(payloadString));
         } else if (envelope.getType() == Envelope.TypeEnum.CHATMESSAGE) {
             ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
+            User user = chatMessage.getSender();
+            String userString = new Gson().toJson(user);
             String payloadString = new Gson().toJson(chatMessage);
             result.add("payload", new JsonPrimitive(payloadString));
+            result.add("user", new JsonPrimitive(userString));
         }
         return result;
     }
