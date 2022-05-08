@@ -22,7 +22,7 @@ class MyThreadRead extends Thread{
                         UserEvent userEvent = (UserEvent) envelope.getPayload();
                         User newUser = userEvent.getUser();
                         if (!newUser.getName().equals(this.user.getName())) {
-                            System.out.println(user.getName() + " joined the room");
+                            System.out.println(newUser.getName() + " joined the room");
                         }
                     } else if (envelope.getType() == Envelope.TypeEnum.CHATMESSAGE) {
                         ChatMessage chatMessage = (ChatMessage) envelope.getPayload();

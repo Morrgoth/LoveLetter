@@ -64,7 +64,8 @@ class MyThreadServer extends Thread{
                             msg=is.readUTF();
                             System.out.println(msg);
                             // Code for logging in upon receiving "bye"
-                            //Envelope envelope = Util.deserializeJsontoEnvelope(msg);
+                            Envelope envelope = Util.deserializeJsontoEnvelope(msg);
+                            System.out.println(envelope.getType());
                             for (User recepient: clientList.keySet()) {
                                 os= new DataOutputStream(clientList.get(recepient).getOutputStream());
                                 os.writeUTF(msg);
