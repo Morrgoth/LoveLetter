@@ -11,7 +11,7 @@ public class NewServer {
     public Socket client = null;
     public DataOutputStream dataOutputStream;
     public DataInputStream dataInputStream;
-    public HashMap<User, Socket> clientList = new HashMap<User,Socket>();
+    public HashMap<User, Socket> clientList = new HashMap<User,Socket>(); // use/rewrite UserList
     public static void main(String[] args){
         NewServer newServer = new NewServer();
         newServer.doConnections();
@@ -31,10 +31,22 @@ public class NewServer {
                     String json = dataInputStream.readUTF();
                     Envelope envelope = Util.deserializeJsontoEnvelope(json);
                     UserEvent userEvent = (UserEvent) envelope.getPayload();
-                    User user = userEvent.getUser();
-                    clientList.put(user, client);
-                    dataOutputStream.writeUTF("#accepted"); // LOGIN_CONFIRMATION
-                    messageRouterThread.clientList.put(user,client);
+                    if (userEvent.getUserEventType() == UserEvent.UserEventType.LOGIN_REQUEST) {
+                        User user = userEvent.getUser();
+                        if (!clientList.containsKey(user)) {
+                            UserEvent loginConfirmationEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_CONFIRMATION);
+                            Envelope loginConfirmation = new Envelope(loginConfirmationEvent, Envelope.TypeEnum.USEREVENT);
+                            dataOutputStream.writeUTF(Util.getEnvelopGson().toJson(loginConfirmation)); // LOGIN_CONFIRMATION
+                            clientList.put(user, client);
+                            messageRouterThread.clientList.put(user,client);
+                        } else {
+                            UserEvent loginConfirmationEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_ERROR);
+                            Envelope loginConfirmation = new Envelope(loginConfirmationEvent, Envelope.TypeEnum.USEREVENT);
+                            dataOutputStream.writeUTF(Util.getEnvelopGson().toJson(loginConfirmation)); // LOGIN_ERROR
+                            clientList.put(user, client);
+                            messageRouterThread.clientList.put(user,client);
+                        }
+                    }
                 }
             }
         }

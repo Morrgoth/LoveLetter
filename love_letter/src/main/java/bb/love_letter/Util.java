@@ -1,6 +1,7 @@
 package bb.love_letter;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import java.io.BufferedReader;
@@ -14,7 +15,6 @@ public class Util {
         Envelope envelope = gson.fromJson(json, Envelope.class);
         return envelope;
     }
-
     public static Envelope deserializeJsontoEnvelope(String json) {
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
@@ -31,5 +31,10 @@ public class Util {
            envelope.setPayload(chatMessage);
         }
         return envelope;
+    }
+
+    public static Gson getEnvelopGson() {
+        Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
+        return gson;
     }
 }

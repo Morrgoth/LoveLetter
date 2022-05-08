@@ -26,8 +26,8 @@ public class NewClient{
         try{
             InputStreamReader isr = new InputStreamReader(System.in);
             BufferedReader br = new BufferedReader(isr);
-            System.out.println("Enter Your Name <Please Dont use Space> : ");
-            clientName = "@" + br.readLine();
+            System.out.print("Enter Your Name: ");
+            clientName = br.readLine();
             client = new Socket("127.0.0.1",6556);
             os = new DataOutputStream(client.getOutputStream());
             is = new DataInputStream(client.getInputStream());
@@ -38,23 +38,24 @@ public class NewClient{
             Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
             String json = gson.toJson(request);
             os.writeUTF(json);
-            String response = is.readUTF();
-            // Parse Response to the Login Request
             ClientReader read = new ClientReader(is, user);
             ClientWriter write = new ClientWriter(os,user);
-            if(response.equals("#accepted")){
-                System.out.println("Welcome "+ clientName +" !");
-                //now run the thread
-                read.start();
-                write.start();
-                read.join();
-                write.join();
+            String response = is.readUTF();
+            Envelope envelope = Util.deserializeJsontoEnvelope(response);
+            if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
+                UserEvent loginResponseEvent = (UserEvent) envelope.getPayload();
+                if (loginResponseEvent.getUserEventType() == UserEvent.UserEventType.LOGIN_CONFIRMATION) {
+                    System.out.println("Welcome "+ clientName +" !");
+                    read.start();
+                    write.start();
+                    read.join();
+                    write.join();
+                } else if (loginResponseEvent.getUserEventType() == UserEvent.UserEventType.LOGIN_ERROR) {
+                    System.out.println("Error: The username " + user.getName() + " is already taken!");
+                }
+            } else {
+                System.out.println("Error: Could Not Connect To Server!");
             }
-            else
-            {
-                System.out.println("# Could Not Connect To Server !");
-            }
-
         }
         catch(Exception e){
             System.out.println("Error Occured Oops!");
