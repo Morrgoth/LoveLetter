@@ -38,8 +38,8 @@ public class NewClient{
             Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
             String json = gson.toJson(request);
             os.writeUTF(json);
-            ClientReader read = new ClientReader(is, user);
-            ClientWriter write = new ClientWriter(os,user);
+            ClientReaderThread read = new ClientReaderThread(is, user);
+            ClientWriterThread write = new ClientWriterThread(os,user);
             String response = is.readUTF();
             Envelope envelope = Util.deserializeJsontoEnvelope(response);
             if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
