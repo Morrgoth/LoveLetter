@@ -10,13 +10,20 @@ class MyThreadRead extends Thread{
     public void run()
     {
         try{
-            String msg=null;
+            String json=null;
             while(true){
                 // RECEIVE MESSAGE FROM SERVER
-                msg = is.readUTF();
-                if(msg != null)
-                    System.out.println(msg);
-                msg = null;
+                json = is.readUTF();
+                if(json != null) {
+                    Envelope envelope = Util.deserializeJsontoEnvelope(json);
+                    if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
+                        System.out.println("UserEvent: TODO");
+                    } else if (envelope.getType() == Envelope.TypeEnum.CHATMESSAGE) {
+                        ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
+                        System.out.println(chatMessage.getSender().getName() + ": " + chatMessage.getMessage());
+                    }
+                }
+                json = null;
             }
         }
         catch(Exception e){
