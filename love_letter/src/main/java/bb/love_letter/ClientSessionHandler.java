@@ -18,12 +18,11 @@ public class ClientSessionHandler implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Thread started running");
+        System.out.println("ClientSessionHandler Thread started running");
 
         while (true) {
-            //Receive message from server
+            
             Envelope envelope = null;
-            envelope = null;//Util.readEnvelopeFromInputStream(NetworkConnection.getInstance().getInputStream());
             switch (envelope.getType()) {
                 case USEREVENT:
                     UserEvent userEvent = (UserEvent) envelope.getPayload();

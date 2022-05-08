@@ -36,18 +36,20 @@ public class Server implements Runnable{
             UserEvent userEvent = (UserEvent) requestEnvelope.getPayload();
             User user = userEvent.getUser();
             if (userList.addName(user)) {
-                System.out.println(user.getName() + " has entered Chatroom!");
-                ServerSessionHandler serverSessionHandler = new ServerSessionHandler(serverSocket, server);
-                Thread thread = new Thread(serverSessionHandler);
-                thread.start();
-                sessionList.add(new Pair<>(serverSessionHandler, thread));
                 UserEvent event  = new UserEvent(user, UserEvent.UserEventType.LOGIN_CONFIRMATION);
                 Envelope responseEnvelope = new Envelope(event, Envelope.TypeEnum.USEREVENT);
                 Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
                 String json = gson.toJson(responseEnvelope);
                 PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
                 printWriter.println(json);
-                System.out.println(json);
+                System.out.println("Error: " + printWriter.checkError());
+                System.out.println("Response:" + json);
+                System.out.println(user.getName() + " has entered Chatroom!");
+                //Start server thread
+                ServerSessionHandler serverSessionHandler = new ServerSessionHandler(serverSocket, server);
+                Thread thread = new Thread(serverSessionHandler);
+                thread.start();
+                sessionList.add(new Pair<>(serverSessionHandler, thread));
             }
         }else{
             System.out.println("Error: Unauthorized request!");
