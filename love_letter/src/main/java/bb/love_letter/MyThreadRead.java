@@ -20,10 +20,15 @@ class MyThreadRead extends Thread{
                     Envelope envelope = Util.deserializeJsontoEnvelope(json);
                     if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
                         UserEvent userEvent = (UserEvent) envelope.getPayload();
-                        User newUser = userEvent.getUser();
-                        if (!newUser.getName().equals(this.user.getName())) {
-                            System.out.println(newUser.getName() + " joined the room");
+                        if (userEvent.getUserEventType() == UserEvent.UserEventType.LOGIN_CONFIRMATION) {
+                            User newUser = userEvent.getUser();
+                            if (!newUser.getName().equals(this.user.getName())) {
+                                System.out.println(newUser.getName() + " joined the room");
+                            }
+                        } else if (userEvent.getUserEventType() == UserEvent.UserEventType.LOGOUT_CONFIRMATION) {
+                            System.out.println(userEvent.getUser().getName() + " left the room");
                         }
+
                     } else if (envelope.getType() == Envelope.TypeEnum.CHATMESSAGE) {
                         ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
                         System.out.println(chatMessage.getSender().getName() + ": " + chatMessage.getMessage());
