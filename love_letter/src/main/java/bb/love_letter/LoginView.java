@@ -94,6 +94,9 @@ public class LoginView {
                     ChatModel chatModel = new ChatModel();
                     ChatController chatController = new ChatController(chatModel);
                     ChatView chatView = new ChatView(chatModel, chatController);
+                    ClientSessionHandler clientSessionHandler = new ClientSessionHandler(chatController);
+                    Thread thread = new Thread(clientSessionHandler);
+                    thread.start();
 
                     Stage stage = new Stage();
                     stage.setTitle("Chat");

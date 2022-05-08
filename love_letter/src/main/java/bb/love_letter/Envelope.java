@@ -3,7 +3,6 @@ package bb.love_letter;
 import java.io.*;
 
 public class Envelope implements Serializable {
-    private static final long serialVersionUID = 1L;
     private  Object payload;
     private  TypeEnum type;
 

@@ -32,6 +32,7 @@ public class LoginController {
             UserEvent loginResponse = (UserEvent) response.getPayload();
             if (loginResponse.getUserEventType() == UserEvent.UserEventType.LOGIN_CONFIRMATION) {
                 model.setSuccessfulLogin(true);
+                NetworkConnection.getInstance().init(socket, inputStream, outputStream, me);
             }
 
         } catch (UnknownHostException ex) {

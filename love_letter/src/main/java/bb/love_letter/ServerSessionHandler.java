@@ -30,9 +30,9 @@ public class ServerSessionHandler implements Runnable{
                 Envelope envelope = (Envelope) clientInput.readObject();
                 server.broadcast(envelope);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (EOFException e) {
+            System.out.println("BS");
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
