@@ -9,12 +9,12 @@ import java.util.*;
 public class NewServer {
     public ServerSocket server;
     public Socket client = null;
-    public DataOutputStream os;
-    public DataInputStream is;
+    public DataOutputStream dataOutputStream;
+    public DataInputStream dataInputStream;
     public HashMap<User, Socket> clientList = new HashMap<User,Socket>();
     public static void main(String[] args){
-        NewServer a = new NewServer();
-        a.doConnections();
+        NewServer newServer = new NewServer();
+        newServer.doConnections();
     }
     public void doConnections(){
         try{
@@ -26,14 +26,14 @@ public class NewServer {
                 client = server.accept();
                 if(client != null)
                 {
-                    os = new DataOutputStream(client.getOutputStream());
-                    is = new DataInputStream(client.getInputStream());
-                    String json = is.readUTF();
+                    dataOutputStream = new DataOutputStream(client.getOutputStream());
+                    dataInputStream = new DataInputStream(client.getInputStream());
+                    String json = dataInputStream.readUTF();
                     Envelope envelope = Util.deserializeJsontoEnvelope(json);
                     UserEvent userEvent = (UserEvent) envelope.getPayload();
                     User user = userEvent.getUser();
                     clientList.put(user, client);
-                    os.writeUTF("#accepted");
+                    dataOutputStream.writeUTF("#accepted"); // LOGIN_CONFIRMATION
                     messageRouterThread.clientList.put(user,client);
                 }
             }
@@ -50,8 +50,8 @@ public class NewServer {
 }
 class MyThreadServer extends Thread{
     public HashMap<User,Socket> clientList = new HashMap<User,Socket>();
-    public DataInputStream is= null;
-    public DataOutputStream os=null;
+    public DataInputStream dataInputStream = null;
+    public DataOutputStream dataOutputStream = null;
     public NewServer parent;
 
     public MyThreadServer(NewServer parent) {
@@ -59,7 +59,6 @@ class MyThreadServer extends Thread{
     }
     public void run(){
         String msg = "";
-        int i = 0;
         System.out.println("Chat Server Running .....");
 
         while(true){
@@ -67,13 +66,12 @@ class MyThreadServer extends Thread{
                 if(clientList != null){
                     for(User user: clientList.keySet())
                     {
-                        is= new DataInputStream(clientList.get(user).getInputStream());
-                        if(is.available()>0)
+                        dataInputStream = new DataInputStream(clientList.get(user).getInputStream());
+                        if(dataInputStream.available()>0)
                         {
                             // RECEIVE MESSAGE FROM USERS
-                            msg=is.readUTF();
+                            msg = dataInputStream.readUTF();
                             System.out.println(msg);
-                            // Code for logging in upon receiving "bye"
                             Envelope envelope = Util.deserializeJsontoEnvelope(msg);
                             if (envelope.getType() == Envelope.TypeEnum.CHATMESSAGE) {
                                 ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
@@ -89,8 +87,8 @@ class MyThreadServer extends Thread{
                                 }
                             }
                             for (User recepient: clientList.keySet()) {
-                                os= new DataOutputStream(clientList.get(recepient).getOutputStream());
-                                os.writeUTF(msg);
+                                dataOutputStream = new DataOutputStream(clientList.get(recepient).getOutputStream());
+                                dataOutputStream.writeUTF(msg);
                             }
                         }
                     }

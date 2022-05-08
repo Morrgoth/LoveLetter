@@ -39,15 +39,14 @@ public class NewClient{
             String json = gson.toJson(request);
             os.writeUTF(json);
             String response = is.readUTF();
+            // Parse Response to the Login Request
             MyThreadRead read = new MyThreadRead(is, user);
             MyThreadWrite write = new MyThreadWrite(os,user);
             if(response.equals("#accepted")){
                 System.out.println("Welcome "+ clientName +" !");
-                System.out.println("--------------");
                 //now run the thread
                 read.start();
                 write.start();
-
                 read.join();
                 write.join();
             }

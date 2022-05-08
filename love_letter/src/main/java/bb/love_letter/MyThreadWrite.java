@@ -8,15 +8,15 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 
 class MyThreadWrite extends Thread{
-    private DataOutputStream os;
-    public BufferedReader br;
+    private DataOutputStream dataOutputStream;
+    public BufferedReader bufferedReader;
     public User user;
-    public MyThreadWrite(DataOutputStream o,User user){
-        os=o;
+    public MyThreadWrite(DataOutputStream dataOutputStream,User user){
+        this.dataOutputStream = dataOutputStream;
         this.user = user;
         try{
             InputStreamReader isr = new InputStreamReader(System.in);
-            br = new BufferedReader(isr);
+            bufferedReader = new BufferedReader(isr);
         }
         catch(Exception e)
         {
@@ -26,17 +26,18 @@ class MyThreadWrite extends Thread{
     public void run()
     {
         try{
+            // Notify others that the User logged in
             UserEvent loginEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_CONFIRMATION);
             Envelope loginNotification = new Envelope(loginEvent, Envelope.TypeEnum.USEREVENT);
             Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
-            os.writeUTF(gson.toJson(loginNotification));
+            dataOutputStream.writeUTF(gson.toJson(loginNotification));
             while(true){
                 // SEND MESSAGE TO SERVER
-                String msg = br.readLine();
+                String msg = bufferedReader.readLine();
                 ChatMessage chatMessage = new ChatMessage(user, msg);
                 Envelope envelope = new Envelope(chatMessage, Envelope.TypeEnum.CHATMESSAGE);
                 String json = gson.toJson(envelope);
-                os.writeUTF(json);
+                dataOutputStream.writeUTF(json);
             }
         }
         catch(Exception e){

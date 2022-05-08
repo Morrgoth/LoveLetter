@@ -3,10 +3,10 @@ package bb.love_letter;
 import java.io.DataInputStream;
 
 class MyThreadRead extends Thread{
-    DataInputStream is;
+    DataInputStream dataInputStream;
     User user;
-    public MyThreadRead(DataInputStream i, User user){
-        is=i;
+    public MyThreadRead(DataInputStream dataInputStream, User user){
+        this.dataInputStream = dataInputStream;
         this.user = user;
     }
     public void run()
@@ -15,7 +15,7 @@ class MyThreadRead extends Thread{
             String json=null;
             while(true){
                 // RECEIVE MESSAGE FROM SERVER
-                json = is.readUTF();
+                json = dataInputStream.readUTF();
                 if(json != null) {
                     Envelope envelope = Util.deserializeJsontoEnvelope(json);
                     if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
