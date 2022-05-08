@@ -38,7 +38,6 @@ public class NewClient{
                 System.out.println("# Login Successful  as "+ clientName +" !");
                 System.out.println("Message Format");
                 System.out.println("--------------");
-                System.out.println("MESSAGE_BODY @to_username [Message Body may contain Space]");
                 //now run the thread
                 read.start();
                 write.start();

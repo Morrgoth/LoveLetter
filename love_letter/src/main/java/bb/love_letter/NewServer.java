@@ -46,7 +46,6 @@ class MyThreadServer extends Thread{
         String msg = "";
         int i = 0;
         System.out.println("Chat Server Running .....");
-        String toClientName = "";
         while(true){
             try{
                 if(clientList != null){
@@ -56,18 +55,10 @@ class MyThreadServer extends Thread{
                         if(is.available()>0)
                         {
                             msg=is.readUTF();
-                            i= msg.indexOf("@");
-                            toClientName = msg.substring(i);
-                            // System.out.println(msg);
-                            // obtained the client name 
-                            // now write that message to that client
-                            if(clientList.containsKey(toClientName)){
-                                os= new DataOutputStream(clientList.get(toClientName).getOutputStream());
-                                os.writeUTF( key + ": " + msg.substring(0,i));
-                            }
-                            else{
-                                os= new DataOutputStream(clientList.get(key).getOutputStream());
-                                os.writeUTF("Message From Server : No such Username found");
+                            System.out.println(key + ": " + msg);
+                            for (String recepient: clientList.keySet()) {
+                                os= new DataOutputStream(clientList.get(recepient).getOutputStream());
+                                os.writeUTF( key + ": " + msg);
                             }
                         }
                     }
