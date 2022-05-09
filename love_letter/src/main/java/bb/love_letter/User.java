@@ -14,4 +14,23 @@ public class User implements Serializable {
     public String getName(){
         return name;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || this.getClass() != obj.getClass()) {
+            return false;
+        }
+
+        User other = (User) obj;
+
+        if(this.getName().equals(other.getName())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
