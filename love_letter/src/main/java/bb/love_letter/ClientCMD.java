@@ -5,20 +5,20 @@ import com.google.gson.GsonBuilder;
 import java.io.*;
 import java.net.*;
 
-public class NewClient{
+public class ClientCMD {
 
     public Socket client = null;
     public DataOutputStream os;
     public DataInputStream is;
     public String clientName="@Client0";
 
-    public NewClient(){
+    public ClientCMD(){
 
     }
 
     public static void main(String[] args)throws IOException{
 
-        NewClient a = new NewClient();
+        ClientCMD a = new ClientCMD();
         a.doConnections();
 
     }

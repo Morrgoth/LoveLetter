@@ -8,7 +8,7 @@ public class Server {
     public Socket client = null;
     public DataOutputStream dataOutputStream;
     public DataInputStream dataInputStream;
-    public HashMap<User, Socket> clientList = new HashMap<User,Socket>(); // use/rewrite UserList
+    public ClientList clientList = new ClientList();
     public static void main(String[] args){
         Server server = new Server();
         server.doConnections();
@@ -30,18 +30,19 @@ public class Server {
                     UserEvent userEvent = (UserEvent) envelope.getPayload();
                     if (userEvent.getUserEventType() == UserEvent.UserEventType.LOGIN_REQUEST) {
                         User user = userEvent.getUser();
-                        if (!clientList.containsKey(user)) {
+                        if (!clientList.containsClient(user)) {
                             UserEvent loginConfirmationEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_CONFIRMATION);
                             Envelope loginConfirmation = new Envelope(loginConfirmationEvent, Envelope.TypeEnum.USEREVENT);
                             dataOutputStream.writeUTF(Util.getEnvelopGson().toJson(loginConfirmation)); // LOGIN_CONFIRMATION
-                            clientList.put(user, client);
-                            messageRouterThread.clientList.put(user,client);
+                            clientList.addClient(user, client);
+                            messageRouterThread.clientList.addClient(user,client);
                         } else {
                             UserEvent loginErrorEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_ERROR);
                             Envelope loginError = new Envelope(loginErrorEvent, Envelope.TypeEnum.USEREVENT);
                             dataOutputStream.writeUTF(Util.getEnvelopGson().toJson(loginError)); // LOGIN_ERROR
-                            clientList.put(user, client);
-                            messageRouterThread.clientList.put(user,client);
+                            // What to do with the connection of login is unsuccessful?
+                            clientList.addClient(user, client);
+                            messageRouterThread.clientList.addClient(user,client);
                         }
                     }
                 }
@@ -50,10 +51,5 @@ public class Server {
         catch(Exception e){
             System.out.println("Error Occured Oops!" +  e.getMessage());
         }
-    }
-
-    public void logoutUser(User user) throws IOException {
-        this.clientList.get(user).close();
-        this.clientList.remove(user);
     }
 }

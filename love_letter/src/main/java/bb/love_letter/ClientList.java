@@ -1,48 +1,57 @@
 package bb.love_letter;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 // Create an ArrayList object
 
 //Diese Klasse wurde von Veronika Heckel bearbeitet
 public class ClientList {
-     private ArrayList<User> userList = new ArrayList<>();
+     public HashMap<User, Socket> clientList = new HashMap<User,Socket>();
 
     // adds a clientName to UserList-array
-    public boolean addUser(User user) {
-        boolean foundName = false;
-        for (User u : userList) {
-            if (u.getName().equals(user.getName())) {
-                foundName = true;
-                System.out.println("This name is already taken.\nChoose another name, please.");
-                break;
-            }
-
-        }  if (!foundName){
-            userList.add(user);
+    public boolean addClient(User user, Socket socket) {
+        if (!containsClient(user)) {
+            clientList.put(user, socket);
             System.out.println("You can keep this name.");
+            return true;
+        } else {
+            return false;
         }
-        return !foundName;
+    }
+
+    public Set<User> getUsers() {
+        return clientList.keySet();
+    }
+
+    public Socket getClientSocket(User user) {
+        return clientList.get(user);
+    }
+    public boolean containsClient(User user) {
+        for (User u : clientList.keySet()) {
+            if (u.equals(user)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //removeName a clientName from UserList-array
-    public boolean removeUser(User user) {
-        boolean foundName = true;
-        for(User u: userList){
-            if (u.getName().equals(user.getName())){
-                foundName = false;
-                System.out.println("This name is not on the list");
-                break;
-                }
-            }
-            if(foundName){
-            userList.remove(user);
-            System.out.println(user.getName() + " " + "has left the chat.");
+    public boolean removeClient(User user) throws IOException {
+        if (containsClient(user)) {
+            Socket socket = clientList.get(user);
+            socket.close();
+            clientList.remove(user);
+            return true;
+        } else {
+            return false;
         }
-        return foundName;
     }
 
     //print whole userList to client
-    public void printUserList(){
-        for (User u: userList ) {
+    public void printClientList(){
+        for (User u: clientList.keySet() ) {
             System.out.println(u.getName());
         }
     }
@@ -51,13 +60,13 @@ public class ClientList {
       //while(true)
         ClientList list = new ClientList();
         ArrayList<User> names = new ArrayList<>();
-        list.addUser(new User("Linda"));
-        list.addUser(new User("Alex"));
-        list.addUser(new User("Lilly"));
-        list.addUser(new User("Leon"));
-        list.addUser((new User("Linda")));
+        //list.addUser(new User("Linda"));
+        //list.addUser(new User("Alex"));
+        //list.addUser(new User("Lilly"));
+        //list.addUser(new User("Leon"));
+        //list.addUser((new User("Linda")));
 
-        list.printUserList();
+        list.printClientList();
 
 
 
