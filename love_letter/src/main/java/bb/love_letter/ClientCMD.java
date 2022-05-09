@@ -10,8 +10,6 @@ public class ClientCMD {
     public Socket client = null;
     public DataOutputStream os;
     public DataInputStream is;
-    public String clientName="@Client0";
-
     public ClientCMD(){
 
     }
@@ -27,7 +25,7 @@ public class ClientCMD {
             InputStreamReader isr = new InputStreamReader(System.in);
             BufferedReader br = new BufferedReader(isr);
             System.out.print("Enter Your Name: ");
-            clientName = br.readLine();
+            String clientName = br.readLine();
             client = new Socket("127.0.0.1",6556);
             os = new DataOutputStream(client.getOutputStream());
             is = new DataInputStream(client.getInputStream());

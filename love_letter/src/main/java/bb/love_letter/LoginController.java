@@ -24,27 +24,28 @@ public class LoginController {
         model.setUsername(username);
 
         try {
-            Socket socket = new Socket(model.getIp(), model.getPort());
-            socket.getKeepAlive();
-            InputStream inputStream = socket.getInputStream();
-            OutputStream outputStream = socket.getOutputStream();
-            BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
-            // Request for Login is made here
-            User me = new User(username);
-            UserEvent login = new UserEvent(me, UserEvent.UserEventType.LOGIN_REQUEST);
-            Envelope request = new Envelope(login, Envelope.TypeEnum.USEREVENT);
-            Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
-            String requestJson = gson.toJson(request);
-            PrintWriter out = new PrintWriter(outputStream, true);
-            out.println(requestJson);
-            out.flush();
-            // Wait for response of the Server
-            String responseJson = in.readLine();
-            Envelope response = Util.deserializeJsontoEnvelope(responseJson);
-            UserEvent loginResponse = (UserEvent) response.getPayload();
-            if (loginResponse.getUserEventType() == UserEvent.UserEventType.LOGIN_CONFIRMATION) {
-                NetworkConnection.getInstance().init(socket, model.getIp(), model.getPort(), me);
-                model.setSuccessfulLogin(true);
+            Socket client = new Socket(ip, port);
+            DataOutputStream dataOutputStream = new DataOutputStream(client.getOutputStream());
+            DataInputStream dataInputStream = new DataInputStream(client.getInputStream());
+            //request as a client
+            User user = new User(username);
+            UserEvent userEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_REQUEST);
+            Envelope request = new Envelope(userEvent, Envelope.TypeEnum.USEREVENT);
+            String jsonRequest = Util.getEnvelopGson().toJson(request);
+            dataOutputStream.writeUTF(jsonRequest);
+            String response = dataInputStream.readUTF();
+            Envelope envelope = Util.deserializeJsontoEnvelope(response);
+
+            if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
+                UserEvent loginResponseEvent = (UserEvent) envelope.getPayload();
+                if (loginResponseEvent.getUserEventType() == UserEvent.UserEventType.LOGIN_CONFIRMATION) {
+                    NetworkConnection.getInstance().init(client, dataInputStream, dataOutputStream, user);
+                    model.setSuccessfulLogin(true);
+                } else if (loginResponseEvent.getUserEventType() == UserEvent.UserEventType.LOGIN_ERROR) {
+                    System.out.println("Error: The username " + user.getName() + " is already taken!");
+                }
+            } else {
+                System.out.println("Error: Could Not Connect To Server!");
             }
 
         } catch (UnknownHostException ex) {

@@ -69,18 +69,8 @@ public class ChatView {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 String message = messageField.getText();
-                ChatMessage chatMessage = new ChatMessage(NetworkConnection.getInstance().getUser(), message);
-                Envelope envelope = new Envelope(chatMessage, Envelope.TypeEnum.CHATMESSAGE);
-                Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
-                String json = gson.toJson(envelope);
-                try {
-                    PrintWriter printWriter = new PrintWriter(NetworkConnection.getInstance().getSocket().getOutputStream());
-                    printWriter.println(json);
-                    messageField.setText("");
-                    System.out.println(json);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                model.setCurrentMessage(message);
+                messageField.setText("");
             }
         });
     }
@@ -89,10 +79,10 @@ public class ChatView {
         model.getChatMessageObservableList().addListener(new ListChangeListener<ChatMessage>() {
             @Override
             public void onChanged(Change<? extends ChatMessage> change) {
-                if (change.wasAdded()) {
+                if (change.next()) {
                     for (ChatMessage chatMessage: change.getAddedSubList()) {
                         Label label = new Label(chatMessage.getMessage());
-                        //scroll.get
+                        System.out.println("Msg: " + chatMessage.getMessage());
                     }
                 }
             }

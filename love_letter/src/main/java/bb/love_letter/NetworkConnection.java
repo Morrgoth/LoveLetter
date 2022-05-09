@@ -9,10 +9,8 @@ public class NetworkConnection {
 
     User user;
     Socket socket;
-    InputStream inputStream;
-    OutputStreamWriter outputStream;
-    String ip;
-    int port;
+    DataInputStream dataInputStream;
+    DataOutputStream dataOutputStream;
     NetworkConnection(){}
 
     public User getUser(){
@@ -21,25 +19,18 @@ public class NetworkConnection {
     public Socket getSocket(){
         return socket;
     }
-    public InputStream getInputStream(){
-        return inputStream;
+    public DataInputStream getInputStream(){
+        return dataInputStream;
     }
-    public OutputStreamWriter getOutputStream(){
-        return outputStream;
+    public DataOutputStream getOutputStream(){
+        return dataOutputStream;
     }
 
-    public void init(Socket socket, String ip, int port, User user) {
+    public void init(Socket socket, DataInputStream dataInputStream, DataOutputStream dataOutputStream, User user) {
         this.socket = socket;
-        this.ip = ip;
-        this.port = port;
+        this.dataInputStream = dataInputStream;
+        this.dataOutputStream = dataOutputStream;
         this.user = user;
-    }
-    public String getIp(){
-        return this.ip;
-    }
-
-    public int getPort() {
-        return port;
     }
 
     public static NetworkConnection getInstance() {
