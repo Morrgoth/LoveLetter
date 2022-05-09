@@ -26,7 +26,7 @@ public class ChatView {
     private TextField messageField;
     private Button sentbutton;
     private ScrollPane scroll;
-    private ListView<ChatMessage> listView;
+    private ListView<String> listView;
 
 
     public ChatView (ChatModel model, ChatController controller) {
@@ -43,8 +43,8 @@ public class ChatView {
         messageField = new TextField();
         messageField.setPromptText("Type your message here...");
         sentbutton = new Button("Send");
-        controller.addChatMessage(new ChatMessage(new User("name"), "Hallo"));
-        listView = new ListView<>(model.getChatMessageObservableList());
+        controller.addChatMessage(new ChatMessage(new User("Server"), "Welcome " + NetworkConnection.getInstance().getUser().getName() + "!"));
+        listView = new ListView<>(model.getChatMessageStringObservableList());
         HBox chatBox = new HBox();
         HBox.setHgrow(messageField, Priority.ALWAYS);
         RowConstraints regRow = new RowConstraints();

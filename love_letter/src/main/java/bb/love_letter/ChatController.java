@@ -20,6 +20,7 @@ public class ChatController {
 
     public void addChatMessage(ChatMessage chatMessage) {
         this.model.addChatMessage(chatMessage);
+        this.model.addChatMessageString(chatMessage);
     }
     public void addUser(User user){
         this.model.addUser(user);

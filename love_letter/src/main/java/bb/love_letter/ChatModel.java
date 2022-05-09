@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 
 public class ChatModel {
    private ObservableList <ChatMessage> chatMessageObservableList = FXCollections.observableArrayList();
+   private ObservableList <String> chatMessageStringObservableList = FXCollections.observableArrayList();
    private ObservableList<User> userObservableList = FXCollections.observableArrayList();
 
    private StringProperty currentMessage = new SimpleStringProperty("");
@@ -21,6 +22,11 @@ public class ChatModel {
 
     public ObservableList<User> getUserObservableList() {
         return userObservableList;
+    }
+
+    public ObservableList<String> getChatMessageStringObservableList() {return chatMessageStringObservableList;}
+    public void addChatMessageString(ChatMessage chatMessage) {
+        chatMessageStringObservableList.add(chatMessage.getSender().getName() + ": " + chatMessage.getMessage());
     }
 
     public void addUser(User user){

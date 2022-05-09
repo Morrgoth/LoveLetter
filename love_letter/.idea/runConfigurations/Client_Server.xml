@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Client-Server" type="CompoundRunConfigurationType">
-    <toRun name="ClientApplication" type="Application" />
+    <toRun name="bb.love_letter.ClientApplication" type="Application" />
     <toRun name="Server1" type="Application" />
     <method v="2" />
   </configuration>
