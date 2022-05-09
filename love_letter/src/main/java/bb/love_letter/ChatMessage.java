@@ -4,8 +4,8 @@ package bb.love_letter;
 import java.io.Serializable;
 
 public class ChatMessage implements Serializable {
-    private User sender;
-    private String message;
+    public User sender;
+    public String message;
 
     public ChatMessage(User sender, String message){
         this.sender = sender;
@@ -18,5 +18,9 @@ public class ChatMessage implements Serializable {
 
     public String getMessage(){
         return message;
+    }
+
+    public void setSender(User user) {
+        this.sender = user;
     }
 }

@@ -1,11 +1,16 @@
 package bb.love_letter;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class ChatModel {
    private ObservableList <ChatMessage> chatMessageObservableList = FXCollections.observableArrayList();
+   private ObservableList <String> chatMessageStringObservableList = FXCollections.observableArrayList();
    private ObservableList<User> userObservableList = FXCollections.observableArrayList();
+
+   private StringProperty currentMessage = new SimpleStringProperty("");
 
     public ObservableList<ChatMessage> getChatMessageObservableList() {
         return chatMessageObservableList;
@@ -19,7 +24,28 @@ public class ChatModel {
         return userObservableList;
     }
 
+    public ObservableList<String> getChatMessageStringObservableList() {return chatMessageStringObservableList;}
+    public void addChatMessageString(ChatMessage chatMessage) {
+        chatMessageStringObservableList.add(chatMessage.getSender().getName() + ": " + chatMessage.getMessage());
+    }
+
     public void addUser(User user){
         userObservableList.add(user);
+    }
+
+    public StringProperty currentMessageProperty() {
+        return currentMessage;
+    }
+
+    public String getCurrentMessage() {
+        return currentMessage.get();
+    }
+
+    public void setCurrentMessage(String message) {
+        currentMessage.set(message);
+    }
+
+    public void resetCurrentMessage() {
+        currentMessage.set("");
     }
 }

@@ -1,7 +1,7 @@
 package bb.love_letter;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 public class NetworkConnection {
@@ -9,9 +9,8 @@ public class NetworkConnection {
 
     User user;
     Socket socket;
-    ObjectInputStream inputStream;
-    ObjectOutputStream outputStream;
-
+    DataInputStream dataInputStream;
+    DataOutputStream dataOutputStream;
     NetworkConnection(){}
 
     public User getUser(){
@@ -20,17 +19,17 @@ public class NetworkConnection {
     public Socket getSocket(){
         return socket;
     }
-    public ObjectInputStream getObjectInputStream(){
-        return inputStream;
+    public DataInputStream getInputStream(){
+        return dataInputStream;
     }
-    public ObjectOutputStream getObjectOutputStream(){
-        return outputStream;
+    public DataOutputStream getOutputStream(){
+        return dataOutputStream;
     }
 
-    public void init(Socket socket,ObjectInputStream inputStream,ObjectOutputStream outputStream,User user) {
+    public void init(Socket socket, DataInputStream dataInputStream, DataOutputStream dataOutputStream, User user) {
         this.socket = socket;
-        this.inputStream = inputStream;
-        this.outputStream = outputStream;
+        this.dataInputStream = dataInputStream;
+        this.dataOutputStream = dataOutputStream;
         this.user = user;
     }
 

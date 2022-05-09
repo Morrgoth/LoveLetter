@@ -67,7 +67,6 @@ public class LoginView {
         button.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                System.out.println("Clicked");
                 String ip = ipField.getText();
                 int port = Integer.parseInt(portField.getText());
                 String username = usernameField.getText();
@@ -91,15 +90,19 @@ public class LoginView {
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldVal, Boolean newVal) {
                 if (newVal) {
                     // Successful login, open new window etc.
+                    System.out.println("Successful Login!");
                     ChatModel chatModel = new ChatModel();
                     ChatController chatController = new ChatController(chatModel);
                     ChatView chatView = new ChatView(chatModel, chatController);
-
                     Stage stage = new Stage();
                     stage.setTitle("Chat");
                     stage.setScene(new Scene(chatView.asParent(), 700, 500));
                     stage.show();
                     view.getScene().getWindow().hide();
+                    ClientReaderThreadUI read = new ClientReaderThreadUI(chatController);
+                    ClientWriterThreadUI write = new ClientWriterThreadUI(chatController);
+                    read.start();
+                    write.start();
                 }
             }
         });

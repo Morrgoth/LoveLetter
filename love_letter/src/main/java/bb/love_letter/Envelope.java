@@ -3,9 +3,8 @@ package bb.love_letter;
 import java.io.*;
 
 public class Envelope implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private  Object payload;
-    private  TypeEnum type;
+    public Object payload;
+    public TypeEnum type;
 
     //enum * user & chatMessage ) speichert in string type
     public enum TypeEnum{
@@ -18,13 +17,26 @@ public class Envelope implements Serializable {
         this.type = type;
     }
 
+    public Envelope() {
+        this.payload = null;
+        this.type = null;
+    }
+
     public Object getPayload(){
         return payload;
+    }
+
+    public void setPayload(Object payload) {
+        this.payload = payload;
     }
 
     public TypeEnum getType(){
 
         return type;
+    }
+
+    public void setType(TypeEnum type) {
+        this.type = type;
     }
 
 }
