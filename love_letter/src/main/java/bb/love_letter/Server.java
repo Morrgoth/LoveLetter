@@ -40,9 +40,7 @@ public class Server {
                             UserEvent loginErrorEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_ERROR);
                             Envelope loginError = new Envelope(loginErrorEvent, Envelope.TypeEnum.USEREVENT);
                             dataOutputStream.writeUTF(Util.getEnvelopGson().toJson(loginError)); // LOGIN_ERROR
-                            // What to do with the connection of login is unsuccessful?
-                            clientList.addClient(user, client);
-                            messageRouterThread.clientList.addClient(user,client);
+                            client.close();
                         }
                     }
                 }
