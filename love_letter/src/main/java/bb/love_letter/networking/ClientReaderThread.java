@@ -5,6 +5,12 @@ import bb.love_letter.game.User;
 
 import java.io.DataInputStream;
 
+/**
+ * This is the Thread that receives all messages from the Server and handles them as needed. It is used by
+ * the CLI version of Love Letter.
+ *
+ * @author Bence Ament
+ */
 public class ClientReaderThread extends Thread{
     DataInputStream dataInputStream;
     User user;
@@ -12,6 +18,10 @@ public class ClientReaderThread extends Thread{
         this.dataInputStream = dataInputStream;
         this.user = user;
     }
+
+    /**
+     * Handling of messages received from the Server
+     */
     public void run()
     {
         try{

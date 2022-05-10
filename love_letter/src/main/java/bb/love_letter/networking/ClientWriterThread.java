@@ -9,6 +9,14 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 
+/**
+ * This is the Thread that sends all the messages from the Client to the Server. It waits for lines on the command line
+ * and if a line is fed into it, it forwards it the Server.
+ *
+ * It is used by the CLI version of Love Letter.
+ *
+ * @author Bence Ament
+ */
 public class ClientWriterThread extends Thread{
     private DataOutputStream dataOutputStream;
     public BufferedReader bufferedReader;
@@ -25,6 +33,10 @@ public class ClientWriterThread extends Thread{
 
         }
     }
+
+    /**
+     * Upon inputting a line of text it is forwarded to the Server.
+     */
     public void run()
     {
         try{

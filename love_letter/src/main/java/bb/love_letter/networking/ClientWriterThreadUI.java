@@ -8,12 +8,23 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
 import java.io.*;
-
+/**
+ * This is the Thread that sends all the messages from the Client to the Server. It waits for lines on the command line
+ * and if a line is fed into it, it forwards it the Server.
+ *
+ * It is used by the GUI version of Love Letter.
+ *
+ * @author Bence Ament
+ */
 public class ClientWriterThreadUI extends Thread{
     private ChatController chatController;
     public ClientWriterThreadUI(ChatController chatController){
         this.chatController = chatController;
     }
+    /**
+     * This method listens to the changes of the ChatModel, and upon detecting a new Message written by the User
+     * it forwards it to the Server.
+     */
     public void run()
     {
         System.out.println("ClientWriterThreadUI started running");

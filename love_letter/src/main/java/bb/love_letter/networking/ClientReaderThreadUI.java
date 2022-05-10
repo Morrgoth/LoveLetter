@@ -5,11 +5,20 @@ import bb.love_letter.user_interface.ChatController;
 import bb.love_letter.user_interface.ChatMessage;
 import javafx.application.Platform;
 
+/**
+ * This is the Thread that receives all messages from the Server and handles them as needed. It is used by
+ * the GUI version of Love Letter.
+ *
+ * @author Bence Ament
+ */
 public class ClientReaderThreadUI extends Thread{
     ChatController chatController;
     public ClientReaderThreadUI(ChatController chatController){
         this.chatController = chatController;
     }
+    /**
+     * Handling of messages received from the Server
+     */
     public void run()
     {
         System.out.println("ClientReaderThreadUI started running");
