@@ -8,6 +8,10 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ *
+ * @author Zeynab Baiani
+ */
 public class ChatController {
     public ChatModel model;
     private BufferedWriter bufferedWriter;

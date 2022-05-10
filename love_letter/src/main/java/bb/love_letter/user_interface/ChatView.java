@@ -12,6 +12,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 
+/**
+ *
+ * @author Zeynab Baiani
+ */
 public class ChatView {
     public ChatModel model;
     public ChatController controller;

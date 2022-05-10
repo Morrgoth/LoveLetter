@@ -2,6 +2,10 @@ package bb.love_letter.user_interface;
 
 import javafx.beans.property.*;
 
+/**
+ *
+ * @author Bence Ament
+ */
 public class LoginModel {
     private final StringProperty ip = new SimpleStringProperty();
     private final IntegerProperty port = new SimpleIntegerProperty();

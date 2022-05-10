@@ -1,7 +1,5 @@
 package bb.love_letter.game;
 
-//Diese Klasse wurde von Veronika Heckel bearbeitet
-
 import java.io.Serializable;
 
 /**
@@ -15,6 +13,9 @@ public class User implements Serializable {
         this.name = name;
     }
 
+    /**
+     * @return The username of the User
+     */
     public String getName(){
         return name;
     }

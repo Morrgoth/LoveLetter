@@ -10,6 +10,10 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+/**
+ *
+ * @author Bence Ament
+ */
 public class LoginController {
     public LoginModel model;
 

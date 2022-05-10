@@ -7,6 +7,10 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ *
+ * @author Zeynab Baiani
+ */
 public class ChatModel {
    private ObservableList <ChatMessage> chatMessageObservableList = FXCollections.observableArrayList();
    private ObservableList <String> chatMessageStringObservableList = FXCollections.observableArrayList();

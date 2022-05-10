@@ -11,6 +11,10 @@ import com.google.gson.GsonBuilder;
 import java.io.*;
 import java.net.*;
 
+/**
+ *
+ * @author Bence Ament
+ */
 public class ClientCLI {
 
     public Socket client = null;

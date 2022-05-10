@@ -17,6 +17,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+/**
+ *
+ * @author Bence Ament
+ */
 public class LoginView {
     private GridPane view;
     public LoginModel model;

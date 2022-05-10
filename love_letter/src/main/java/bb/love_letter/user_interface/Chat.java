@@ -7,6 +7,10 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ *
+ * @author Zeynab Baiani
+ */
 public class Chat extends Application {
 
     public static void main(String[] args) {
