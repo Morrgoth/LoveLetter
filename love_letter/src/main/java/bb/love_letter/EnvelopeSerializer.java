@@ -6,10 +6,10 @@ import java.lang.reflect.Type;
 
 /**
  * This is the custom JsonSerializer we use to convert Envelope objects to JSON.
- * The overriden serialize method must handle each Object type which might be the payload of an Envelope
+ * The override serialize method must handle each Object type which might be the payload of an Envelope
  * individually.
  *
- * Currently it can handle: UserEvent, ChatMessage
+ * Currently, it can handle: UserEvent, ChatMessage
  *
  * @author Bence Ament
  */
