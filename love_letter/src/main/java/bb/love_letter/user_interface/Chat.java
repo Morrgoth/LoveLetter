@@ -1,5 +1,8 @@
-package bb.love_letter;
+package bb.love_letter.user_interface;
 
+import bb.love_letter.user_interface.ChatController;
+import bb.love_letter.user_interface.ChatModel;
+import bb.love_letter.user_interface.ChatView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

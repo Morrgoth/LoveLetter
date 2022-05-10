@@ -1,5 +1,7 @@
-package bb.love_letter;
+package bb.love_letter.networking;
 
+import bb.love_letter.user_interface.ChatController;
+import bb.love_letter.user_interface.ChatMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import javafx.beans.value.ChangeListener;
@@ -7,7 +9,7 @@ import javafx.beans.value.ObservableValue;
 
 import java.io.*;
 
-class ClientWriterThreadUI extends Thread{
+public class ClientWriterThreadUI extends Thread{
     private ChatController chatController;
     public ClientWriterThreadUI(ChatController chatController){
         this.chatController = chatController;

@@ -1,12 +1,12 @@
-package bb.love_letter;
+package bb.love_letter.networking;
 
+import bb.love_letter.user_interface.ChatMessage;
+import bb.love_letter.game.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.net.Socket;
-import java.util.HashMap;
 
 public class ServerThread extends Thread{
     //public HashMap<User, Socket> clientList = new HashMap<User,Socket>();

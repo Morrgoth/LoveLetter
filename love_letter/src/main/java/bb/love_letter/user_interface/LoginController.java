@@ -1,15 +1,14 @@
-package bb.love_letter;
+package bb.love_letter.user_interface;
 
-import com.google.gson.GsonBuilder;
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import com.google.gson.Gson;
+import bb.love_letter.game.User;
+import bb.love_letter.networking.UserEvent;
+import bb.love_letter.networking.Envelope;
+import bb.love_letter.networking.NetworkConnection;
 
 
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.nio.charset.StandardCharsets;
 
 public class LoginController {
     public LoginModel model;

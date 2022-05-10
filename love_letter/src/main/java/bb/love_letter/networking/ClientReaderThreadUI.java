@@ -1,12 +1,11 @@
-package bb.love_letter;
+package bb.love_letter.networking;
 
+import bb.love_letter.game.User;
+import bb.love_letter.user_interface.ChatController;
+import bb.love_letter.user_interface.ChatMessage;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 
-import java.io.DataInputStream;
-
-class ClientReaderThreadUI extends Thread{
+public class ClientReaderThreadUI extends Thread{
     ChatController chatController;
     public ClientReaderThreadUI(ChatController chatController){
         this.chatController = chatController;

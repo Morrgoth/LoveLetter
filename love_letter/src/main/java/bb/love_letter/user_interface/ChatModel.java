@@ -1,5 +1,6 @@
-package bb.love_letter;
+package bb.love_letter.user_interface;
 
+import bb.love_letter.game.User;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;

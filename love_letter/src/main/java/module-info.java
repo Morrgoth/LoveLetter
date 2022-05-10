@@ -4,6 +4,10 @@ module bb.love_letter {
     requires com.google.gson;
 
 
-    opens bb.love_letter to javafx.fxml;
-    exports bb.love_letter;
+    exports bb.love_letter.networking;
+    opens bb.love_letter.networking to javafx.fxml;
+    exports bb.love_letter.user_interface;
+    opens bb.love_letter.user_interface to javafx.fxml;
+    exports bb.love_letter.game;
+    opens bb.love_letter.game to javafx.fxml;
 }

@@ -1,8 +1,7 @@
-package bb.love_letter;
+package bb.love_letter.user_interface;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import javafx.collections.ListChangeListener;
+import bb.love_letter.game.User;
+import bb.love_letter.networking.NetworkConnection;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -11,11 +10,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
-
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.net.Socket;
 
 public class ChatView {
     public ChatModel model;

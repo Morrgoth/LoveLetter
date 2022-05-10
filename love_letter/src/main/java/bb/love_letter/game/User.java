@@ -1,4 +1,4 @@
-package bb.love_letter;
+package bb.love_letter.game;
 
 //Diese Klasse wurde von Veronika Heckel bearbeitet
 

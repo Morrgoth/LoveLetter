@@ -1,7 +1,8 @@
-package bb.love_letter;
+package bb.love_letter.networking;
+
+import bb.love_letter.game.User;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 public class NetworkConnection {

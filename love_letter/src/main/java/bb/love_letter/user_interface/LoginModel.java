@@ -1,4 +1,4 @@
-package bb.love_letter;
+package bb.love_letter.user_interface;
 
 import javafx.beans.property.*;
 

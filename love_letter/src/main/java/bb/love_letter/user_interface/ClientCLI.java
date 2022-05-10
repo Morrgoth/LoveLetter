@@ -1,4 +1,10 @@
-package bb.love_letter;
+package bb.love_letter.user_interface;
+import bb.love_letter.game.User;
+import bb.love_letter.networking.UserEvent;
+import bb.love_letter.networking.ClientReaderThread;
+import bb.love_letter.networking.ClientWriterThread;
+import bb.love_letter.networking.Envelope;
+import bb.love_letter.networking.EnvelopeSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

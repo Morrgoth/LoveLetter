@@ -1,5 +1,7 @@
-package bb.love_letter;
+package bb.love_letter.networking;
 
+import bb.love_letter.user_interface.ChatMessage;
+import bb.love_letter.game.User;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;

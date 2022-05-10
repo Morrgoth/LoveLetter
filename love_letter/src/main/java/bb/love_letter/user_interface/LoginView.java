@@ -1,12 +1,12 @@
-package bb.love_letter;
+package bb.love_letter.user_interface;
 
+import bb.love_letter.networking.ClientReaderThreadUI;
+import bb.love_letter.networking.ClientWriterThreadUI;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -16,8 +16,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class LoginView {
     private GridPane view;

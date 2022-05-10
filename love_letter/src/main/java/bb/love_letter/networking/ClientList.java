@@ -1,7 +1,8 @@
-package bb.love_letter;
+package bb.love_letter.networking;
+import bb.love_letter.game.User;
+
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 // Create an ArrayList object
