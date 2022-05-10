@@ -35,7 +35,6 @@ public class Envelope implements Serializable {
     }
 
     public TypeEnum getType(){
-
         return type;
     }
     public void setType(TypeEnum type) {
