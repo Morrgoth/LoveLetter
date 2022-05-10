@@ -25,7 +25,6 @@ public class ChatView {
     private GridPane view;
     private TextField messageField;
     private Button sentbutton;
-    private ScrollPane scroll;
     private ListView<String> listView;
 
 
@@ -34,12 +33,11 @@ public class ChatView {
         this.controller = controller;
         buildUI();
         setUpListeners();
-        observeModelandUpdate();
+        //observeModelandUpdate();
     }
 
     private void buildUI() {
         view = new GridPane();
-        scroll = new ScrollPane();
         messageField = new TextField();
         messageField.setPromptText("Type your message here...");
         sentbutton = new Button("Send");
@@ -50,9 +48,7 @@ public class ChatView {
         RowConstraints regRow = new RowConstraints();
         regRow.setVgrow(Priority.ALWAYS);
         view.getRowConstraints().add(regRow);
-        scroll.setPannable(true);
 
-        //scroll.setStyle("-fx-background: #FF0000");
         chatBox.getChildren().addAll(messageField, sentbutton);
         messageField.setPrefWidth(600);
         sentbutton.setPrefWidth(100);
@@ -74,19 +70,4 @@ public class ChatView {
             }
         });
     }
-
-    private void observeModelandUpdate() {
-        model.getChatMessageObservableList().addListener(new ListChangeListener<ChatMessage>() {
-            @Override
-            public void onChanged(Change<? extends ChatMessage> change) {
-                if (change.next()) {
-                    for (ChatMessage chatMessage: change.getAddedSubList()) {
-                        Label label = new Label(chatMessage.getMessage());
-                        System.out.println("Msg: " + chatMessage.getMessage());
-                    }
-                }
-            }
-        });
-    }
-
 }

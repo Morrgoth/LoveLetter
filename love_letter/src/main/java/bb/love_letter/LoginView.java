@@ -99,10 +99,10 @@ public class LoginView {
                     stage.setScene(new Scene(chatView.asParent(), 700, 500));
                     stage.show();
                     view.getScene().getWindow().hide();
-                    ClientReaderThreadUI read = new ClientReaderThreadUI(chatController);
-                    ClientWriterThreadUI write = new ClientWriterThreadUI(chatController);
-                    read.start();
-                    write.start();
+                    ClientReaderThreadUI readerThreadUI = new ClientReaderThreadUI(chatController);
+                    ClientWriterThreadUI writerThreadUI = new ClientWriterThreadUI(chatController);
+                    readerThreadUI.start();
+                    writerThreadUI.start();
                 }
             }
         });

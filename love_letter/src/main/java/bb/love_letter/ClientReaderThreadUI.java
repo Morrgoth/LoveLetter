@@ -39,15 +39,13 @@ class ClientReaderThreadUI extends Thread{
                                 chatController.addChatMessage(chatMessage);
                             }
                         });
-
-                        //System.out.println(chatMessage.getSender().getName() + ": " + chatMessage.getMessage());
                     }
                 }
                 json = null;
             }
         }
         catch(Exception e){
-
+            // Error Message should be added here
         }
     }
 }

@@ -55,35 +55,6 @@ public class ClientList {
             System.out.println(u.getName());
         }
     }
-
-    public static void main(String[] args) {
-      //while(true)
-        ClientList list = new ClientList();
-        ArrayList<User> names = new ArrayList<>();
-        //list.addUser(new User("Linda"));
-        //list.addUser(new User("Alex"));
-        //list.addUser(new User("Lilly"));
-        //list.addUser(new User("Leon"));
-        //list.addUser((new User("Linda")));
-
-        list.printClientList();
-
-
-
-          //printUserList(userList);
-          /*Scanner sc = new Scanner(System.in);
-          System.out.print("Please enter your nickname.");
-          String name = sc.nextLine();
-          if(userList.contains(name) == false){
-          userList.add(new User(name));
-          System.out.println(userList.toString());
-          System.out.println("The entered nickname is acceptable.");
-          break;
-          }else{
-           System.out.println("The entered nickname exists already. Please enter an another name:");
-            }*/
-         }
-
-    }
+}
 
 

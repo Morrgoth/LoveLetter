@@ -40,24 +40,5 @@ class ClientWriterThreadUI extends Thread{
                 }
             }
         });
-        //try{
-        //    // Notify others that the User logged in
-
-        //    while(true){
-        //        // SEND MESSAGE TO SERVER
-        //        String msg = "";
-        //        System.out.println("MSG: " + msg);
-        //        if (!msg.equals("")) {
-        //            ChatMessage chatMessage = new ChatMessage(NetworkConnection.getInstance().getUser(), msg);
-        //            Envelope envelope = new Envelope(chatMessage, Envelope.TypeEnum.CHATMESSAGE);
-        //            String json = gson.toJson(envelope);
-        //            NetworkConnection.getInstance().getOutputStream().writeUTF(json);
-        //            //chatController.resetCurrentMessage();
-        //        }
-        //    }
-        //}
-        //catch(Exception e){
-//
-        //}
     }
 }
