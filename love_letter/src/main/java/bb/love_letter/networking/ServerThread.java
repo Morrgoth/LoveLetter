@@ -8,8 +8,13 @@ import com.google.gson.GsonBuilder;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
+/**
+ * This is the Thread started for each user, it waits for messages from its corresponding user and then forwards
+ * the received messages to all the other logged-in Users.
+ *
+ * @author Bence Ament
+ */
 public class ServerThread extends Thread{
-    //public HashMap<User, Socket> clientList = new HashMap<User,Socket>();
     public ClientList clientList = new ClientList();
     public DataInputStream dataInputStream = null;
     public DataOutputStream dataOutputStream = null;
@@ -18,8 +23,12 @@ public class ServerThread extends Thread{
     public ServerThread(Server parent) {
         this.parent = parent;
     }
+
+    /**
+     * Waits for and forwards messages of the User corresponding to the ServerThread instance.
+     */
     public void run(){
-        String msg = "";
+        String json = "";
         System.out.println("Chat Server Running .....");
 
         while(true){
@@ -31,9 +40,9 @@ public class ServerThread extends Thread{
                         if(dataInputStream.available()>0)
                         {
                             // RECEIVE MESSAGE FROM USERS
-                            msg = dataInputStream.readUTF();
-                            System.out.println(msg);
-                            Envelope envelope = Envelope.deserializeEnvelopeFromJson(msg);
+                            json = dataInputStream.readUTF();
+                            System.out.println(json);
+                            Envelope envelope = Envelope.deserializeEnvelopeFromJson(json);
                             if (envelope.getType() == Envelope.TypeEnum.CHATMESSAGE) {
                                 ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
                                 String message = chatMessage.getMessage();
@@ -41,15 +50,15 @@ public class ServerThread extends Thread{
                                     UserEvent userEvent = new UserEvent(chatMessage.getSender(), UserEvent.UserEventType.LOGOUT_CONFIRMATION);
                                     Envelope logoutNotification = new Envelope(userEvent, Envelope.TypeEnum.USEREVENT);
                                     Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
-                                    msg = gson.toJson(logoutNotification);
+                                    json = gson.toJson(logoutNotification);
                                     this.clientList.removeClient(user);
                                     this.parent.clientList.removeClient(user);
                                     Thread.currentThread().interrupt();
                                 }
                             }
-                            for (User recepient: clientList.getUsers()) {
-                                dataOutputStream = new DataOutputStream(clientList.getClientSocket(recepient).getOutputStream());
-                                dataOutputStream.writeUTF(msg);
+                            for (User recipient: clientList.getUsers()) {
+                                dataOutputStream = new DataOutputStream(clientList.getClientSocket(recipient).getOutputStream());
+                                dataOutputStream.writeUTF(json);
                             }
                         }
                     }
