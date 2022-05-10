@@ -17,7 +17,7 @@ class ClientReaderThread extends Thread{
                 // RECEIVE MESSAGE FROM SERVER
                 json = dataInputStream.readUTF();
                 if(json != null) {
-                    Envelope envelope = Util.deserializeJsontoEnvelope(json);
+                    Envelope envelope = Envelope.deserializeEnvelopeFromJson(json);
                     if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
                         UserEvent userEvent = (UserEvent) envelope.getPayload();
                         if (userEvent.getUserEventType() == UserEvent.UserEventType.LOGIN_CONFIRMATION) {

@@ -39,7 +39,7 @@ public class ClientCMD {
             ClientReaderThread read = new ClientReaderThread(is, user);
             ClientWriterThread write = new ClientWriterThread(os,user);
             String response = is.readUTF();
-            Envelope envelope = Util.deserializeJsontoEnvelope(response);
+            Envelope envelope = Envelope.deserializeEnvelopeFromJson(response);
             if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
                 UserEvent loginResponseEvent = (UserEvent) envelope.getPayload();
                 if (loginResponseEvent.getUserEventType() == UserEvent.UserEventType.LOGIN_CONFIRMATION) {

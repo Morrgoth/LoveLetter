@@ -26,20 +26,20 @@ public class Server {
                     dataOutputStream = new DataOutputStream(client.getOutputStream());
                     dataInputStream = new DataInputStream(client.getInputStream());
                     String json = dataInputStream.readUTF();
-                    Envelope envelope = Util.deserializeJsontoEnvelope(json);
+                    Envelope envelope = Envelope.deserializeEnvelopeFromJson(json);
                     UserEvent userEvent = (UserEvent) envelope.getPayload();
                     if (userEvent.getUserEventType() == UserEvent.UserEventType.LOGIN_REQUEST) {
                         User user = userEvent.getUser();
                         if (!clientList.containsClient(user)) {
                             UserEvent loginConfirmationEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_CONFIRMATION);
                             Envelope loginConfirmation = new Envelope(loginConfirmationEvent, Envelope.TypeEnum.USEREVENT);
-                            dataOutputStream.writeUTF(Util.getEnvelopGson().toJson(loginConfirmation)); // LOGIN_CONFIRMATION
+                            dataOutputStream.writeUTF(loginConfirmation.toJson()); // LOGIN_CONFIRMATION
                             clientList.addClient(user, client);
                             messageRouterThread.clientList.addClient(user,client);
                         } else {
                             UserEvent loginErrorEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_ERROR);
                             Envelope loginError = new Envelope(loginErrorEvent, Envelope.TypeEnum.USEREVENT);
-                            dataOutputStream.writeUTF(Util.getEnvelopGson().toJson(loginError)); // LOGIN_ERROR
+                            dataOutputStream.writeUTF(loginError.toJson()); // LOGIN_ERROR
                             client.close();
                         }
                     }

@@ -33,7 +33,7 @@ public class ServerThread extends Thread{
                             // RECEIVE MESSAGE FROM USERS
                             msg = dataInputStream.readUTF();
                             System.out.println(msg);
-                            Envelope envelope = Util.deserializeJsontoEnvelope(msg);
+                            Envelope envelope = Envelope.deserializeEnvelopeFromJson(msg);
                             if (envelope.getType() == Envelope.TypeEnum.CHATMESSAGE) {
                                 ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
                                 String message = chatMessage.getMessage();

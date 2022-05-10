@@ -31,10 +31,10 @@ public class LoginController {
             User user = new User(username);
             UserEvent userEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_REQUEST);
             Envelope request = new Envelope(userEvent, Envelope.TypeEnum.USEREVENT);
-            String jsonRequest = Util.getEnvelopGson().toJson(request);
+            String jsonRequest = request.toJson();
             dataOutputStream.writeUTF(jsonRequest);
             String response = dataInputStream.readUTF();
-            Envelope envelope = Util.deserializeJsontoEnvelope(response);
+            Envelope envelope = Envelope.deserializeEnvelopeFromJson(response);
 
             if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
                 UserEvent loginResponseEvent = (UserEvent) envelope.getPayload();
