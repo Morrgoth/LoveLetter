@@ -1,8 +1,17 @@
 package bb.love_letter;
 
-//Diese Klasse wurde von Veronika Heckel bearbeitet
 
 import java.io.Serializable;
+
+
+/**
+ * This class represents the User in the Chat as a Person with its name.
+ * Each Username will be stored in a Hashmap (created in the Class ClientList)
+ * paired with the relating Socket to ensure that the login/logout process can be handled correctly.
+ * equals - Methods checks if two Users as an Object are the same and if the Names for both Users are equal
+ *
+ * @author Veronika
+ */
 
 public class User implements Serializable {
     public String name;
@@ -14,6 +23,7 @@ public class User implements Serializable {
     public String getName(){
         return name;
     }
+
 
     @Override
     public boolean equals(Object obj) {
