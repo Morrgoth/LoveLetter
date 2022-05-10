@@ -12,6 +12,7 @@ import java.net.*;
  * @author Bence Ament
  */
 public class Server {
+    private final int PORT = 6868;
     public ServerSocket server;
     public Socket client = null;
     public DataOutputStream dataOutputStream;
@@ -27,7 +28,7 @@ public class Server {
      */
     public void doConnections(){
         try{
-            server = new ServerSocket(6556);
+            server = new ServerSocket(PORT);
             ServerThread messageRouterThread = new ServerThread(this);
             messageRouterThread.start();
             while(true)

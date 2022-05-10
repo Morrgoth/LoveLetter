@@ -36,7 +36,7 @@ public class ClientCLI {
             BufferedReader br = new BufferedReader(isr);
             System.out.print("Enter Your Name: ");
             String clientName = br.readLine();
-            client = new Socket("127.0.0.1",6556);
+            client = new Socket("127.0.0.1",6868);
             os = new DataOutputStream(client.getOutputStream());
             is = new DataInputStream(client.getInputStream());
             //request as a client
