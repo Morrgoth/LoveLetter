@@ -5,6 +5,12 @@ import bb.love_letter.game.User;
 import java.io.*;
 import java.net.*;
 
+/**
+ * This is the primary Server Thread, it handles the logging in of new Users and upon successful login starts
+ * the separate ServerThreads for the individual users.
+ *
+ * @author Bence Ament
+ */
 public class Server {
     public ServerSocket server;
     public Socket client = null;
@@ -15,6 +21,10 @@ public class Server {
         Server server = new Server();
         server.doConnections();
     }
+
+    /**
+     * Waits for and handles the Login Requests of Users.
+     */
     public void doConnections(){
         try{
             server = new ServerSocket(6556);
