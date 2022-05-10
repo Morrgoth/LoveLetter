@@ -5,18 +5,18 @@ import com.google.gson.GsonBuilder;
 import java.io.*;
 import java.net.*;
 
-public class ClientCMD {
+public class ClientCLI {
 
     public Socket client = null;
     public DataOutputStream os;
     public DataInputStream is;
-    public ClientCMD(){
+    public ClientCLI(){
 
     }
 
     public static void main(String[] args)throws IOException{
 
-        ClientCMD a = new ClientCMD();
+        ClientCLI a = new ClientCLI();
         a.doConnections();
 
     }
