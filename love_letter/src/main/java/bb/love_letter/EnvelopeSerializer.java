@@ -4,6 +4,15 @@ import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
+/**
+ * This is the custom JsonSerializer we use to convert Envelope objects to JSON.
+ * The overriden serialize method must handle each Object type which might be the payload of an Envelope
+ * individually.
+ *
+ * Currently it can handle: UserEvent, ChatMessage
+ *
+ * @author Bence Ament
+ */
 public class EnvelopeSerializer implements JsonSerializer<Envelope> {
 
     @Override
