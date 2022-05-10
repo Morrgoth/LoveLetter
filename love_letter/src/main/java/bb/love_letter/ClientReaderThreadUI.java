@@ -26,10 +26,24 @@ class ClientReaderThreadUI extends Thread{
                         if (userEvent.getUserEventType() == UserEvent.UserEventType.LOGIN_CONFIRMATION) {
                             User newUser = userEvent.getUser();
                             if (!newUser.getName().equals(NetworkConnection.getInstance().getUser().getName())) {
-                                System.out.println(newUser.getName() + " joined the room");
+                                ChatMessage userJoinedMessage =
+                                        new ChatMessage(new User("Server"), newUser.getName() + " joined the room");
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        chatController.addChatMessage(userJoinedMessage);
+                                    }
+                                });
                             }
                         } else if (userEvent.getUserEventType() == UserEvent.UserEventType.LOGOUT_CONFIRMATION) {
-                            System.out.println(userEvent.getUser().getName() + " left the room");
+                            ChatMessage userLeftMessage =
+                                    new ChatMessage(new User("Server"), userEvent.getUser().getName() + " left the room");
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    chatController.addChatMessage(userLeftMessage);
+                                }
+                            });
                         }
                     } else if (envelope.getType() == Envelope.TypeEnum.CHATMESSAGE) {
                         ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
