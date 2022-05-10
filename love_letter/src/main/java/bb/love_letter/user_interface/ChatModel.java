@@ -1,6 +1,7 @@
 package bb.love_letter.user_interface;
 
 import bb.love_letter.game.User;
+import bb.love_letter.networking.ChatMessage;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;

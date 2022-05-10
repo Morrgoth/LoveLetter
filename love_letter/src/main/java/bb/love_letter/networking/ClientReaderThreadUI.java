@@ -2,7 +2,6 @@ package bb.love_letter.networking;
 
 import bb.love_letter.game.User;
 import bb.love_letter.user_interface.ChatController;
-import bb.love_letter.user_interface.ChatMessage;
 import javafx.application.Platform;
 
 /**

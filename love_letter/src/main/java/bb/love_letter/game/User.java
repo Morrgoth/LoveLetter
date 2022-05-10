@@ -4,6 +4,10 @@ package bb.love_letter.game;
 
 import java.io.Serializable;
 
+/**
+ *
+ * @author Veronika Heckel
+ */
 public class User implements Serializable {
     public String name;
 

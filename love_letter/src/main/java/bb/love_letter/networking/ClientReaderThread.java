@@ -1,6 +1,5 @@
 package bb.love_letter.networking;
 
-import bb.love_letter.user_interface.ChatMessage;
 import bb.love_letter.game.User;
 
 import java.io.DataInputStream;

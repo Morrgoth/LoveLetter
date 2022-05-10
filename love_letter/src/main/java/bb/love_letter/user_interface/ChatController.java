@@ -2,6 +2,7 @@ package bb.love_letter.user_interface;
 
 
 import bb.love_letter.game.User;
+import bb.love_letter.networking.ChatMessage;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
