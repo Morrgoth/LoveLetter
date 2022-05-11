@@ -9,6 +9,7 @@ import javafx.application.Platform;
  * the GUI version of Love Letter.
  *
  * @author Bence Ament
+ * @author Tolga Engin
  */
 public class ClientReaderThreadUI extends Thread{
     ChatController chatController;

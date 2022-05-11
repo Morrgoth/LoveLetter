@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
  * It is used by the CLI version of Love Letter.
  *
  * @author Bence Ament
+ * @author Tolga Engin
  */
 public class ClientWriterThread extends Thread{
     private DataOutputStream dataOutputStream;
@@ -39,17 +40,12 @@ public class ClientWriterThread extends Thread{
     public void run()
     {
         try{
-            // Notify others that the User logged in
-            ServerEvent loginEvent = new ServerEvent(user, ServerEvent.UserEventType.LOGIN_CONFIRMATION);
-            Envelope loginNotification = new Envelope(loginEvent, Envelope.TypeEnum.USEREVENT);
-            Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
-            dataOutputStream.writeUTF(gson.toJson(loginNotification));
             while(true){
                 // SEND MESSAGE TO SERVER
                 String msg = bufferedReader.readLine();
                 ChatMessage chatMessage = new ChatMessage(user, msg);
-                Envelope envelope = new Envelope(chatMessage, Envelope.TypeEnum.CHATMESSAGE);
-                String json = gson.toJson(envelope);
+                Envelope envelope = new Envelope(chatMessage, Envelope.EnvelopeType.CHAT_MESSAGE);
+                String json = envelope.toJson();
                 dataOutputStream.writeUTF(json);
             }
         }

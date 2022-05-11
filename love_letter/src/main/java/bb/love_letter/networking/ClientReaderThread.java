@@ -10,6 +10,7 @@ import java.io.DataInputStream;
  * the CLI version of Love Letter.
  *
  * @author Bence Ament
+ * @author Tolga Engin
  */
 public class ClientReaderThread extends Thread{
     DataInputStream dataInputStream;
