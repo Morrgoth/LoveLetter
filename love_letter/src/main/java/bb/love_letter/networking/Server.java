@@ -40,18 +40,18 @@ public class Server {
                     dataInputStream = new DataInputStream(client.getInputStream());
                     String json = dataInputStream.readUTF();
                     Envelope envelope = Envelope.deserializeEnvelopeFromJson(json);
-                    ServerEvent serverEvent = (ServerEvent) envelope.getPayload();
-                    if (serverEvent.getUserEventType() == ServerEvent.UserEventType.LOGIN_REQUEST) {
-                        User user = serverEvent.getUser();
+                    if (envelope.getType()== Envelope.EnvelopeType.LOGIN_REQUEST) {
+                        LoginRequest loginRequest=(LoginRequest) envelope.getPayload();
+                        User user = loginRequest.getUser();
                         if (!clientList.containsClient(user)) {
-                            ServerEvent loginConfirmationEvent = new ServerEvent(user, ServerEvent.UserEventType.LOGIN_CONFIRMATION);
-                            Envelope loginConfirmation = new Envelope(loginConfirmationEvent, Envelope.TypeEnum.USEREVENT);
+                            ServerEvent loginConfirmationEvent = new ServerEvent(user, ServerEvent.ServerEventType.LOGIN_CONFIRMATION);
+                            Envelope loginConfirmation = new Envelope(loginConfirmationEvent, Envelope.EnvelopeType.LOGIN_REQUEST);
                             dataOutputStream.writeUTF(loginConfirmation.toJson()); // LOGIN_CONFIRMATION
                             clientList.addClient(user, client);
                             messageRouterThread.clientList.addClient(user,client);
                         } else {
-                            ServerEvent loginErrorEvent = new ServerEvent(user, ServerEvent.UserEventType.LOGIN_ERROR);
-                            Envelope loginError = new Envelope(loginErrorEvent, Envelope.TypeEnum.USEREVENT);
+                            ServerEvent loginErrorEvent = new ServerEvent(user, ServerEvent.ServerEventType.LOGIN_ERROR);
+                            Envelope loginError = new Envelope(loginErrorEvent, Envelope.EnvelopeType.USEREVENT);
                             dataOutputStream.writeUTF(loginError.toJson()); // LOGIN_ERROR
                             client.close();
                         }
