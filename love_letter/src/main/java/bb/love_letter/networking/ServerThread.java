@@ -86,9 +86,10 @@ public class ServerThread extends Thread{
             }
         } else if (blacklist != null) {
             for (User recipient: clientList.getUsers()) {
-                if (!blacklist.contains(recipient))
-                dataOutputStream = new DataOutputStream(clientList.getClientSocket(recipient).getOutputStream());
-                dataOutputStream.writeUTF(envelope.toJson());
+                if (!blacklist.contains(recipient)) {
+                    dataOutputStream = new DataOutputStream(clientList.getClientSocket(recipient).getOutputStream());
+                    dataOutputStream.writeUTF(envelope.toJson());
+                }
             }
         }
         else {

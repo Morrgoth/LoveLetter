@@ -44,14 +44,14 @@ public class Server {
                         LoginRequest loginRequest=(LoginRequest) envelope.getPayload();
                         User user = loginRequest.getUser();
                         if (!clientList.containsClient(user)) {
-                            ServerEvent loginConfirmationEvent = new ServerEvent(user, ServerEvent.ServerEventType.LOGIN_CONFIRMATION);
+                            ServerEvent loginConfirmationEvent = new ServerEvent("Welcome " + user.getName() + "!", ServerEvent.ServerEventType.LOGIN_CONFIRMATION);
                             Envelope loginConfirmation = new Envelope(loginConfirmationEvent, Envelope.EnvelopeType.LOGIN_REQUEST);
                             dataOutputStream.writeUTF(loginConfirmation.toJson()); // LOGIN_CONFIRMATION
                             clientList.addClient(user, client);
                             messageRouterThread.clientList.addClient(user,client);
                         } else {
-                            ServerEvent loginErrorEvent = new ServerEvent(user, ServerEvent.ServerEventType.LOGIN_ERROR);
-                            Envelope loginError = new Envelope(loginErrorEvent, Envelope.EnvelopeType.USEREVENT);
+                            ServerEvent loginErrorEvent = new ServerEvent("Username is already in use. Please choose another username.", ServerEvent.ServerEventType.NAME_ALREADY_TAKEN);
+                            Envelope loginError = new Envelope(loginErrorEvent, Envelope.EnvelopeType.SERVER_EVENT);
                             dataOutputStream.writeUTF(loginError.toJson()); // LOGIN_ERROR
                             client.close();
                         }
