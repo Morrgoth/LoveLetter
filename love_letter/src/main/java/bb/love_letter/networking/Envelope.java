@@ -16,15 +16,16 @@ import java.io.*;
  */
 public class Envelope implements Serializable {
     public Object payload;
-    public TypeEnum type;
+    public EnvelopeType type;
 
     /**
      * TypeEnum is used to store the original type of the payload of the Envelope which is necessary to know in order
      * to unwrap the Envelope and get the payload back.
      */
-    public enum TypeEnum{
-        USEREVENT,
-        CHATMESSAGE
+    public enum EnvelopeType{
+        SERVER_EVENT,
+        CHAT_MESSAGE,
+        LOGIN_REQUEST
     }
 
     /**
@@ -32,7 +33,7 @@ public class Envelope implements Serializable {
      * @param payload The Object to be exchanged between Client and Server.
      * @param type The original type of the payload.
      */
-    public Envelope(Object payload, TypeEnum type){
+    public Envelope(Object payload, EnvelopeType type){
         this.payload = payload;
         this.type = type;
     }
@@ -48,7 +49,7 @@ public class Envelope implements Serializable {
     public Object getPayload(){
         return payload;
     }
-    public TypeEnum getType(){
+    public EnvelopeType getType(){
         return type;
     }
 
@@ -59,7 +60,7 @@ public class Envelope implements Serializable {
     public void setPayload(Object payload) {
         this.payload = payload;
     }
-    public void setType(TypeEnum type) {
+    public void setType(EnvelopeType type) {
         this.type = type;
     }
 
@@ -80,16 +81,22 @@ public class Envelope implements Serializable {
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
         Envelope envelope = new Envelope();
-        if (jsonObject.get("type").getAsString().equals("USEREVENT")) {
+        if (jsonObject.get("type").getAsString().equals("SERVER_EVENT")) {
             ServerEvent serverEvent = gson.fromJson(jsonObject.get("payload").getAsString(), ServerEvent.class);
-            envelope.setType(Envelope.TypeEnum.USEREVENT);
+            envelope.setType(EnvelopeType.SERVER_EVENT);
             envelope.setPayload(serverEvent);
-        } else if (jsonObject.get("type").getAsString().equals("CHATMESSAGE")){
+        } else if (jsonObject.get("type").getAsString().equals("CHAT_MESSAGE")){
             ChatMessage chatMessage = gson.fromJson(jsonObject.get("payload").getAsString(), ChatMessage.class);
             User user = gson.fromJson(jsonObject.get("user").getAsString(), User.class);
             chatMessage.setSender(user);
-            envelope.setType(Envelope.TypeEnum.CHATMESSAGE);
+            envelope.setType(Envelope.EnvelopeType.CHAT_MESSAGE);
             envelope.setPayload(chatMessage);
+        }else if (jsonObject.get("type").getAsString().equals("LOGIN_REQUEST")){
+            LoginRequest loginRequest = gson.fromJson(jsonObject.get("payload").getAsString(), LoginRequest.class);
+            User user = gson.fromJson(jsonObject.get("user").getAsString(), User.class);
+            loginRequest.setUser(user);
+            envelope.setType(EnvelopeType.LOGIN_REQUEST);
+            envelope.setPayload(loginRequest);
         }
         return envelope;
     }

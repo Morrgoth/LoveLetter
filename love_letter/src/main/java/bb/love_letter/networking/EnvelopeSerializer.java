@@ -20,15 +20,22 @@ public class EnvelopeSerializer implements JsonSerializer<Envelope> {
     public JsonElement serialize(Envelope envelope, Type type, JsonSerializationContext jsonSerializationContext) {
         JsonObject result = new JsonObject();
         result.add("type", new JsonPrimitive(envelope.getType().toString()));
-        if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
+        if (envelope.getType() == Envelope.EnvelopeType.SERVER_EVENT) {
             ServerEvent serverEvent = (ServerEvent) envelope.getPayload();
             String payloadString = new Gson().toJson(serverEvent);
             result.add("payload", new JsonPrimitive(payloadString));
-        } else if (envelope.getType() == Envelope.TypeEnum.CHATMESSAGE) {
+        } else if (envelope.getType() == Envelope.EnvelopeType.CHAT_MESSAGE) {
             ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
             User user = chatMessage.getSender();
             String userString = new Gson().toJson(user);
             String payloadString = new Gson().toJson(chatMessage);
+            result.add("payload", new JsonPrimitive(payloadString));
+            result.add("user", new JsonPrimitive(userString));
+        } else if (envelope.getType() == Envelope.EnvelopeType.LOGIN_REQUEST) {
+            LoginRequest loginRequest = (LoginRequest) envelope.getPayload();
+            User user = loginRequest.getUser();
+            String userString = new Gson().toJson(user);
+            String payloadString = new Gson().toJson(loginRequest);
             result.add("payload", new JsonPrimitive(payloadString));
             result.add("user", new JsonPrimitive(userString));
         }
