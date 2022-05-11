@@ -5,7 +5,7 @@ import bb.love_letter.game.User;
 
 /**
  *
- * @author Zeynab
+ * @author Zeynab Baiani
  */
 public class Command {
     public enum CommandType{
@@ -19,9 +19,14 @@ public class Command {
     private User userTarget;
     private ChatMessage privateMessage;
 
+
     public Command (ChatMessage chatMessage){
         this.chatMessage = chatMessage;
         this.commandType = interprete(chatMessage);
+    }
+
+    public CommandType getCommandType() {
+        return commandType;
     }
 
     private CommandType interprete (ChatMessage chatMessage){
