@@ -44,10 +44,13 @@ public class ServerThread extends Thread{
                             Envelope envelope = Envelope.deserializeEnvelopeFromJson(json);
                             if (envelope.getType() == Envelope.TypeEnum.CHATMESSAGE) {
                                 ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
+                                Command command = new Command(chatMessage);
+                                execute(command);
+                                ///
                                 String message = chatMessage.getMessage();
                                 if (message.equals("bye")) {
-                                    UserEvent userEvent = new UserEvent(chatMessage.getSender(), UserEvent.UserEventType.LOGOUT_CONFIRMATION);
-                                    Envelope logoutNotification = new Envelope(userEvent, Envelope.TypeEnum.USEREVENT);
+                                    ServerEvent serverEvent = new ServerEvent(chatMessage.getSender(), ServerEvent.UserEventType.LOGOUT_CONFIRMATION);
+                                    Envelope logoutNotification = new Envelope(serverEvent, Envelope.TypeEnum.USEREVENT);
                                     Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
                                     json = gson.toJson(logoutNotification);
                                     this.clientList.removeClient(user);
@@ -69,5 +72,9 @@ public class ServerThread extends Thread{
                 System.out.println("Server Up And Running ...");
             }
         }
+    }
+
+    private void execute(Command command) {
+
     }
 }

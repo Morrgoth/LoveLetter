@@ -81,9 +81,9 @@ public class Envelope implements Serializable {
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
         Envelope envelope = new Envelope();
         if (jsonObject.get("type").getAsString().equals("USEREVENT")) {
-            UserEvent userEvent = gson.fromJson(jsonObject.get("payload").getAsString(), UserEvent.class);
+            ServerEvent serverEvent = gson.fromJson(jsonObject.get("payload").getAsString(), ServerEvent.class);
             envelope.setType(Envelope.TypeEnum.USEREVENT);
-            envelope.setPayload(userEvent);
+            envelope.setPayload(serverEvent);
         } else if (jsonObject.get("type").getAsString().equals("CHATMESSAGE")){
             ChatMessage chatMessage = gson.fromJson(jsonObject.get("payload").getAsString(), ChatMessage.class);
             User user = gson.fromJson(jsonObject.get("user").getAsString(), User.class);

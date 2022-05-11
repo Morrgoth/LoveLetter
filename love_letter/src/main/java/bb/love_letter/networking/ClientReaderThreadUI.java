@@ -29,9 +29,9 @@ public class ClientReaderThreadUI extends Thread{
                 if(json != null) {
                     Envelope envelope = Envelope.deserializeEnvelopeFromJson(json);
                     if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
-                        UserEvent userEvent = (UserEvent) envelope.getPayload();
-                        if (userEvent.getUserEventType() == UserEvent.UserEventType.LOGIN_CONFIRMATION) {
-                            User newUser = userEvent.getUser();
+                        ServerEvent serverEvent = (ServerEvent) envelope.getPayload();
+                        if (serverEvent.getUserEventType() == ServerEvent.UserEventType.LOGIN_CONFIRMATION) {
+                            User newUser = serverEvent.getUser();
                             if (!newUser.getName().equals(NetworkConnection.getInstance().getUser().getName())) {
                                 ChatMessage userJoinedMessage =
                                         new ChatMessage(new User("Server"), newUser.getName() + " joined the room");
@@ -42,9 +42,9 @@ public class ClientReaderThreadUI extends Thread{
                                     }
                                 });
                             }
-                        } else if (userEvent.getUserEventType() == UserEvent.UserEventType.LOGOUT_CONFIRMATION) {
+                        } else if (serverEvent.getUserEventType() == ServerEvent.UserEventType.LOGOUT_CONFIRMATION) {
                             ChatMessage userLeftMessage =
-                                    new ChatMessage(new User("Server"), userEvent.getUser().getName() + " left the room");
+                                    new ChatMessage(new User("Server"), serverEvent.getUser().getName() + " left the room");
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {

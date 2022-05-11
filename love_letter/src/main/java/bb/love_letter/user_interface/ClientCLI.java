@@ -1,6 +1,6 @@
 package bb.love_letter.user_interface;
 import bb.love_letter.game.User;
-import bb.love_letter.networking.UserEvent;
+import bb.love_letter.networking.ServerEvent;
 import bb.love_letter.networking.ClientReaderThread;
 import bb.love_letter.networking.ClientWriterThread;
 import bb.love_letter.networking.Envelope;
@@ -41,8 +41,8 @@ public class ClientCLI {
             is = new DataInputStream(client.getInputStream());
             //request as a client
             User user = new User(clientName);
-            UserEvent userEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_REQUEST);
-            Envelope request = new Envelope(userEvent, Envelope.TypeEnum.USEREVENT);
+            ServerEvent serverEvent = new ServerEvent(user, ServerEvent.UserEventType.LOGIN_REQUEST);
+            Envelope request = new Envelope(serverEvent, Envelope.TypeEnum.USEREVENT);
             Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
             String json = gson.toJson(request);
             os.writeUTF(json);
@@ -51,14 +51,14 @@ public class ClientCLI {
             String response = is.readUTF();
             Envelope envelope = Envelope.deserializeEnvelopeFromJson(response);
             if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
-                UserEvent loginResponseEvent = (UserEvent) envelope.getPayload();
-                if (loginResponseEvent.getUserEventType() == UserEvent.UserEventType.LOGIN_CONFIRMATION) {
+                ServerEvent loginResponseEvent = (ServerEvent) envelope.getPayload();
+                if (loginResponseEvent.getUserEventType() == ServerEvent.UserEventType.LOGIN_CONFIRMATION) {
                     System.out.println("Welcome "+ clientName +" !");
                     read.start();
                     write.start();
                     read.join();
                     write.join();
-                } else if (loginResponseEvent.getUserEventType() == UserEvent.UserEventType.LOGIN_ERROR) {
+                } else if (loginResponseEvent.getUserEventType() == ServerEvent.UserEventType.LOGIN_ERROR) {
                     System.out.println("Error: The username " + user.getName() + " is already taken!");
                 }
             } else {

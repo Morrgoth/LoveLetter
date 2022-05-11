@@ -40,7 +40,7 @@ public class ClientWriterThread extends Thread{
     {
         try{
             // Notify others that the User logged in
-            UserEvent loginEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_CONFIRMATION);
+            ServerEvent loginEvent = new ServerEvent(user, ServerEvent.UserEventType.LOGIN_CONFIRMATION);
             Envelope loginNotification = new Envelope(loginEvent, Envelope.TypeEnum.USEREVENT);
             Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
             dataOutputStream.writeUTF(gson.toJson(loginNotification));

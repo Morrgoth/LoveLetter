@@ -1,7 +1,7 @@
 package bb.love_letter.user_interface;
 
 import bb.love_letter.game.User;
-import bb.love_letter.networking.UserEvent;
+import bb.love_letter.networking.ServerEvent;
 import bb.love_letter.networking.Envelope;
 import bb.love_letter.networking.NetworkConnection;
 
@@ -32,19 +32,19 @@ public class LoginController {
             DataInputStream dataInputStream = new DataInputStream(client.getInputStream());
             //request as a client
             User user = new User(username);
-            UserEvent userEvent = new UserEvent(user, UserEvent.UserEventType.LOGIN_REQUEST);
-            Envelope request = new Envelope(userEvent, Envelope.TypeEnum.USEREVENT);
+            ServerEvent serverEvent = new ServerEvent(user, ServerEvent.UserEventType.LOGIN_REQUEST);
+            Envelope request = new Envelope(serverEvent, Envelope.TypeEnum.USEREVENT);
             String jsonRequest = request.toJson();
             dataOutputStream.writeUTF(jsonRequest);
             String response = dataInputStream.readUTF();
             Envelope envelope = Envelope.deserializeEnvelopeFromJson(response);
 
             if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
-                UserEvent loginResponseEvent = (UserEvent) envelope.getPayload();
-                if (loginResponseEvent.getUserEventType() == UserEvent.UserEventType.LOGIN_CONFIRMATION) {
+                ServerEvent loginResponseEvent = (ServerEvent) envelope.getPayload();
+                if (loginResponseEvent.getUserEventType() == ServerEvent.UserEventType.LOGIN_CONFIRMATION) {
                     NetworkConnection.getInstance().init(client, dataInputStream, dataOutputStream, user);
                     model.setSuccessfulLogin(true);
-                } else if (loginResponseEvent.getUserEventType() == UserEvent.UserEventType.LOGIN_ERROR) {
+                } else if (loginResponseEvent.getUserEventType() == ServerEvent.UserEventType.LOGIN_ERROR) {
                     System.out.println("Error: The username " + user.getName() + " is already taken!");
                 }
             } else {

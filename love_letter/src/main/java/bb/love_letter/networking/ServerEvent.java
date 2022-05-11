@@ -12,12 +12,12 @@ import java.io.Serializable;
  *
  * @author Tolga Engin
  */
-public class UserEvent implements Serializable {
+public class ServerEvent implements Serializable {
 
     public User user;
     public UserEventType userEventType;
 
-    public UserEvent(User user, UserEventType userEventType){
+    public ServerEvent(User user, UserEventType userEventType){
         this.user=user;
         this.userEventType=userEventType;
     }

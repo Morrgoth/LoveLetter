@@ -27,7 +27,7 @@ public class ClientWriterThreadUI extends Thread{
     public void run()
     {
         System.out.println("ClientWriterThreadUI started running");
-        UserEvent loginEvent = new UserEvent(NetworkConnection.getInstance().getUser(), UserEvent.UserEventType.LOGIN_CONFIRMATION);
+        ServerEvent loginEvent = new ServerEvent(NetworkConnection.getInstance().getUser(), ServerEvent.UserEventType.LOGIN_CONFIRMATION);
         Envelope loginNotification = new Envelope(loginEvent, Envelope.TypeEnum.USEREVENT);
         Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
         try {

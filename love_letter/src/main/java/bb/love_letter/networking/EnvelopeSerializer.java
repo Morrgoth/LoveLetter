@@ -21,8 +21,8 @@ public class EnvelopeSerializer implements JsonSerializer<Envelope> {
         JsonObject result = new JsonObject();
         result.add("type", new JsonPrimitive(envelope.getType().toString()));
         if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
-            UserEvent userEvent = (UserEvent) envelope.getPayload();
-            String payloadString = new Gson().toJson(userEvent);
+            ServerEvent serverEvent = (ServerEvent) envelope.getPayload();
+            String payloadString = new Gson().toJson(serverEvent);
             result.add("payload", new JsonPrimitive(payloadString));
         } else if (envelope.getType() == Envelope.TypeEnum.CHATMESSAGE) {
             ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
