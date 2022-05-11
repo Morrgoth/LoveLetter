@@ -8,6 +8,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * This is the Thread started for each user, it waits for messages from its corresponding user and then forwards
@@ -45,25 +46,10 @@ public class ServerThread extends Thread{
                             json = dataInputStream.readUTF();
                             System.out.println(json);
                             Envelope envelope = Envelope.deserializeEnvelopeFromJson(json);
-                            if (envelope.getType() == Envelope.TypeEnum.CHATMESSAGE) {
+                            if (envelope.getType() == Envelope.EnvelopeType.CHAT_MESSAGE) {
                                 ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
                                 Command command = new Command(chatMessage);
                                 execute(command);
-                                ///
-                                String message = chatMessage.getMessage();
-                                if (message.equals("bye")) {
-                                    ServerEvent serverEvent = new ServerEvent(chatMessage.getSender(), ServerEvent.UserEventType.LOGOUT_CONFIRMATION);
-                                    Envelope logoutNotification = new Envelope(serverEvent, Envelope.TypeEnum.USEREVENT);
-                                    Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
-                                    json = gson.toJson(logoutNotification);
-                                    this.clientList.removeClient(user);
-                                    this.parent.clientList.removeClient(user);
-                                    Thread.currentThread().interrupt();
-                                }
-                            }
-                            for (User recipient: clientList.getUsers()) {
-                                dataOutputStream = new DataOutputStream(clientList.getClientSocket(recipient).getOutputStream());
-                                dataOutputStream.writeUTF(json);
                             }
                         }
                     }
@@ -100,8 +86,27 @@ public class ServerThread extends Thread{
         }
     }
 
-    private void execute(Command command) {
+    private void execute(Command command) throws IOException {
         if (command.getCommandType()== Command.CommandType.LOGOUT_COMMAND){
+            ServerEvent logOutConfirmation = new ServerEvent("You have successfully logged out.", ServerEvent.ServerEventType.LOGOUT_CONFIRMATION);
+            ServerEvent userLeftNotification = new ServerEvent(command.getUser().getName() + " left the room.", ServerEvent.ServerEventType.PLAYER_LEFT_NOTIFICATION);
+
+            Envelope logoutNotification = new Envelope(logOutConfirmation, Envelope.EnvelopeType.SERVER_EVENT);
+            Envelope userLeftNotificationEnvelope = new Envelope(userLeftNotification, Envelope.EnvelopeType.SERVER_EVENT);
+            broadcast(logoutNotification, new ArrayList<User>((Collection) command.getUser()), null);
+            broadcast(userLeftNotificationEnvelope, null, new ArrayList<User>((Collection) command.getUser()));
+
+            this.clientList.removeClient(command.getUser());
+            this.parent.clientList.removeClient(command.getUser());
+            Thread.currentThread().interrupt();
+
+        } else if (command.getCommandType()== Command.CommandType.PRIVATE_MESSAHECOMMAND) {
+            Envelope privateMessageEnvelope = new Envelope(command.getPrivateMessage(), Envelope.EnvelopeType.CHAT_MESSAGE);
+            broadcast(privateMessageEnvelope, new ArrayList<>((Collection) command.getUser()), null);
+
+        }  else if (command.getCommandType()== Command.CommandType.EMPTY_COMMAND) {
+            Envelope messageEnvelope = new Envelope(command.getChatMessage(), Envelope.EnvelopeType.CHAT_MESSAGE);
+            broadcast(messageEnvelope, null, null);
 
         }
 
