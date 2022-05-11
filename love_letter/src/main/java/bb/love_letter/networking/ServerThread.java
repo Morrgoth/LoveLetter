@@ -1,8 +1,6 @@
 package bb.love_letter.networking;
 
 import bb.love_letter.game.User;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -100,7 +98,7 @@ public class ServerThread extends Thread{
             this.parent.clientList.removeClient(command.getUser());
             Thread.currentThread().interrupt();
 
-        } else if (command.getCommandType()== Command.CommandType.PRIVATE_MESSAHECOMMAND) {
+        } else if (command.getCommandType()== Command.CommandType.PRIVATE_MESSAGE_COMMAND) {
             Envelope privateMessageEnvelope = new Envelope(command.getPrivateMessage(), Envelope.EnvelopeType.CHAT_MESSAGE);
             broadcast(privateMessageEnvelope, new ArrayList<>((Collection) command.getUser()), null);
 

@@ -14,7 +14,7 @@ public class Command {
 
     public enum CommandType{
         LOGOUT_COMMAND,
-        PRIVATE_MESSAHECOMMAND,
+        PRIVATE_MESSAGE_COMMAND,
         GAME_COMMAND,
         EMPTY_COMMAND,
     }
@@ -55,7 +55,7 @@ public class Command {
             String message = parts [1];
             this.user = new User(target);
             privateMessage = new ChatMessage(chatMessage.getSender(),message);
-            return CommandType.PRIVATE_MESSAHECOMMAND;
+            return CommandType.PRIVATE_MESSAGE_COMMAND;
 
         }
         else if (content.charAt(0) =='#') {
