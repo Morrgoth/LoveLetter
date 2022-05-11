@@ -10,7 +10,7 @@ public class LoginRequest {
 
     public User user;
 
-    public LoginRequest(User){
+    public LoginRequest(User user){
         this.user=user;
     }
 

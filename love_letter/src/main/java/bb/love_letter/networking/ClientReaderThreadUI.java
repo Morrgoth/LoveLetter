@@ -28,39 +28,12 @@ public class ClientReaderThreadUI extends Thread{
                 json = NetworkConnection.getInstance().getInputStream().readUTF();
                 if(json != null) {
                     Envelope envelope = Envelope.deserializeEnvelopeFromJson(json);
-                    if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
-                        ServerEvent serverEvent = (ServerEvent) envelope.getPayload();
-                        if (serverEvent.getUserEventType() == ServerEvent.UserEventType.LOGIN_CONFIRMATION) {
-                            User newUser = serverEvent.getUser();
-                            if (!newUser.getName().equals(NetworkConnection.getInstance().getUser().getName())) {
-                                ChatMessage userJoinedMessage =
-                                        new ChatMessage(new User("Server"), newUser.getName() + " joined the room");
-                                Platform.runLater(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        chatController.addChatMessage(userJoinedMessage);
-                                    }
-                                });
-                            }
-                        } else if (serverEvent.getUserEventType() == ServerEvent.UserEventType.LOGOUT_CONFIRMATION) {
-                            ChatMessage userLeftMessage =
-                                    new ChatMessage(new User("Server"), serverEvent.getUser().getName() + " left the room");
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    chatController.addChatMessage(userLeftMessage);
-                                }
-                            });
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            chatController.addChatMessage(envelope);
                         }
-                    } else if (envelope.getType() == Envelope.TypeEnum.CHATMESSAGE) {
-                        ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                chatController.addChatMessage(chatMessage);
-                            }
-                        });
-                    }
+                    });
                 }
                 json = null;
             }

@@ -44,7 +44,10 @@ public class ServerEvent implements Serializable {
         NAME_ALREADY_TAKEN,
         PLAYER_LOGGED_OUT,
         ILLEGAL_MOVE,
-        GAME_ERROR
+        GAME_ERROR,
+        LOGIN_CONFIRMATION,
+        NEW_PLAYER_NOTIFICATION
+
     }
 
 }

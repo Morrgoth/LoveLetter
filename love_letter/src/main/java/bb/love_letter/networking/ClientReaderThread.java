@@ -1,6 +1,7 @@
 package bb.love_letter.networking;
 
 import bb.love_letter.game.User;
+import javafx.event.Event;
 
 import java.io.DataInputStream;
 
@@ -30,18 +31,11 @@ public class ClientReaderThread extends Thread{
                 json = dataInputStream.readUTF();
                 if(json != null) {
                     Envelope envelope = Envelope.deserializeEnvelopeFromJson(json);
-                    if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
+                    if (envelope.getType() == Envelope.EnvelopeType.SERVER_EVENT) {
                         ServerEvent serverEvent = (ServerEvent) envelope.getPayload();
-                        if (serverEvent.getUserEventType() == ServerEvent.UserEventType.LOGIN_CONFIRMATION) {
-                            User newUser = serverEvent.getUser();
-                            if (!newUser.getName().equals(this.user.getName())) {
-                                System.out.println(newUser.getName() + " joined the room");
-                            }
-                        } else if (serverEvent.getUserEventType() == ServerEvent.UserEventType.LOGOUT_CONFIRMATION) {
-                            System.out.println(serverEvent.getUser().getName() + " left the room");
-                        }
+                        System.out.println(serverEvent.getMessage());
 
-                    } else if (envelope.getType() == Envelope.TypeEnum.CHATMESSAGE) {
+                    } else if (envelope.getType() == Envelope.EnvelopeType.CHAT_MESSAGE) {
                         ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
                         System.out.println(chatMessage.getSender().getName() + ": " + chatMessage.getMessage());
                     }
