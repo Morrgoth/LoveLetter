@@ -50,9 +50,9 @@ public class Command {
         }
         else if (content.charAt(0) == '@'){
             content =  content.substring(1);
-            String [] parts = toString().split(" ");
+            String [] parts = content.split(" ", 2);
             String target = parts [0];
-            String message = parts [1];
+            String message = parts[1];
             this.user = new User(target);
             privateMessage = new ChatMessage(chatMessage.getSender(),message);
             return CommandType.PRIVATE_MESSAGE_COMMAND;

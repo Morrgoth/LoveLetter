@@ -27,6 +27,8 @@ public class Server {
     public void establishConnections(){
         try{
             server = new ServerSocket(PORT);
+            InetAddress inetAddress = InetAddress.getLocalHost();
+            System.out.println("Server started running on " + inetAddress.getHostAddress() + ":" + PORT);
             ServerThread messageRouterThread = new ServerThread();
             messageRouterThread.start();
             while(true)

@@ -29,7 +29,7 @@ public class ServerThread extends Thread{
      */
     public void run(){
         String json = "";
-        System.out.println("Chat Server Running .....");
+        System.out.println("ServerThread started");
 
         while(true){
             try{

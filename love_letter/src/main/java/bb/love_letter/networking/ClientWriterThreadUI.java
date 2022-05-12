@@ -28,16 +28,14 @@ public class ClientWriterThreadUI extends Thread{
     public void run()
     {
         System.out.println("ClientWriterThreadUI started running");
-        // Keep listening for changes
+        // Keep listening for messages to send
         chatController.model.currentMessageProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldVal, String newVal) {
                 if (!newVal.equals("")) {
                     ChatMessage chatMessage = new ChatMessage(NetworkConnection.getInstance().getUser(), newVal);
-                    Envelope envelope = new Envelope(chatMessage, Envelope.EnvelopeType.CHAT_MESSAGE);
-                    String json = envelope.toJson();
                     try {
-                        NetworkConnection.getInstance().getOutputStream().writeUTF(json);
+                        NetworkConnection.getInstance().getOutputStream().writeUTF(chatMessage.toEnvelope().toJson());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
