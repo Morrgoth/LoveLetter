@@ -34,29 +34,26 @@ public class LoginController {
             //request as a client
             User user = new User(username);
             LoginRequest loginRequest = new LoginRequest(user);
-            ServerEvent serverEvent = new ServerEvent(user, ServerEvent.ServerEventType.LOGIN_REQUEST);
-            Envelope request = new Envelope(serverEvent, Envelope.TypeEnum.USEREVENT);
-            String jsonRequest = request.toJson();
-            dataOutputStream.writeUTF(jsonRequest);
+            dataOutputStream.writeUTF(loginRequest.toEnvelope().toJson());
             String response = dataInputStream.readUTF();
             Envelope envelope = Envelope.deserializeEnvelopeFromJson(response);
-
-            if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
+            if (envelope.getType() == Envelope.EnvelopeType.SERVER_EVENT) {
                 ServerEvent loginResponseEvent = (ServerEvent) envelope.getPayload();
-                if (loginResponseEvent.getUserEventType() == ServerEvent.UserEventType.LOGIN_CONFIRMATION) {
+                if (loginResponseEvent.getServerEventType() == ServerEvent.ServerEventType.LOGIN_CONFIRMATION) {
                     NetworkConnection.getInstance().init(client, dataInputStream, dataOutputStream, user);
                     model.setSuccessfulLogin(true);
-                } else if (loginResponseEvent.getUserEventType() == ServerEvent.UserEventType.LOGIN_ERROR) {
-                    System.out.println("Error: The username " + user.getName() + " is already taken!");
+                } else if (loginResponseEvent.getServerEventType() == ServerEvent.ServerEventType.NAME_ALREADY_TAKEN) {
+                    model.setErrorMessage("Error: The username " + user.getName() + " is already taken!");
+                } else if (loginResponseEvent.getServerEventType() == ServerEvent.ServerEventType.LOGIN_ERROR) {
+                    model.setErrorMessage("Error: A login error occurred, please try again.");
                 }
             } else {
-                System.out.println("Error: Could Not Connect To Server!");
+                model.setErrorMessage("Error: Could Not Connect To Server!");
             }
-
         } catch (UnknownHostException ex) {
             model.setErrorMessage("Server was not found! (Check ip and port)");
         } catch (IOException ex) {
-            model.setErrorMessage("An I/O exception occured! (Check ip and port)");
+            model.setErrorMessage("An I/O exception occurred! (Check ip and port)");
         }
     }
 }

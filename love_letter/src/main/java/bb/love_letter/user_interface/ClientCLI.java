@@ -1,10 +1,6 @@
 package bb.love_letter.user_interface;
 import bb.love_letter.game.User;
-import bb.love_letter.networking.ServerEvent;
-import bb.love_letter.networking.ClientReaderThread;
-import bb.love_letter.networking.ClientWriterThread;
-import bb.love_letter.networking.Envelope;
-import bb.love_letter.networking.EnvelopeSerializer;
+import bb.love_letter.networking.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -18,17 +14,13 @@ import java.net.*;
 public class ClientCLI {
 
     public Socket client = null;
-    public DataOutputStream os;
-    public DataInputStream is;
-    public ClientCLI(){
-
-    }
+    public DataOutputStream dataOutputStream;
+    public DataInputStream dataInputStream;
+    public ClientCLI(){}
 
     public static void main(String[] args)throws IOException{
-
         ClientCLI a = new ClientCLI();
         a.doConnections();
-
     }
     public void doConnections()throws IOException{
         try{
@@ -37,28 +29,26 @@ public class ClientCLI {
             System.out.print("Enter Your Name: ");
             String clientName = br.readLine();
             client = new Socket("127.0.0.1",6868);
-            os = new DataOutputStream(client.getOutputStream());
-            is = new DataInputStream(client.getInputStream());
+            dataOutputStream = new DataOutputStream(client.getOutputStream());
+            dataInputStream = new DataInputStream(client.getInputStream());
             //request as a client
             User user = new User(clientName);
-            ServerEvent serverEvent = new ServerEvent(user, ServerEvent.UserEventType.LOGIN_REQUEST);
-            Envelope request = new Envelope(serverEvent, Envelope.TypeEnum.USEREVENT);
-            Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
-            String json = gson.toJson(request);
-            os.writeUTF(json);
-            ClientReaderThread read = new ClientReaderThread(is, user);
-            ClientWriterThread write = new ClientWriterThread(os,user);
-            String response = is.readUTF();
+            LoginRequest loginRequest = new LoginRequest(user);
+            String json = loginRequest.toEnvelope().toJson();
+            dataOutputStream.writeUTF(json);
+            ClientReaderThread read = new ClientReaderThread(dataInputStream, user);
+            ClientWriterThread write = new ClientWriterThread(dataOutputStream,user);
+            String response = dataInputStream.readUTF();
             Envelope envelope = Envelope.deserializeEnvelopeFromJson(response);
-            if (envelope.getType() == Envelope.TypeEnum.USEREVENT) {
+            if (envelope.getType() == Envelope.EnvelopeType.SERVER_EVENT) {
                 ServerEvent loginResponseEvent = (ServerEvent) envelope.getPayload();
-                if (loginResponseEvent.getUserEventType() == ServerEvent.UserEventType.LOGIN_CONFIRMATION) {
+                if (loginResponseEvent.getServerEventType() == ServerEvent.ServerEventType.LOGIN_CONFIRMATION) {
                     System.out.println("Welcome "+ clientName +" !");
                     read.start();
                     write.start();
                     read.join();
                     write.join();
-                } else if (loginResponseEvent.getUserEventType() == ServerEvent.UserEventType.LOGIN_ERROR) {
+                } else if (loginResponseEvent.getServerEventType() == ServerEvent.ServerEventType.NAME_ALREADY_TAKEN) {
                     System.out.println("Error: The username " + user.getName() + " is already taken!");
                 }
             } else {

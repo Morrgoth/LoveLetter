@@ -42,10 +42,11 @@ public class Server {
                     Envelope envelope = Envelope.deserializeEnvelopeFromJson(json);
                     if (envelope.getType()== Envelope.EnvelopeType.LOGIN_REQUEST) {
                         LoginRequest loginRequest=(LoginRequest) envelope.getPayload();
+                        System.out.println("loginrequest");
                         User user = loginRequest.getUser();
                         if (!clientList.containsClient(user)) {
                             ServerEvent loginConfirmationEvent = new ServerEvent("Welcome " + user.getName() + "!", ServerEvent.ServerEventType.LOGIN_CONFIRMATION);
-                            Envelope loginConfirmation = new Envelope(loginConfirmationEvent, Envelope.EnvelopeType.LOGIN_REQUEST);
+                            Envelope loginConfirmation = new Envelope(loginConfirmationEvent, Envelope.EnvelopeType.SERVER_EVENT);
                             dataOutputStream.writeUTF(loginConfirmation.toJson()); // LOGIN_CONFIRMATION
                             clientList.addClient(user, client);
                             messageRouterThread.clientList.addClient(user,client);
