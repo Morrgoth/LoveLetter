@@ -5,6 +5,7 @@ import bb.love_letter.game.User;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,11 +21,8 @@ public class ServerThread extends Thread{
     public ClientList clientList = new ClientList();
     public DataInputStream dataInputStream = null;
     public DataOutputStream dataOutputStream = null;
-    public Server parent;
 
-    public ServerThread(Server parent) {
-        this.parent = parent;
-    }
+    public ServerThread() {}
 
     /**
      * Receives, processes and forwards messages from Clients.
@@ -63,6 +61,21 @@ public class ServerThread extends Thread{
             }
         }
     }
+
+    public synchronized void registerClient(User user, Socket socket) throws IOException {
+        clientList.addClient(user, socket);
+        ServerEvent loginConfirmation = new ServerEvent("Welcome " + user.getName() + "!",
+                ServerEvent.ServerEventType.LOGIN_CONFIRMATION);
+        ServerEvent newUserNotification = new ServerEvent(user.getName() + " joined the room!",
+                ServerEvent.ServerEventType.NEW_PLAYER_NOTIFICATION);
+        broadcast(loginConfirmation.toEnvelope(), new User[] {user}, null);
+        broadcast(newUserNotification.toEnvelope(), null, new User[] {user});
+    }
+
+    public synchronized ClientList getClientList() {
+        return this.clientList;
+    }
+
     private void broadcast(Envelope envelope, User[] whitelist, User[] blacklist) throws IOException {
         if (whitelist != null) {
             for (User recipient: clientList.getUsers()) {
@@ -95,13 +108,7 @@ public class ServerThread extends Thread{
                     " left the room.", ServerEvent.ServerEventType.PLAYER_LEFT_NOTIFICATION);
             broadcast(logOutConfirmation.toEnvelope(), new User[] {command.getUser()}, null);
             broadcast(userLeftNotification.toEnvelope(), null, new User[] {command.getUser()});
-
-            try {
-                this.clientList.removeClient(command.getUser());
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            this.parent.clientList.removeClient(command.getUser());
+            this.clientList.removeClient(command.getUser());
 
         } else if (command.getCommandType()== Command.CommandType.PRIVATE_MESSAGE_COMMAND) {
             Envelope privateMessageEnvelope = new Envelope(command.getPrivateMessage(),

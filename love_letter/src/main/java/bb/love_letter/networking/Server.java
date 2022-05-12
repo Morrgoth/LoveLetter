@@ -6,8 +6,7 @@ import java.io.*;
 import java.net.*;
 
 /**
- * This is the primary Server Thread, it handles the logging in of new Users and upon successful login starts
- * the separate ServerThreads for the individual users.
+ * This is the primary Server Thread, it handles the logging in of new Users and upon successful registers the user.
  *
  * @author Bence Ament
  */
@@ -17,19 +16,18 @@ public class Server {
     public Socket client = null;
     public DataOutputStream dataOutputStream;
     public DataInputStream dataInputStream;
-    public ClientList clientList = new ClientList();
     public static void main(String[] args){
         Server server = new Server();
-        server.doConnections();
+        server.establishConnections();
     }
 
     /**
      * Waits for and handles the Login Requests of Users.
      */
-    public void doConnections(){
+    public void establishConnections(){
         try{
             server = new ServerSocket(PORT);
-            ServerThread messageRouterThread = new ServerThread(this);
+            ServerThread messageRouterThread = new ServerThread();
             messageRouterThread.start();
             while(true)
             {
@@ -43,12 +41,8 @@ public class Server {
                     if (envelope.getType()== Envelope.EnvelopeType.LOGIN_REQUEST) {
                         LoginRequest loginRequest = (LoginRequest) envelope.getPayload();
                         User user = loginRequest.getUser();
-                        if (!clientList.containsClient(user)) {
-                            ServerEvent loginConfirmation = new ServerEvent("Welcome " + user.getName() + "!",
-                                    ServerEvent.ServerEventType.LOGIN_CONFIRMATION);
-                            dataOutputStream.writeUTF(loginConfirmation.toEnvelope().toJson()); // LOGIN_CONFIRMATION
-                            clientList.addClient(user, client);
-                            messageRouterThread.clientList.addClient(user, client);
+                        if (!messageRouterThread.getClientList().containsClient(user)) {
+                            messageRouterThread.registerClient(user, client); // LOGIN
                         } else {
                             ServerEvent loginError = new ServerEvent("Username is already in use. Please " +
                                     "choose another username.",
