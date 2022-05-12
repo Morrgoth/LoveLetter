@@ -27,7 +27,7 @@ public class ServerThread extends Thread{
     }
 
     /**
-     * Waits for and forwards messages from Users.
+     * Receives, processes and forwards messages from Clients.
      */
     public void run(){
         String json = "";
@@ -49,6 +49,8 @@ public class ServerThread extends Thread{
                                 ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
                                 Command command = new Command(chatMessage);
                                 execute(command);
+                            } else {
+                                System.out.println("Invalid Message received from a Client.");
                             }
                         }
                     }
@@ -102,7 +104,8 @@ public class ServerThread extends Thread{
             this.parent.clientList.removeClient(command.getUser());
 
         } else if (command.getCommandType()== Command.CommandType.PRIVATE_MESSAGE_COMMAND) {
-            Envelope privateMessageEnvelope = new Envelope(command.getPrivateMessage(), Envelope.EnvelopeType.CHAT_MESSAGE);
+            Envelope privateMessageEnvelope = new Envelope(command.getPrivateMessage(),
+                    Envelope.EnvelopeType.CHAT_MESSAGE);
             broadcast(privateMessageEnvelope, new User[] {command.getUser()}, null);
 
         }  else if (command.getCommandType()== Command.CommandType.EMPTY_COMMAND) {
