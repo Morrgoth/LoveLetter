@@ -4,11 +4,14 @@ import bb.love_letter.game.characters.*;
 
 import java.util.ArrayList;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Deck {
     Guard guard1 = new Guard();
-    Guard guard2 = new Guard();
-    Guard guard3 = new Guard();
-    Guard guard4 = new Guard();
+   // Guard guard2 = new Guard();
+   // Guard guard3 = new Guard();
+   // Guard guard4 = new Guard();
     Guard guard5 = new Guard();
     Priest priest1 = new Priest();
     Priest priest2 = new Priest();
