@@ -19,4 +19,5 @@ public class Cards {
     public String getCardAction(){
         return cardAction;
     }
+
 }

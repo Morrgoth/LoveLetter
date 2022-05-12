@@ -1,5 +1,7 @@
 package bb.love_letter.game.characters;
 
+import java.util.Scanner;
+
 /*
     Strength: 1
     AmountInDeck: 5
@@ -37,6 +39,7 @@ public class Guard  extends Cards implements Playable {
         //compare value.name, if correct
         //terminate Round for player;
         //else do nothing;
+
         return 0;
     }
 

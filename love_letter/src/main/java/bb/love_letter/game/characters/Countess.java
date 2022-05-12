@@ -7,6 +7,8 @@ package bb.love_letter.game.characters;
     this card must be played immediately, which otherwise does nothing.
  */
 
+import bb.love_letter.game.Player;
+
 public class Countess extends Cards implements Playable {
     private String name = "COUNTESS";
     private int cardPoints = 7;
@@ -43,6 +45,7 @@ public class Countess extends Cards implements Playable {
     @Override
     public int see(){
         //make Hand arrList visible only to player 2
+
         return 0;
     }
 
