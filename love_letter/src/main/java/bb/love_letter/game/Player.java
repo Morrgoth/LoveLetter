@@ -24,13 +24,14 @@ public class Player extends User{
         this.card1 = card1;
     }
 
+    public Cards getCard2(){
+        return card2;
+    }
+
     public void setCard2(Cards card2){
         this.card2 = card2;
     }
 
-    public Cards getCard2(){
-        return card2;
-    }
 
     public int getToken(){
         return token;
