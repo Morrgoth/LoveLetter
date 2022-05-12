@@ -26,7 +26,6 @@ public class ClientList {
     public boolean addClient(User user, Socket socket) {
         if (!containsClient(user)) {
             clientList.put(user, socket);
-            System.out.println("You can keep this name.");
             return true;
         } else {
             return false;
@@ -67,14 +66,15 @@ public class ClientList {
      * @throws IOException
      */
     public boolean removeClient(User user) throws IOException {
-        if (containsClient(user)) {
-            Socket socket = clientList.get(user);
-            socket.close();
-            clientList.remove(user);
-            return true;
-        } else {
-            return false;
+        for (User u: clientList.keySet()) {
+            if (u.equals(user)) {
+                Socket socket = getClientSocket(u);
+                socket.close();
+                clientList.remove(u);
+                return true;
+            }
         }
+        return false;
     }
 
     /**

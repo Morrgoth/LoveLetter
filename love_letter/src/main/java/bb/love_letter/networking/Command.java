@@ -26,7 +26,7 @@ public class Command {
 
     public Command (ChatMessage chatMessage){
         this.chatMessage = chatMessage;
-        this.commandType = interprete(chatMessage);
+        this.commandType = interpret(chatMessage);
     }
 
     public CommandType getCommandType() {
@@ -42,7 +42,7 @@ public class Command {
         return chatMessage;
     }
 
-    private CommandType interprete (ChatMessage chatMessage){
+    private CommandType interpret(ChatMessage chatMessage){
         String content = chatMessage.getMessage();
         if (content.equals("bye")){
             this.user = chatMessage.getSender();

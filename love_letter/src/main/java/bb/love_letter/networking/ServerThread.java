@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -60,17 +61,17 @@ public class ServerThread extends Thread{
             }
         }
     }
-    private void broadcast(Envelope envelope, ArrayList<User> whitelist, ArrayList<User> blacklist) throws IOException {
+    private void broadcast(Envelope envelope, User[] whitelist, User[] blacklist) throws IOException {
         if (whitelist != null) {
             for (User recipient: clientList.getUsers()) {
-                if (whitelist.contains(recipient)){
+                if (Arrays.asList(whitelist).contains(recipient)){
                     dataOutputStream = new DataOutputStream(clientList.getClientSocket(recipient).getOutputStream());
                     dataOutputStream.writeUTF(envelope.toJson());
                 }
             }
         } else if (blacklist != null) {
             for (User recipient: clientList.getUsers()) {
-                if (!blacklist.contains(recipient)) {
+                if (!Arrays.asList(blacklist).contains(recipient)) {
                     dataOutputStream = new DataOutputStream(clientList.getClientSocket(recipient).getOutputStream());
                     dataOutputStream.writeUTF(envelope.toJson());
                 }
@@ -86,21 +87,23 @@ public class ServerThread extends Thread{
 
     private void execute(Command command) throws IOException {
         if (command.getCommandType()== Command.CommandType.LOGOUT_COMMAND){
-            ServerEvent logOutConfirmation = new ServerEvent("You have successfully logged out.", ServerEvent.ServerEventType.LOGOUT_CONFIRMATION);
-            ServerEvent userLeftNotification = new ServerEvent(command.getUser().getName() + " left the room.", ServerEvent.ServerEventType.PLAYER_LEFT_NOTIFICATION);
+            ServerEvent logOutConfirmation = new ServerEvent("You have successfully logged out.",
+                    ServerEvent.ServerEventType.LOGOUT_CONFIRMATION);
+            ServerEvent userLeftNotification = new ServerEvent(command.getUser().getName() +
+                    " left the room.", ServerEvent.ServerEventType.PLAYER_LEFT_NOTIFICATION);
+            broadcast(logOutConfirmation.toEnvelope(), new User[] {command.getUser()}, null);
+            broadcast(userLeftNotification.toEnvelope(), null, new User[] {command.getUser()});
 
-            Envelope logoutNotification = new Envelope(logOutConfirmation, Envelope.EnvelopeType.SERVER_EVENT);
-            Envelope userLeftNotificationEnvelope = new Envelope(userLeftNotification, Envelope.EnvelopeType.SERVER_EVENT);
-            broadcast(logoutNotification, new ArrayList<User>((Collection) command.getUser()), null);
-            broadcast(userLeftNotificationEnvelope, null, new ArrayList<User>((Collection) command.getUser()));
-
-            this.clientList.removeClient(command.getUser());
+            try {
+                this.clientList.removeClient(command.getUser());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
             this.parent.clientList.removeClient(command.getUser());
-            Thread.currentThread().interrupt();
 
         } else if (command.getCommandType()== Command.CommandType.PRIVATE_MESSAGE_COMMAND) {
             Envelope privateMessageEnvelope = new Envelope(command.getPrivateMessage(), Envelope.EnvelopeType.CHAT_MESSAGE);
-            broadcast(privateMessageEnvelope, new ArrayList<>((Collection) command.getUser()), null);
+            broadcast(privateMessageEnvelope, new User[] {command.getUser()}, null);
 
         }  else if (command.getCommandType()== Command.CommandType.EMPTY_COMMAND) {
             Envelope messageEnvelope = new Envelope(command.getChatMessage(), Envelope.EnvelopeType.CHAT_MESSAGE);

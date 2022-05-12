@@ -41,19 +41,19 @@ public class Server {
                     String json = dataInputStream.readUTF();
                     Envelope envelope = Envelope.deserializeEnvelopeFromJson(json);
                     if (envelope.getType()== Envelope.EnvelopeType.LOGIN_REQUEST) {
-                        LoginRequest loginRequest=(LoginRequest) envelope.getPayload();
-                        System.out.println("loginrequest");
+                        LoginRequest loginRequest = (LoginRequest) envelope.getPayload();
                         User user = loginRequest.getUser();
                         if (!clientList.containsClient(user)) {
-                            ServerEvent loginConfirmationEvent = new ServerEvent("Welcome " + user.getName() + "!", ServerEvent.ServerEventType.LOGIN_CONFIRMATION);
-                            Envelope loginConfirmation = new Envelope(loginConfirmationEvent, Envelope.EnvelopeType.SERVER_EVENT);
-                            dataOutputStream.writeUTF(loginConfirmation.toJson()); // LOGIN_CONFIRMATION
+                            ServerEvent loginConfirmation = new ServerEvent("Welcome " + user.getName() + "!",
+                                    ServerEvent.ServerEventType.LOGIN_CONFIRMATION);
+                            dataOutputStream.writeUTF(loginConfirmation.toEnvelope().toJson()); // LOGIN_CONFIRMATION
                             clientList.addClient(user, client);
-                            messageRouterThread.clientList.addClient(user,client);
+                            messageRouterThread.clientList.addClient(user, client);
                         } else {
-                            ServerEvent loginErrorEvent = new ServerEvent("Username is already in use. Please choose another username.", ServerEvent.ServerEventType.NAME_ALREADY_TAKEN);
-                            Envelope loginError = new Envelope(loginErrorEvent, Envelope.EnvelopeType.SERVER_EVENT);
-                            dataOutputStream.writeUTF(loginError.toJson()); // LOGIN_ERROR
+                            ServerEvent loginError = new ServerEvent("Username is already in use. Please " +
+                                    "choose another username.",
+                                    ServerEvent.ServerEventType.NAME_ALREADY_TAKEN);
+                            dataOutputStream.writeUTF(loginError.toEnvelope().toJson()); // LOGIN_ERROR
                             client.close();
                         }
                     }
@@ -61,7 +61,7 @@ public class Server {
             }
         }
         catch(Exception e){
-            System.out.println("Error Occured Oops!" +  e.getMessage());
+            System.out.println("Server Error: " +  e.getMessage());
         }
     }
 }
