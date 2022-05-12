@@ -21,4 +21,9 @@ public class LoginRequest {
     public void setUser(User newUser) {
         this.user = newUser;
     }
+
+    public Envelope toEnvelope() {
+        Envelope envelope = new Envelope(this, Envelope.EnvelopeType.LOGIN_REQUEST);
+        return envelope;
+    }
 }

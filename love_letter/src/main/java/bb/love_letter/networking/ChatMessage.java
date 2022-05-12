@@ -41,4 +41,9 @@ public class ChatMessage implements Serializable {
     public void setSender(User user) {
         this.sender = user;
     }
+
+    public Envelope toEnvelope() {
+        Envelope envelope = new Envelope(this, Envelope.EnvelopeType.CHAT_MESSAGE);
+        return envelope;
+    }
 }

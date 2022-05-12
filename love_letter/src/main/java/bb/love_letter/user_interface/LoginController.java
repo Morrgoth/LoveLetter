@@ -1,6 +1,7 @@
 package bb.love_letter.user_interface;
 
 import bb.love_letter.game.User;
+import bb.love_letter.networking.LoginRequest;
 import bb.love_letter.networking.ServerEvent;
 import bb.love_letter.networking.Envelope;
 import bb.love_letter.networking.NetworkConnection;
@@ -32,7 +33,8 @@ public class LoginController {
             DataInputStream dataInputStream = new DataInputStream(client.getInputStream());
             //request as a client
             User user = new User(username);
-            ServerEvent serverEvent = new ServerEvent(user, ServerEvent.UserEventType.LOGIN_REQUEST);
+            LoginRequest loginRequest = new LoginRequest(user);
+            ServerEvent serverEvent = new ServerEvent(user, ServerEvent.ServerEventType.LOGIN_REQUEST);
             Envelope request = new Envelope(serverEvent, Envelope.TypeEnum.USEREVENT);
             String jsonRequest = request.toJson();
             dataOutputStream.writeUTF(jsonRequest);
