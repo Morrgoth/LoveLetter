@@ -7,7 +7,7 @@ package bb.love_letter.game.characters;
     If the chosen player's hand contains that card, that player is eliminated from the round.
  */
 public class Guard  extends Cards implements Playable {
-    private String name = "BARON";
+    private String name = "GUARD";
     private int cardPoints = 1;
     private String cardAction = "Choose a player and a specific card. If you're right and it's his in his hand, this player is terminated for the Round.";
 
