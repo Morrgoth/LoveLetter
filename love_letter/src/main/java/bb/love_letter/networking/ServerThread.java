@@ -27,7 +27,7 @@ public class ServerThread extends Thread{
     }
 
     /**
-     * Waits for and forwards messages of the User corresponding to the ServerThread instance.
+     * Waits for and forwards messages from Users.
      */
     public void run(){
         String json = "";
