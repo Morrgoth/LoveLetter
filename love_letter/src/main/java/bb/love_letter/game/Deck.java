@@ -4,6 +4,9 @@ import bb.love_letter.game.characters.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * This class is used for initializing and shuffling the deck.
+ */
 public class Deck{
     ArrayList<Cards> deck = new ArrayList<>();
 
