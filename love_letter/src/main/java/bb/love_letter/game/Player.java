@@ -17,7 +17,6 @@ public class Player extends User{
 
     private Cards card1;
     private Cards card2;
-    private int token = 0;
 
     private boolean inGame;
 
@@ -25,11 +24,10 @@ public class Player extends User{
     private ArrayList<Cards> discarded = new ArrayList<>();
 
 
-    public Player(String name, Cards card1, Cards card2, int token) {
+    public Player(String name, Cards card1, Cards card2) {
         super(name);
         this.card1 = card1;
         this.card2 = card2;
-        this.token = token;
     }
 
     public Cards getCard1(){
@@ -48,14 +46,6 @@ public class Player extends User{
         this.card2 = card2;
     }
 
-
-    public int getToken(){
-        return token;
-    }
-
-    public void setToken(){
-        token++;
-    }
 
     public boolean getInGame(){
         return inGame;
