@@ -17,8 +17,9 @@ public class EnvelopeTypeAdapter extends TypeAdapter<Envelope> {
     @Override
     public void write(JsonWriter jsonWriter, Envelope envelope) throws IOException {
         Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LoginRequest.class, new LoginRequestTypeAdapter())
+                .registerTypeAdapter(ServerEvent.class, new ServerEventTypeAdapter())
                 .create(); // we have to register the other TypeAdapters here
-        // TODO: UserTypeAdapter, ChatMessageTypeAdapter, ServerEventTypeAdapter, LoginRequestTypeAdapter
         jsonWriter.beginObject();
         jsonWriter.name("type");
         jsonWriter.value(envelope.getType().toString());
@@ -33,7 +34,7 @@ public class EnvelopeTypeAdapter extends TypeAdapter<Envelope> {
             jsonWriter.value(payload);
         } else if (envelope.getType() == Envelope.EnvelopeType.CHAT_MESSAGE) {
             ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
-            String payload = gson.toJson(chatMessage, ChatMessage.class);
+            String payload = gson.toJson(chatMessage);//, ChatMessage.class);
             jsonWriter.value(payload);
         }
         jsonWriter.endObject();
@@ -41,7 +42,11 @@ public class EnvelopeTypeAdapter extends TypeAdapter<Envelope> {
 
     @Override
     public Envelope read(JsonReader jsonReader) throws IOException {
-        Gson gson = new GsonBuilder().create(); // we have to register the other TypeAdapters here
+        System.out.println(jsonReader)
+        Gson gson = new GsonBuilder()
+                //.registerTypeAdapter(LoginRequest.class, new LoginRequestTypeAdapter())
+                //.registerTypeAdapter(ServerEvent.class, new ServerEventTypeAdapter())
+                .create();
         Envelope envelope = new Envelope();
         jsonReader.beginObject();
         String fieldName = null;

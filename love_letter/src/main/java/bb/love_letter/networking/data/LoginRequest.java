@@ -14,6 +14,8 @@ public class LoginRequest implements EnvelopeSerializable{
     public LoginRequest(User user){
         this.user=user;
     }
+    public LoginRequest(){
+    }
 
     public User getUser() {
         return user;

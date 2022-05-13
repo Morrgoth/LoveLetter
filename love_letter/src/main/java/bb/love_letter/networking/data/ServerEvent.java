@@ -17,6 +17,8 @@ public class ServerEvent implements EnvelopeSerializable {
     public String message;
     public ServerEventType serverEventType;
 
+    public ServerEvent(){}
+
     public ServerEvent(String message, ServerEventType serverEventType){
         this.message=message;
         this.serverEventType=serverEventType;
@@ -49,6 +51,11 @@ public class ServerEvent implements EnvelopeSerializable {
     public ServerEventType getServerEventType(){
         return serverEventType;
     }
+    public void setServerEventType(ServerEventType serverEventType){
+        this.serverEventType=serverEventType;
+
+    }
+
 
     public Envelope toEnvelope() {
         Envelope envelope = new Envelope(this, Envelope.EnvelopeType.SERVER_EVENT);

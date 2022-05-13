@@ -12,12 +12,17 @@ public class User implements Serializable {
     public User (String name){
         this.name = name;
     }
+    public User (){}
 
     /**
      * @return The username of the User
      */
     public String getName(){
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
