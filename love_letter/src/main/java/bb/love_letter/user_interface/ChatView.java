@@ -39,6 +39,7 @@ public class ChatView {
         sentbutton = new Button("Send");
         controller.addChatMessage(new ChatMessage(new User("Server"), "Welcome " + NetworkConnection.getInstance().getUser().getName() + "!"));
         listView = new ListView<>(model.getvBoxObservableList());
+        //listView.setStyle("-fx-background-color: transparent;");
         HBox chatBox = new HBox();
         HBox.setHgrow(messageField, Priority.ALWAYS);
         RowConstraints regRow = new RowConstraints();

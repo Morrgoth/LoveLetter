@@ -17,6 +17,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.net.URL;
+
 /**
  *
  * @author Bence Ament
@@ -98,7 +100,9 @@ public class LoginView {
                     ChatView chatView = new ChatView(chatModel, chatController);
                     Stage stage = new Stage();
                     stage.setTitle("Chat");
-                    stage.setScene(new Scene(chatView.asParent(), 700, 500));
+                    Scene scene = new Scene(chatView.asParent(), 700, 500);
+                    //scene.setUserAgentStylesheet("/resources/Chat.css");
+                    stage.setScene(scene);
                     stage.show();
                     view.getScene().getWindow().hide();
                     ClientReaderThreadUI readerThreadUI = new ClientReaderThreadUI(chatController);

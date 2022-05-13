@@ -36,13 +36,13 @@ height: 122px;
 }
 
 /*blue bubblefield*/
-#messageBubble{
+.messageBubble{
     position: absolute;
-    width: 265px;
-    height: 76px;
+    /*width: 265px;
+    height: 76px;*/
 
-    background: #0085FF;
-    border-radius: 25px;
+    -fx-background: #0085FF;
+    -fx-border-radius: 25px;
 }
 
 /*round blue bubble*/
