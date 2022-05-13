@@ -56,7 +56,7 @@ public class EnvelopeTypeAdapter extends TypeAdapter<Envelope> {
             if (fieldName.equals("type")) {
                 token = jsonReader.peek();
                 String type = jsonReader.nextString();
-                envelope.setType(envelopeTypeFromString(type));
+                envelope.setType(Envelope.EnvelopeType.valueOf(type));
             }
 
             if(fieldName.equals("payload")) {
@@ -76,17 +76,5 @@ public class EnvelopeTypeAdapter extends TypeAdapter<Envelope> {
         }
         jsonReader.endObject();
         return envelope;
-    }
-
-    private Envelope.EnvelopeType envelopeTypeFromString(String type) {
-        if (type.equals("LOGIN_REQUEST")) {
-            return Envelope.EnvelopeType.LOGIN_REQUEST;
-        } else if (type.equals("SERVER_EVENT")) {
-            return Envelope.EnvelopeType.SERVER_EVENT;
-        } else if (type.equals("CHAT_MESSAGE")) {
-            return Envelope.EnvelopeType.CHAT_MESSAGE;
-        } else {
-            return null;
-        }
     }
 }
