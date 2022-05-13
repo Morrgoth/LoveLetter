@@ -7,7 +7,7 @@ import bb.love_letter.networking.data.Envelope;
  *
  * @author Tolga Engin
  */
-public class LoginRequest {
+public class LoginRequest implements EnvelopeSerializable{
 
     public User user;
 

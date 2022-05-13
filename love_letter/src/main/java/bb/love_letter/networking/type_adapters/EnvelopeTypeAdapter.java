@@ -16,7 +16,8 @@ import java.io.IOException;
 public class EnvelopeTypeAdapter extends TypeAdapter<Envelope> {
     @Override
     public void write(JsonWriter jsonWriter, Envelope envelope) throws IOException {
-        Gson gson = new GsonBuilder().create(); // we have to register the other TypeAdapters here
+        Gson gson = new GsonBuilder()
+                .create(); // we have to register the other TypeAdapters here
         // TODO: UserTypeAdapter, ChatMessageTypeAdapter, ServerEventTypeAdapter, LoginRequestTypeAdapter
         jsonWriter.beginObject();
         jsonWriter.name("type");

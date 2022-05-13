@@ -13,8 +13,8 @@ import java.io.*;
  *
  * @author Muqiu Wang
  */
-public class Envelope implements Serializable {
-    private Object payload;
+public class Envelope {
+    private EnvelopeSerializable payload;
     private EnvelopeType type;
 
     /**
@@ -32,7 +32,7 @@ public class Envelope implements Serializable {
      * @param payload The Object to be exchanged between Client and Server.
      * @param type The original type of the payload.
      */
-    public Envelope(Object payload, EnvelopeType type){
+    public Envelope(EnvelopeSerializable payload, EnvelopeType type){
         this.payload = payload;
         this.type = type;
     }
@@ -56,7 +56,7 @@ public class Envelope implements Serializable {
      * This method is only used for the deserialization.
      * @param payload The Object to be stored in the Envelope.
      */
-    public void setPayload(Object payload) {
+    public void setPayload(EnvelopeSerializable payload) {
         this.payload = payload;
     }
     public void setType(EnvelopeType type) {

@@ -12,7 +12,7 @@ import java.io.Serializable;
  *
  * @author Tolga Engin
  */
-public class ServerEvent implements Serializable {
+public class ServerEvent implements EnvelopeSerializable {
 
     public String message;
     public ServerEventType serverEventType;

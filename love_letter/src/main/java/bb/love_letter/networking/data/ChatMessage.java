@@ -12,7 +12,7 @@ import java.io.Serializable;
  *
  * @author Muqiu Wang
  */
-public class ChatMessage implements Serializable {
+public class ChatMessage implements EnvelopeSerializable {
     public User sender;
     public String message;
 
