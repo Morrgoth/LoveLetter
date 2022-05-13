@@ -1,36 +1,59 @@
 package bb.love_letter.game;
 
 import bb.love_letter.game.characters.Cards;
+import bb.love_letter.game.characters.GameEvent;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
+import static bb.love_letter.game.characters.GameEvent.GameEventType.*;
+
 public class GameApplication {
-    static ArrayList<Player> players;
+    static ArrayList<Player> players = new ArrayList<>();
     static ArrayList<Cards> history;
 
-    public static void main(String[] args) {
+    public Player winner = null;
 
-        //This list 'players' list is only an example for testing
-        players.add(new Player("Muqiu", null, null, 0));
-        players.add(new Player("Veronika", null, null, 0));
 
-        Deck deck = new Deck();
-        //Do the Initialization and shuffling for the deck
-        deck.initializeDeck();
-        deck.shuffleDeck();
 
+    public void addPlayers(User user){
+        while(players.size()<4){
+            if(!players.contains(user))
+                players.add(new Player(user.getName(), null, null, 0));
+        }
+    }
+
+    public ArrayList<GameEvent> startGame(){
+        ArrayList<GameEvent> gameEvents = new ArrayList<>();
+        int i = 0;
+        if(players.size() > 2){
+            Deck deck = new Deck();
+            //Do the Initialization and shuffling for the deck
+            deck.initializeDeck();
+            deck.shuffleDeck();
+
+            gameEvents.add(withdrawFirstCards(deck));
+        }else{
+            GameEvent lackOfPlayer = new GameEvent("Lack of Player!", GAMEISREADY);
+        }
+        return gameEvents;
+    }
+
+    private GameEvent withdrawFirstCards(Deck deck){
+        GameEvent broadcast = new GameEvent(null, null);
         //When there are 2 players, 4 cards out of the deck and last 3 cards from them should be seen by all
         if(players.size() == 2){
             for(int i = 0; i<4; i++){
                 if(i > 0){
                     //Print out to all, which last 3 cards are removed from deck
-                    System.out.println("Card " + deck.getDeck().get(i).getCardName() + "removed.\n");
+                    String msg = "Card " + deck.getDeck().get(i).getCardName() + "removed.";
+                    broadcast.setMessage(msg);
+                    broadcast.setGameEvent(GAMEISREADY);
                 }
                 //The removed card is added to the history
-                history.add(deck.getDeck().get(i));
-                deck.getDeck().remove(i);
+                history.add(deck.getDeck().get(0));
+                deck.getDeck().remove(0);
             }
         }//When there are more than 2 players, only 1 card is out, and it shouldn't be seen
         else if(players.size() == 3 || players.size() == 4){
@@ -44,6 +67,24 @@ public class GameApplication {
             players.get(i).setCard1(deck.getDeck().get(0));
             deck.getDeck().remove(0);
         }
+        return broadcast;
+    }
+
+
+
+    public static void main(String[] args) {
+
+
+
+
+
+        //This list 'players' list is only an example for testing
+        players.add(new Player("Muqiu", null, null, 0));
+        players.add(new Player("Veronika", null, null, 0));
+
+        Deck deck = new Deck();
+
+
 
 
         //Players get the second card in their turns and discard cards in the order of the list 'players'
