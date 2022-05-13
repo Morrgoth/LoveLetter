@@ -18,7 +18,9 @@ public class Player extends User{
     private Cards card2;
     private int token = 0;
 
-    private boolean eliminated = false;
+    private boolean inGame;
+
+    private boolean immune;
     private ArrayList<Cards> discarded = new ArrayList<>();
 
 
@@ -66,6 +68,7 @@ public class Player extends User{
     public void drawCard(Deck deck){
         if(card1 == null) {
             card1 = deck.getDeck().get(0);
+
         }else{
             card2 = deck.getDeck().get(0);
         }
@@ -75,29 +78,41 @@ public class Player extends User{
 
 
     //discard a Card during each round
-    public void discardCard(){
-        System.out.println("Choose a card: ");
-        Scanner scanner = new Scanner(System.in);
-        String chosenCard = scanner.nextLine();
-        if(chosenCard.equals(card1.getCardName())){
-            discarded.add(card1);
-            setCard1(null);
-        }else{
-            discarded.add(card2);
+    public void discardCard(Player player, Cards card){
+        if(player.inGame){
+            System.out.println("Choose a card: ");
+            String chosenCard = card.getCardName();  //Input of User in Chat, Command
+            if(chosenCard.equals(card1.getCardName())){
+                discarded.add(card1);
+                setCard1(null);
+            }else if(chosenCard.equals(card2.getCardName())){
+                discarded.add(card2);
                 setCard2(null);
+            }else{
+                GameEvent gameEvent = new GameEvent();
+                gameEvent.setType(GameEvent.GameEventType.NOSUCHCARDONHAND);
+
             }
-        scanner.close();
+        }else{
+            GameEvent gameEvent = new GameEvent();
+            gameEvent.setType(GameEvent.GameEventType.PLAYERELIMINATED);
         }
+    }
 
 
     //Chose a player for cardActions
     public Player choosePlayer(Player player){
-        Scanner scanner = new Scanner(System.in);
-        String playerName = scanner.nextLine();
+        String playerName = "";
         if(playerName.equals(player)){
             Player chosenPlayer = player;
+        }else if(player.immune){
+            GameEvent immunePlayer =  new GameEvent();
+            immunePlayer.setType(GameEvent.GameEventType.PLAYERIMMUNE);
+        }else if(player.inGame){
+            GameEvent notInGame = new GameEvent();
+            notInGame.setType(GameEvent.GameEventType.PLAYERELIMINATED);
         }
-        return choosePlayer(player);
+            return choosePlayer(player);
     }
 }
 
