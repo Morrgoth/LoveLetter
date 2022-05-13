@@ -2,6 +2,7 @@ package bb.love_letter.game;
 
 import bb.love_letter.game.characters.Cards;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -54,6 +55,18 @@ public class Player extends User{
 
     public void setToken(){
         token++;
+    }
+
+    public boolean getInGame(){
+        return inGame;
+    }
+
+    public void setInGame(boolean inGame){
+        this.inGame = inGame;
+    }
+
+    public ArrayList<Cards> getDiscarded(){
+        return discarded;
     }
 
     public int discardedPoints(ArrayList<Cards> discarded){
