@@ -1,7 +1,9 @@
 package bb.love_letter.networking;
 
 import bb.love_letter.game.User;
-import javafx.event.Event;
+import bb.love_letter.networking.data.ChatMessage;
+import bb.love_letter.networking.data.Envelope;
+import bb.love_letter.networking.data.ServerEvent;
 
 import java.io.DataInputStream;
 

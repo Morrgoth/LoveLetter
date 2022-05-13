@@ -10,4 +10,8 @@ module bb.love_letter {
     opens bb.love_letter.user_interface to javafx.fxml;
     exports bb.love_letter.game;
     opens bb.love_letter.game to javafx.fxml;
+    exports bb.love_letter.networking.type_adapters;
+    opens bb.love_letter.networking.type_adapters to javafx.fxml;
+    exports bb.love_letter.networking.data;
+    opens bb.love_letter.networking.data to javafx.fxml;
 }

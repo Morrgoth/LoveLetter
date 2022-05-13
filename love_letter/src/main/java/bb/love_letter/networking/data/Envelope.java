@@ -1,9 +1,8 @@
-package bb.love_letter.networking;
+package bb.love_letter.networking.data;
 
-import bb.love_letter.game.User;
+import bb.love_letter.networking.type_adapters.EnvelopeTypeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 
 import java.io.*;
 

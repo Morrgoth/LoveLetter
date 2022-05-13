@@ -1,14 +1,15 @@
 package bb.love_letter.networking;
 
 import bb.love_letter.game.User;
+import bb.love_letter.networking.data.ChatMessage;
+import bb.love_letter.networking.data.Envelope;
+import bb.love_letter.networking.data.ServerEvent;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * This is the Thread started for each user, it waits for messages from its corresponding user and then forwards

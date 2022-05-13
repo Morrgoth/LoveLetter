@@ -1,9 +1,9 @@
 package bb.love_letter.user_interface;
 
 import bb.love_letter.game.User;
-import bb.love_letter.networking.LoginRequest;
-import bb.love_letter.networking.ServerEvent;
-import bb.love_letter.networking.Envelope;
+import bb.love_letter.networking.data.LoginRequest;
+import bb.love_letter.networking.data.ServerEvent;
+import bb.love_letter.networking.data.Envelope;
 import bb.love_letter.networking.NetworkConnection;
 
 

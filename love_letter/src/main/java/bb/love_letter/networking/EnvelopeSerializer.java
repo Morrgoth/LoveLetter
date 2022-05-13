@@ -1,6 +1,10 @@
 package bb.love_letter.networking;
 
 import bb.love_letter.game.User;
+import bb.love_letter.networking.data.ChatMessage;
+import bb.love_letter.networking.data.Envelope;
+import bb.love_letter.networking.data.LoginRequest;
+import bb.love_letter.networking.data.ServerEvent;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;

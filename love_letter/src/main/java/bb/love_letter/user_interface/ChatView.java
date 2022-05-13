@@ -1,7 +1,7 @@
 package bb.love_letter.user_interface;
 
 import bb.love_letter.game.User;
-import bb.love_letter.networking.ChatMessage;
+import bb.love_letter.networking.data.ChatMessage;
 import bb.love_letter.networking.NetworkConnection;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;

@@ -1,8 +1,8 @@
 package bb.love_letter.networking;
 
 import bb.love_letter.game.User;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import bb.love_letter.networking.data.ChatMessage;
+import bb.love_letter.networking.data.Envelope;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

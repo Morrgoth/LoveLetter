@@ -1,8 +1,9 @@
 package bb.love_letter.user_interface;
 import bb.love_letter.game.User;
 import bb.love_letter.networking.*;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import bb.love_letter.networking.data.Envelope;
+import bb.love_letter.networking.data.LoginRequest;
+import bb.love_letter.networking.data.ServerEvent;
 
 import java.io.*;
 import java.net.*;

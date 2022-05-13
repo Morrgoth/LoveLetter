@@ -1,8 +1,7 @@
 package bb.love_letter.networking;
 
+import bb.love_letter.networking.data.ChatMessage;
 import bb.love_letter.user_interface.ChatController;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 

@@ -1,6 +1,6 @@
-package bb.love_letter.networking;
+package bb.love_letter.networking.data;
 
-import bb.love_letter.game.User;
+import bb.love_letter.networking.data.Envelope;
 
 import java.io.Serializable;
 

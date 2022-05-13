@@ -2,13 +2,9 @@ package bb.love_letter.user_interface;
 
 
 import bb.love_letter.game.User;
-import bb.love_letter.networking.ChatMessage;
-import bb.love_letter.networking.Envelope;
-import bb.love_letter.networking.ServerEvent;
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import bb.love_letter.networking.data.ChatMessage;
+import bb.love_letter.networking.data.Envelope;
+import bb.love_letter.networking.data.ServerEvent;
 
 /**
  *
