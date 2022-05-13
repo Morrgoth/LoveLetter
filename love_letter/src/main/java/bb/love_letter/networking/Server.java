@@ -42,7 +42,7 @@ public class Server {
                     dataOutputStream = new DataOutputStream(client.getOutputStream());
                     dataInputStream = new DataInputStream(client.getInputStream());
                     String json = dataInputStream.readUTF();
-                    Envelope envelope = Envelope.deserializeEnvelopeFromJson(json);
+                    Envelope envelope = Envelope.fromJson(json);
                     if (envelope.getType()== Envelope.EnvelopeType.LOGIN_REQUEST) {
                         LoginRequest loginRequest = (LoginRequest) envelope.getPayload();
                         User user = loginRequest.getUser();

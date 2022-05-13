@@ -40,7 +40,7 @@ public class ClientCLI {
             ClientReaderThread read = new ClientReaderThread(dataInputStream, user);
             ClientWriterThread write = new ClientWriterThread(dataOutputStream,user);
             String response = dataInputStream.readUTF();
-            Envelope envelope = Envelope.deserializeEnvelopeFromJson(response);
+            Envelope envelope = Envelope.fromJson(response);
             if (envelope.getType() == Envelope.EnvelopeType.SERVER_EVENT) {
                 ServerEvent loginResponseEvent = (ServerEvent) envelope.getPayload();
                 if (loginResponseEvent.getServerEventType() == ServerEvent.ServerEventType.LOGIN_CONFIRMATION) {

@@ -28,7 +28,7 @@ public class ClientReaderThreadUI extends Thread{
                 // RECEIVE MESSAGE FROM SERVER
                 json = NetworkConnection.getInstance().getInputStream().readUTF();
                 if(json != null) {
-                    Envelope envelope = Envelope.deserializeEnvelopeFromJson(json);
+                    Envelope envelope = Envelope.fromJson(json);
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {

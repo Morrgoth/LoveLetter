@@ -4,8 +4,6 @@ import bb.love_letter.networking.type_adapters.EnvelopeTypeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.*;
-
 /**
  * Envelope is used for Client-Server communication, by convention whenever we exchange data betweeen Client and Server
  * it must be wrapped by the sender in an Envelope and turned to JSON, and it must be deserialized from JSON by
@@ -76,28 +74,9 @@ public class Envelope {
      * @param json This is a JSON String received through the network.
      * @return An Envelope that has the same contents as the one which was originally sent through the Network.
      */
-    public static Envelope deserializeEnvelopeFromJson(String json) {
+    public static Envelope fromJson(String json) {
         Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeTypeAdapter()).create();
-        //Gson gson = new Gson();
         Envelope envelope = gson.fromJson(json, Envelope.class);
-        //Envelope envelope = new Envelope();
-        //if (jsonObject.get("type").getAsString().equals("SERVER_EVENT")) {
-        //    ServerEvent serverEvent = gson.fromJson(jsonObject.get("payload").getAsString(), ServerEvent.class);
-        //    envelope.setType(EnvelopeType.SERVER_EVENT);
-        //    envelope.setPayload(serverEvent);
-        //} else if (jsonObject.get("type").getAsString().equals("CHAT_MESSAGE")){
-        //    ChatMessage chatMessage = gson.fromJson(jsonObject.get("payload").getAsString(), ChatMessage.class);
-        //    User user = gson.fromJson(jsonObject.get("user").getAsString(), User.class);
-        //    chatMessage.setSender(user);
-        //    envelope.setType(Envelope.EnvelopeType.CHAT_MESSAGE);
-        //    envelope.setPayload(chatMessage);
-        //}else if (jsonObject.get("type").getAsString().equals("LOGIN_REQUEST")){
-        //    LoginRequest loginRequest = gson.fromJson(jsonObject.get("payload").getAsString(), LoginRequest.class);
-        //    User user = gson.fromJson(jsonObject.get("user").getAsString(), User.class);
-        //    loginRequest.setUser(user);
-        //    envelope.setType(EnvelopeType.LOGIN_REQUEST);
-        //    envelope.setPayload(loginRequest);
-        //}
         return envelope;
     }
 

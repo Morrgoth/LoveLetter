@@ -33,7 +33,7 @@ public class ClientReaderThread extends Thread{
                 // RECEIVE MESSAGE FROM SERVER
                 json = dataInputStream.readUTF();
                 if(json != null) {
-                    Envelope envelope = Envelope.deserializeEnvelopeFromJson(json);
+                    Envelope envelope = Envelope.fromJson(json);
                     if (envelope.getType() == Envelope.EnvelopeType.SERVER_EVENT) {
                         ServerEvent serverEvent = (ServerEvent) envelope.getPayload();
                         System.out.println(serverEvent.getMessage());

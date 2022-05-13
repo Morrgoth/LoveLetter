@@ -43,7 +43,7 @@ public class ServerThread extends Thread{
                             // RECEIVE MESSAGE FROM USERS
                             json = dataInputStream.readUTF();
                             System.out.println(json);
-                            Envelope envelope = Envelope.deserializeEnvelopeFromJson(json);
+                            Envelope envelope = Envelope.fromJson(json);
                             if (envelope.getType() == Envelope.EnvelopeType.CHAT_MESSAGE) {
                                 ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
                                 Command command = new Command(chatMessage);
