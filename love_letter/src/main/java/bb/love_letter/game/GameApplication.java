@@ -4,6 +4,7 @@ import bb.love_letter.game.characters.Cards;
 import bb.love_letter.game.characters.GameEvent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -11,6 +12,8 @@ import static bb.love_letter.game.characters.GameEvent.GameEventType.*;
 
 public class GameApplication {
     static ArrayList<Player> players = new ArrayList<>();
+
+    static HashMap<String, Integer> playerScores = new HashMap<String, Integer>();
     static ArrayList<Cards> history;
 
     public Player winner = null;
@@ -20,7 +23,13 @@ public class GameApplication {
     public void addPlayers(User user){
         while(players.size()<4){
             if(!players.contains(user))
-                players.add(new Player(user.getName(), null, null, 0));
+                players.add(new Player(user.getName(), null, null));
+        }
+    }
+
+    public void initializePlayerScores(){
+        for(int i = 0; i< players.size();i++){
+            playerScores.put(players.get(i).getName(), 0);
         }
     }
 
@@ -79,8 +88,8 @@ public class GameApplication {
 
 
         //This list 'players' list is only an example for testing
-        players.add(new Player("Muqiu", null, null, 0));
-        players.add(new Player("Veronika", null, null, 0));
+        players.add(new Player("Muqiu", null, null));
+        players.add(new Player("Veronika", null, null));
 
         Deck deck = new Deck();
 
