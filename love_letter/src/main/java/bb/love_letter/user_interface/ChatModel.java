@@ -6,6 +6,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 /**
  *
@@ -15,6 +17,14 @@ public class ChatModel {
    private ObservableList <ChatMessage> chatMessageObservableList = FXCollections.observableArrayList();
    private ObservableList <String> chatMessageStringObservableList = FXCollections.observableArrayList();
    private ObservableList<User> userObservableList = FXCollections.observableArrayList();
+
+   private ObservableList<VBox> vBoxObservableList = FXCollections.observableArrayList();
+   public ObservableList<VBox> getvBoxObservableList(){
+       return vBoxObservableList;
+   }
+   public void addVBox (VBox vbox){
+       vBoxObservableList.add(vbox);
+   }
 
    private StringProperty currentMessage = new SimpleStringProperty("");
 
