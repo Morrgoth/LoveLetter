@@ -16,10 +16,11 @@ import java.io.IOException;
 public class EnvelopeTypeAdapter extends TypeAdapter<Envelope> {
     @Override
     public void write(JsonWriter jsonWriter, Envelope envelope) throws IOException {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(LoginRequest.class, new LoginRequestTypeAdapter())
-                .registerTypeAdapter(ServerEvent.class, new ServerEventTypeAdapter())
-                .create(); // we have to register the other TypeAdapters here
+        //Gson gson = new GsonBuilder()
+        //        .registerTypeAdapter(LoginRequest.class, new LoginRequestTypeAdapter())
+        //        .registerTypeAdapter(ServerEvent.class, new ServerEventTypeAdapter())
+        //        .create(); // we have to register the other TypeAdapters here
+        Gson gson = new Gson();
         jsonWriter.beginObject();
         jsonWriter.name("type");
         jsonWriter.value(envelope.getType().toString());
@@ -42,11 +43,11 @@ public class EnvelopeTypeAdapter extends TypeAdapter<Envelope> {
 
     @Override
     public Envelope read(JsonReader jsonReader) throws IOException {
-        System.out.println(jsonReader)
-        Gson gson = new GsonBuilder()
-                //.registerTypeAdapter(LoginRequest.class, new LoginRequestTypeAdapter())
-                //.registerTypeAdapter(ServerEvent.class, new ServerEventTypeAdapter())
-                .create();
+        //Gson gson = new GsonBuilder()
+        //        //.registerTypeAdapter(LoginRequest.class, new LoginRequestTypeAdapter())
+        //        //.registerTypeAdapter(ServerEvent.class, new ServerEventTypeAdapter())
+        //        .create();
+        Gson gson = new Gson();
         Envelope envelope = new Envelope();
         jsonReader.beginObject();
         String fieldName = null;

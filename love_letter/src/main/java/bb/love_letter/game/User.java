@@ -43,4 +43,10 @@ public class User implements Serializable {
             return false;
         }
     }
+
+    @Override
+    public int hashCode() {
+        // TODO
+        return super.hashCode();
+    }
 }
