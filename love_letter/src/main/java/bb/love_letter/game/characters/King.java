@@ -5,7 +5,7 @@ package bb.love_letter.game.characters;
     AmountInDeck: 1
     Effects: Player may trade hands with another player.
  */
-public class King extends Cards implements Playable {
+public class King extends Cards {
 
     private String name = "KING";
     private int cardPoints = 6;
@@ -27,20 +27,10 @@ public class King extends Cards implements Playable {
     }
 
     @Override
-    public int pickUp(){ /* KING checks if COUNTESS is in players Hand, if yes trigger COUNTESS effect and putDown(); */
-        return 0;
-    }
+    public void useAction(){ /* BARON does nothing on pickUp */
 
-    @Override
-    public int putDown(){
         //player1 chooses player2
-        // change hands;
-        return 0;
+        // change hands;;
     }
 
-    @Override
-    public int see() {
-        //make Hand arrList visible only to player 2
-        return 0;
-    }
 }

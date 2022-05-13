@@ -1,9 +1,9 @@
 package bb.love_letter.game.characters;
 
-import java.security.SecureRandom;
+import bb.love_letter.game.Player;
 
-public class Cards {
-    //add general cards properties or keep empty?
+public abstract class Cards {
+
     private String cardName;
     private int cardPoints;
     private String cardAction;
@@ -16,8 +16,13 @@ public class Cards {
         return cardPoints;
     }
 
+    //needed only to show the info text
     public String getCardAction(){
         return cardAction;
     }
 
+
+    //when player looses::
+    //
+    public abstract void useAction(Player sourcePlayer, Player targetPlayer);
 }

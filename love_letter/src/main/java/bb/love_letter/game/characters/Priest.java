@@ -6,7 +6,7 @@ package bb.love_letter.game.characters;
     Player may privately see another player's hand.
  */
 
-public class Priest extends Cards implements Playable {
+public class Priest extends Cards{
 
     private String name = "PRIEST";
     private int cardPoints = 2;
@@ -28,20 +28,10 @@ public class Priest extends Cards implements Playable {
     }
 
     @Override
-    public int pickUp(){ /* nohing */
-        return 0;
-    }
+    public void useAction(){ /* BARON does nothing on pickUp */
 
-    @Override
-    public int putDown(){
         //player1 chooses player2
         // see()player2 hand to player1 only;
-        return 0;
     }
 
-    @Override
-    public int see() {
-        //make Hand arrList visible only to player 2
-        return 0;
-    }
 }

@@ -1,16 +1,18 @@
 package bb.love_letter.game.characters;
 
 
+import bb.love_letter.game.Player;
+
 /*
     Strength: 3
     AmountInDeck: 2
     Effects: Player may choose another player and privately compare hands.
     The player with the lower-value card is eliminated from the round.
  */
-public class Baron extends Cards implements Playable {
-    private String name = "BARON";
-    private int cardPoints = 3;
-    private String cardAction = "Compare Hands privately.Lower value card is eliminated";
+public class Baron extends Cards {
+    private final String name = "BARON";
+    private final int cardPoints = 3;
+    private final String cardAction = "Compare Hands privately.Lower value card is eliminated";
 
     @Override
     public String getCardName() {
@@ -27,24 +29,22 @@ public class Baron extends Cards implements Playable {
         return cardPoints;
     }
 
+    //when player looses::
+    //
     @Override
-    public int pickUp(){ /* BARON does nothing on pickUp */
-    return 0;
+    public void useAction(Player sourcePlayer, Player targetPlayer) {
+        /* compare hands with another player, lower number is out */
+        Cards sourcePlayerCard1 = sourcePlayer.getCard1();
+        Cards targetPlayerCard1 = targetPlayer.getCard1();
+
+        sourcePlayerCard1.getCardPoints();
+
+        if (sourcePlayerCard1 > targetPlayerCard1) {
+
+        }
+        else if (sourcePlayerCard1 < targetPlayerCard1){
+
+        }
+
     }
-
-    @Override
-    public int putDown(){
-        //player1 chooses player2 to compare Card on Hand;
-        //compare values --> higher value stays, lower value is terminated for this round
-        //terminate Round for player;
-        return 0;
-    }
-
-    @Override
-    public int see(){
-        //make Hand arrList visible only to player 2
-        return 0;
-    }
-
-
 }

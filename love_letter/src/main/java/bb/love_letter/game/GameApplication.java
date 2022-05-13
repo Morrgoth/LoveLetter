@@ -11,8 +11,13 @@ import java.util.Scanner;
 import static bb.love_letter.game.characters.GameEvent.GameEventType.*;
 
 public class GameApplication {
-    static ArrayList<Player> players = new ArrayList<>();
 
+    //playersInRound is cloned from playersInGame each round
+    //cardActions and terminations only affect playersInRound
+
+    static ArrayList<Player> playersInGame = new ArrayList<>();
+
+    static ArrayList<Player> playersInRound = new ArrayList<>();
     static HashMap<String, Integer> playerScores = new HashMap<String, Integer>();
     static ArrayList<Cards> history;
 

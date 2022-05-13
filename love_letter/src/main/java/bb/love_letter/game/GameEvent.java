@@ -13,8 +13,6 @@ public class GameEvent {
         PLAYERIMMUNE,
         GAMEFINISHED
 
-
-
     }
 
     public void setType(GameEventType type) {
