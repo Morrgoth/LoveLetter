@@ -15,12 +15,18 @@ import java.io.Serializable;
 public class ChatMessage implements EnvelopeSerializable {
     public User sender;
     public String message;
+    public boolean isPrivate = false;
 
     public ChatMessage(User sender, String message){
         this.sender = sender;
         this.message = message;
     }
 
+    public ChatMessage(User sender, String message, boolean isPrivate){
+        this.sender = sender;
+        this.message = message;
+        this.isPrivate = isPrivate;
+    }
     /**
      * @return The User, that sent the message.
      */
@@ -41,6 +47,14 @@ public class ChatMessage implements EnvelopeSerializable {
      */
     public void setSender(User user) {
         this.sender = user;
+    }
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void setIsPrivate(boolean isPrivate) {
+        this.isPrivate = isPrivate;
     }
 
     public Envelope toEnvelope() {
