@@ -34,7 +34,7 @@ public class LoginRequestTypeAdapter extends TypeAdapter<LoginRequest>{
         String fieldName = null;
         while (jsonReader.hasNext()) {
             JsonToken token = jsonReader.peek();
-            if(token.equals(JsonToken.NAME)){
+            if(token.equals(JsonToken.NAME)) {
                 fieldName =jsonReader.nextString();
             }
             if ("user".equals(fieldName)) {
