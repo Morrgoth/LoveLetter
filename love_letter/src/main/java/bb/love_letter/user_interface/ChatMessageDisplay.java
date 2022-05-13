@@ -1,27 +1,39 @@
 package bb.love_letter.user_interface;
 
+import bb.love_letter.networking.NetworkConnection;
 import bb.love_letter.networking.data.ChatMessage;
 import bb.love_letter.networking.data.ServerEvent;
+import javafx.geometry.Pos;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class ChatMessageDisplay {
-    private VBox vBox;
+    private HBox hBox;
 
     public ChatMessageDisplay (ChatMessage chatMessage){
-        vBox = buildDisplay(chatMessage);
+        hBox = buildDisplay(chatMessage);
     }
     public ChatMessageDisplay(ServerEvent serverEvent){
-        vBox = buildDisplay(serverEvent);
+        hBox = buildDisplay(serverEvent);
     }
-     private VBox buildDisplay (ChatMessage chatMessage){
+     private HBox buildDisplay (ChatMessage chatMessage){
         VBox vBox1 = new VBox();
+        HBox hBox1 = new HBox();
         vBox1.getChildren().add(new Text(chatMessage.getSender().getName()));
-         vBox1.getChildren().add(new Text(chatMessage.getMessage()));
-         return vBox1;
+        vBox1.getChildren().add(new Text(chatMessage.getMessage()));
+        hBox1.getChildren().add(vBox1);
+        if (NetworkConnection.getInstance().getUser().equals(chatMessage.getSender())){
+             hBox1.setAlignment(Pos.BASELINE_RIGHT);
+        }
+        return hBox1;
      }
-    private VBox buildDisplay (ServerEvent serverEvent){
+    private HBox buildDisplay (ServerEvent serverEvent){
         return null;
+    }
+
+    public HBox gethBox(){
+        return hBox;
     }
 
 

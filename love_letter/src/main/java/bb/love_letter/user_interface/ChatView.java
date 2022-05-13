@@ -7,10 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
 
 /**
  *
@@ -24,7 +21,7 @@ public class ChatView {
     private GridPane view;
     private TextField messageField;
     private Button sentbutton;
-    private ListView<String> listView;
+    private ListView<HBox> listView;
 
 
     public ChatView (ChatModel model, ChatController controller) {
@@ -41,7 +38,7 @@ public class ChatView {
         messageField.setPromptText("Type your message here...");
         sentbutton = new Button("Send");
         controller.addChatMessage(new ChatMessage(new User("Server"), "Welcome " + NetworkConnection.getInstance().getUser().getName() + "!"));
-        listView = new ListView<>(model.getChatMessageStringObservableList());
+        listView = new ListView<>(model.getvBoxObservableList());
         HBox chatBox = new HBox();
         HBox.setHgrow(messageField, Priority.ALWAYS);
         RowConstraints regRow = new RowConstraints();

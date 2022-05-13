@@ -18,13 +18,14 @@ public class ChatModel {
    private ObservableList <String> chatMessageStringObservableList = FXCollections.observableArrayList();
    private ObservableList<User> userObservableList = FXCollections.observableArrayList();
 
-   private ObservableList<VBox> vBoxObservableList = FXCollections.observableArrayList();
-   public ObservableList<VBox> getvBoxObservableList(){
+   private ObservableList<HBox> vBoxObservableList = FXCollections.observableArrayList();
+   public ObservableList<HBox> getvBoxObservableList(){
        return vBoxObservableList;
    }
-   public void addVBox (VBox vbox){
-       vBoxObservableList.add(vbox);
+   public void addVBox (HBox hbox){
+       vBoxObservableList.add(hbox);
    }
+
 
    private StringProperty currentMessage = new SimpleStringProperty("");
 
