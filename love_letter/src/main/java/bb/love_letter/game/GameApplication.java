@@ -26,7 +26,7 @@ public class GameApplication {
 
 
     public void addPlayers(User user){
-        while(playersInGame.size()<4){
+        while(playersInGame.size()<=4){
             if(!playersInGame.contains(user))
                 playersInGame.add(new Player(user.getName(), null, null));
         }
@@ -41,7 +41,7 @@ public class GameApplication {
     public ArrayList<GameEvent> startGame(){
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
         int i = 0;
-        if(playersInGame.size() > 2){
+        if(playersInGame.size() >= 2){
             Deck deck = new Deck();
             //Do the Initialization and shuffling for the deck
             deck.initializeDeck();
