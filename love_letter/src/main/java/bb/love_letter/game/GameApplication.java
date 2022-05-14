@@ -96,6 +96,17 @@ public class GameApplication {
         //delete all elements in List when a round ends
     }
 
+    public void buildTurnQueue (ArrayList<Player> playersInRound){
+        if (playersInRound.get(0).getInGame()){
+            Player currentPlayer = playersInRound.get(0);
+            playersInRound.remove(0);
+            playersInRound.add(currentPlayer);
+        }
+        else{
+            playersInRound.remove(0);
+        }
+    }
+
 
     public static void main(String[] args) {
 

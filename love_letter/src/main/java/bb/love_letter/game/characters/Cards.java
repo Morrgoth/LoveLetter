@@ -21,8 +21,4 @@ public abstract class Cards {
         return cardAction;
     }
 
-
-    //when player looses::
-    //
-    public abstract void useAction(Player sourcePlayer, Player targetPlayer);
 }

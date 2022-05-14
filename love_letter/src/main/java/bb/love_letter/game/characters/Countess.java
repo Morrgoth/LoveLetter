@@ -7,6 +7,9 @@ package bb.love_letter.game.characters;
     this card must be played immediately, which otherwise does nothing.
  */
 
+import bb.love_letter.game.GameApplication;
+import bb.love_letter.game.Player;
+
 public class Countess extends Cards {
     private String name = "COUNTESS";
     private int cardPoints = 7;
@@ -28,12 +31,20 @@ public class Countess extends Cards {
     }
 
 
-    @Override
-    public void useAction(){ /* COUNTESS does nothing on pickUp */
+
+    public void useCountess(Player sourcePlayer){ /* COUNTESS does nothing on pickUp */
 
         /* COUNTESS checks if KING or PRINCE on pickUp
-    ((implicit > if PRINCESS on hand - putDown(), but still an option to loose by PRINCESS
-    COUNTESS checks every round if KING/ PRINCE in hand*/
+        ((implicit > if PRINCESS on hand - putDown(), but still an option to loose by PRINCESS
+        COUNTESS checks every round if KING/ PRINCE in hand*/
+
+        //checks if King||Prince in hand when drawn from deck
+        if (sourcePlayer.getCard1().equals(getCardName("PRINCE")) || sourcePlayer.getCard1().equals(getCardName("KING"))){
+            GameApplication.history.add(sourcePlayer.getCard2());
+            sourcePlayer.discarded.add(sourcePlayer.getCard2());
+            sourcePlayer.setCard2(null);
+        }
+
     }
 
 }

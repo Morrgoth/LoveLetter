@@ -23,7 +23,7 @@ public class Player extends User{
     private boolean inGame;
 
     private boolean immune;
-    private ArrayList<Cards> discarded = new ArrayList<>();
+    public ArrayList<Cards> discarded = new ArrayList<>();
 
 
     public Player(String name, Cards card1, Cards card2) {
@@ -129,5 +129,7 @@ public class Player extends User{
         //delete all elements in List when a round ends
 
     }
+
+    //check while player in playersInRound for COUNTESS + KING || COUNTESS + PRINCE
 }
 
