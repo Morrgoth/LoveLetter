@@ -17,9 +17,9 @@ public class GameApplication {
 
     static ArrayList<Player> playersInGame = new ArrayList<>();
 
-    static ArrayList<Player> playersInRound = new ArrayList<>();
-    static HashMap<String, Integer> playerScores = new HashMap<String, Integer>();
-    static ArrayList<Cards> history;
+    public static ArrayList<Player> playersInRound = new ArrayList<>();
+    public static HashMap<String, Integer> playerScores = new HashMap<String, Integer>();
+    public static ArrayList<Cards> history;
 
     public Player winner = null;
 
@@ -84,6 +84,9 @@ public class GameApplication {
         return broadcast;
     }
 
+    private void clearHistoryList(){
+        //delete all elements in List when a round ends
+    }
 
 
     public static void main(String[] args) {

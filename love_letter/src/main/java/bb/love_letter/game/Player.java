@@ -117,5 +117,9 @@ public class Player extends User{
         }
             return choosePlayer(player);
     }
+
+    private void clearDiscardedList() {
+        //delete all elements in List when a round ends
+    }
 }
 

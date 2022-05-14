@@ -1,8 +1,9 @@
 package bb.love_letter.game.characters;
 
-
+import bb.love_letter.game.GameApplication;
 import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
+import static bb.love_letter.game.GameApplication.history;
 
 /*
     Strength: 3
@@ -13,7 +14,7 @@ import bb.love_letter.game.Player;
 public class Baron extends Cards {
     private final String name = "BARON";
     private final int cardPoints = 3;
-    private final String cardAction = "Compare Hands privately.Lower value card is eliminated";
+    private final String cardAction = "Compare Hands privately.Card with lower value is eliminated";
 
     @Override
     public String getCardName() {
@@ -31,7 +32,7 @@ public class Baron extends Cards {
     }
 
     //when player looses::
-    // sourcePlayer + targetPlayer private message with Info :: You played Card+Value - target played Card + Value
+    // sourcePlayer + targetPlayer private message with Info :: You played Card+Value - target played Card + Value >> print on Server, but not in method
     // sourceCard + targetCard arrayList <Card> history add.
     // playersInRound delete user
 
@@ -46,13 +47,21 @@ public class Baron extends Cards {
 
         if (sourceCardValue > targetCardValue) {
 
+            history.add(sourcePlayerCard1);
+            GameApplication.history.add(targetPlayerCard1);
+            GameApplication.playersInRound.remove(targetPlayer);
 
         }
         else if (sourceCardValue < targetCardValue){
-
+            GameApplication.history.add(sourcePlayerCard1);
+            GameApplication.history.add(targetPlayerCard1);
+            GameApplication.playersInRound.remove(sourcePlayer);
         }
         else {
             // ignore effect play on; cards to history
+            GameApplication.history.add(sourcePlayerCard1);
+            GameApplication.history.add(targetPlayerCard1);
+            //finish turn;
         }
 
     }
