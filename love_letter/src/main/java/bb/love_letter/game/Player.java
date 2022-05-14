@@ -95,6 +95,13 @@ public class Player extends User{
 
     }
 
+    public boolean checkIfPrincess(Cards card){
+        if(card.getCardName().equals("PRINCESS")){
+            return true;
+        }
+        return false;
+    }
+
 
     //discard a Card during each round
     public GameEvent discardCard(int cardNumber){
@@ -146,11 +153,11 @@ public class Player extends User{
         return choosePlayer(playerNumber);
     }
 
-    private void clearDiscardedList() {
+    private void clearDiscardedList(ArrayList<Cards> discarded) {
         //delete all elements in List when a round ends
-
+        for(int i = 0; i<discarded.size(); i++){
+            discarded.remove(0);
+        }
     }
-
-    //check while player in playersInRound for COUNTESS + KING || COUNTESS + PRINCE
 }
 
