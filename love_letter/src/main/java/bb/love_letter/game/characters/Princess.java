@@ -28,10 +28,5 @@ public class Princess extends Cards{
         return cardPoints;
     }
 
-    @Override
-    public void useAction(){ /* BARON does nothing on pickUp */
-
-        //player1 terminated for Round
-    }
 
 }
