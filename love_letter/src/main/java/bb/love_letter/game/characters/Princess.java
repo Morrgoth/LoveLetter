@@ -6,6 +6,8 @@ package bb.love_letter.game.characters;
     If the player plays or discrds this card for any reason, they are eliminated from the round.
  */
 
+import bb.love_letter.game.GameApplication;
+
 public class Princess extends Cards{
 
     private final String name = "PRINCESS";
@@ -28,10 +30,5 @@ public class Princess extends Cards{
         return cardPoints;
     }
 
-    @Override
-    public void useAction(){ /* BARON does nothing on pickUp */
-
-        //player1 terminated for Round
-    }
 
 }

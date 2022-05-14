@@ -7,7 +7,7 @@ package bb.love_letter.game.characters;
     If the chosen player's hand contains that card, that player is eliminated from the round.
  */
 public class Guard  extends Cards {
-    private String name = "GUARD";
+    private String name = "Guard";
     private int cardPoints = 1;
     private String cardAction = "Choose a player and a specific card. If you're right and it's his in his hand, this player is terminated for the Round.";
 
@@ -29,7 +29,9 @@ public class Guard  extends Cards {
     @Override
     public void useAction(){ /* BARON does nothing on pickUp */
         //player1 chooses player2 to compare Card on Hand;
-        //compare value.name, if correct
+
+        //choose card compare value.name, if correct
+
         //terminate Round for player;
         //else do nothing;
         ;

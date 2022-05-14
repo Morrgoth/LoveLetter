@@ -11,7 +11,7 @@ import bb.love_letter.game.GameApplication;
 import bb.love_letter.game.Player;
 
 public class Countess extends Cards {
-    private String name = "COUNTESS";
+    private String name = "Countess";
     private int cardPoints = 7;
     private String cardAction = "Play out if either King or Prince in hand.";
 

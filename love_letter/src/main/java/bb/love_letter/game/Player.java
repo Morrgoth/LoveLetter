@@ -6,6 +6,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import static bb.love_letter.game.GameApplication.history;
 import static bb.love_letter.game.GameEvent.GameEventType.*;
 
 
@@ -102,20 +103,30 @@ public class Player extends User {
 
     }
 
+    public boolean checkIfPrincess(Cards card){
+        if(card.getCardName().equals("PRINCESS")){
+            return true;
+        }
+        return false;
+    }
+
 
     //discard a Card during each round
     public GameEvent discardCard(int cardNumber) {
         GameEvent gameEvent = new GameEvent(null, null);
         switch (cardNumber) {
             case 1:
+                GameApplication.history.add(card1);
                 discarded.add(card1);
                 setCard1(card2);
                 setCard2(null);
                 gameEvent.setMessage("You chose Card 1");
                 gameEvent.setType(DISCARDSUCCESSFULL);
+
                 break;
 
             case 2:
+                GameApplication.history.add(card2);
                 discarded.add(card2);
                 setCard2(null);
                 gameEvent.setMessage("You chose Card 2");
@@ -148,12 +159,11 @@ public class Player extends User {
             return null;
         }
 
-        private void clearDiscardedList () {
-            //delete all elements in List when a round ends
-
+    private void clearDiscardedList(ArrayList<Cards> discarded) {
+        //delete all elements in List when a round ends
+        for(int i = 0; i<discarded.size(); i++){
+            discarded.remove(0);
         }
-
-        //check while player in playersInRound for COUNTESS + KING || COUNTESS + PRINCE
     }
 }
 
