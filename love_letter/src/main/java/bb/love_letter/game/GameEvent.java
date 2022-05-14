@@ -6,6 +6,7 @@ public class GameEvent {
     String message;
     GameEventType type;
 
+
     public enum GameEventType{
         GAMEISREADY,
         DISCARDSUCCESSFULL,

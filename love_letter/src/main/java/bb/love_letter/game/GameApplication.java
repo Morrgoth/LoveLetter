@@ -44,6 +44,16 @@ public class GameApplication {
         playersInRound = (ArrayList<Player>) playersInGame.clone();
     }
 
+    public void initializedChoosePlayer(){
+        choosePlayer = (ArrayList<Player>) playersInRound.clone();
+        for(int i = 0; i < choosePlayer.size(); i++){
+            if(choosePlayer.get(i).getImmune() == true){
+                choosePlayer.remove(i);
+            }
+        }
+
+    }
+
     public ArrayList<GameEvent> startGame(){
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
 
@@ -53,7 +63,7 @@ public class GameApplication {
             //Do the Initialization and shuffling for the deck
             deck.initializeDeck();
             deck.shuffleDeck();
-            initializePlayersInRound();
+            //initializePlayersInRound();
             initializePlayerScores();
             gameEvents.add(withdrawFirstCards(deck));
         }else{
