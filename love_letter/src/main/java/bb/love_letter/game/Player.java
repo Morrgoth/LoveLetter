@@ -74,6 +74,27 @@ public class Player extends User{
         card2 = deck.getDeck().get(0);
     }
 
+    public boolean checkIfCountess(Cards card1, Cards card2){
+
+        //check for COUNTESS
+        if (card1.getCardName().equals("COUNTESS") &&(card2.getCardName().equals("PRINCE")|| card2.getCardName().equals("KING"))){
+            GameApplication.history.add(card1);
+            discarded.add(card1);
+            setCard1(null);
+            return true;
+        }
+        else if(card2.getCardName().equals("COUNTESS") && (card1.getCardName().equals("PRINCE")|| card1.getCardName().equals("KING"))){
+            GameApplication.history.add(card2);
+            discarded.add(card2);
+            setCard2(null);
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+
 
     //discard a Card during each round
     public GameEvent discardCard(int cardNumber){

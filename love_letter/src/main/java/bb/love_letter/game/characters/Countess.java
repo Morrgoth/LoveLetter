@@ -32,19 +32,13 @@ public class Countess extends Cards {
 
 
 
-    public void useCountess(Player sourcePlayer){ /* COUNTESS does nothing on pickUp */
-
-        /* COUNTESS checks if KING or PRINCE on pickUp
+     /* COUNTESS does nothing on pickUp */
+    //checked in Player checkIfCountess();
+    /* COUNTESS checks if KING or PRINCE on pickUp
         ((implicit > if PRINCESS on hand - putDown(), but still an option to loose by PRINCESS
         COUNTESS checks every round if KING/ PRINCE in hand*/
 
         //checks if King||Prince in hand when drawn from deck
-        if (sourcePlayer.getCard1().equals(getCardName("PRINCE")) || sourcePlayer.getCard1().equals(getCardName("KING"))){
-            GameApplication.history.add(sourcePlayer.getCard2());
-            sourcePlayer.discarded.add(sourcePlayer.getCard2());
-            sourcePlayer.setCard2(null);
-        }
 
-    }
 
 }
