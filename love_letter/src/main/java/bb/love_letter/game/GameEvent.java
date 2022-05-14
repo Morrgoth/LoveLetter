@@ -6,7 +6,7 @@ public class GameEvent {
     String message;
     GameEventType type;
 
-
+    public boolean eventState;
     public enum GameEventType{
         GAMEISREADY,
         DISCARDSUCCESSFULL,
@@ -34,5 +34,11 @@ public class GameEvent {
 
     public void setType(GameEventType type) {
         this.type = type;
+    }
+
+    public void changeState (boolean eventState, GameEventType newState){
+        GameEventType currentStateType = newState;
+        this.eventState = true;
+        int counterState = 0;
     }
 }

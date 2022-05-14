@@ -30,5 +30,6 @@ public class Princess extends Cards{
         return cardPoints;
     }
 
+    //checked by usePrince(); method by discardingCard(ifPrincess()) -check;
 
 }

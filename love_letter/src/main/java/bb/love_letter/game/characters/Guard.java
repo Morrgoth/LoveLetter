@@ -26,7 +26,6 @@ public class Guard  extends Cards {
         return cardPoints;
     }
 
-    @Override
     public void useAction(){ /* BARON does nothing on pickUp */
         //player1 chooses player2 to compare Card on Hand;
 

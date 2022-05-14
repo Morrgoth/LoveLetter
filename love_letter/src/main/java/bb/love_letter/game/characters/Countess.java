@@ -32,13 +32,11 @@ public class Countess extends Cards {
 
 
 
-     /* COUNTESS does nothing on pickUp */
+    /* COUNTESS does nothing on pickUp */
     //checked in Player checkIfCountess();
     /* COUNTESS checks if KING or PRINCE on pickUp
-        ((implicit > if PRINCESS on hand - putDown(), but still an option to loose by PRINCESS
+    ((implicit > if PRINCESS on hand - putDown(), but still an option to loose by PRINCESS
         COUNTESS checks every round if KING/ PRINCE in hand*/
-
-        //checks if King||Prince in hand when drawn from deck
-
+ //checks if King||Prince in hand when drawn from deck
 
 }
