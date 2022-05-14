@@ -30,6 +30,7 @@ public class Handmaid extends Cards {
     @Override
     public void useAction(){ /* BARON does nothing on pickUp */
 
+
         //player1 gets immunity until amount of Clients in game, count down per turn; ;
     }
 

@@ -13,7 +13,8 @@ public class GameEvent {
         NOSUCHCARDINHAND,
         PLAYERELIMINATED,
         PLAYERIMMUNE,
-        GAMEFINISHED
+        NOVALIDCHOICE,
+        GAMEFINISHED,
 
     }
 
@@ -30,7 +31,8 @@ public class GameEvent {
         this.message = message;
     }
 
-    public void setGameEvent(GameEventType type){
+    public void setType(GameEventType type){
         this.type = type;
     }
+
 }
