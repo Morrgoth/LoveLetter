@@ -81,7 +81,7 @@ public class GameApplication {
                     //Print out to all, which last 3 cards are removed from deck
                     String msg = "Card " + deck.getDeck().get(i).getCardName() + "removed.";
                     broadcast.setMessage(msg);
-                    broadcast.setGameEvent(GAMEISREADY);
+                    broadcast.setType(GAMEISREADY);
                 }
                 //The removed card is added to the history
                 history.add(deck.getDeck().get(0));

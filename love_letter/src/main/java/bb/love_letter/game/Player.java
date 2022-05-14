@@ -154,10 +154,9 @@ public class Player extends User {
                 noChoice.setMessage("You can't choose that player. Choose a new one.");
                 noChoice.setType(INVALIDCHOICE);
             }
-
-
-            return null;
         }
+        return null;
+    }
 
     private void clearDiscardedList(ArrayList<Cards> discarded) {
         //delete all elements in List when a round ends
