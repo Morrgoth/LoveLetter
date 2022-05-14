@@ -8,11 +8,27 @@ public class GameEvent {
 
     public enum GameEventType{
         GAMEISREADY,
-        NOSUCHCARDONHAND,
+        DISCARDSUCCESSFULL,
+        NOSUCHCARDINHAND,
         PLAYERELIMINATED,
         PLAYERIMMUNE,
+        PLAYERCHOSEN,
+
         GAMEFINISHED
 
+    }
+
+    public GameEvent (String message, GameEventType type){
+        this.message = message;
+        this.type = type;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public void setType(GameEventType type) {

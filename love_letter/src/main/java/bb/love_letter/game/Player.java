@@ -6,6 +6,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import static bb.love_letter.game.GameEvent.GameEventType.*;
+
 
 /**
  * class Player extends class User. Contains all attributes and actions that a player can make during the game
@@ -69,57 +71,63 @@ public class Player extends User{
 
     //player's action - draw the top most  card from deck
     public void drawCard(Deck deck){
-        if(card1 == null) {
-            card1 = deck.getDeck().get(0);
-
-        }else{
-            card2 = deck.getDeck().get(0);
-        }
-        deck.getDeck().remove(0);
-
+        card2 = deck.getDeck().get(0);
     }
 
 
     //discard a Card during each round
-    public void discardCard(Player player, Cards card){
-        if(player.inGame){
-            System.out.println("Choose a card: ");
-            String chosenCard = card.getCardName();  //Input of User in Chat, Command
-            if(chosenCard.equals(card1.getCardName())){
+    public GameEvent discardCard(int cardNumber){
+        GameEvent gameEvent = new GameEvent(null, null);
+        switch (cardNumber) {
+            case 1:
                 discarded.add(card1);
-                setCard1(null);
-            }else if(chosenCard.equals(card2.getCardName())){
+                setCard1(card2);
+                setCard2(null);
+                gameEvent.setMessage("You chose Card 1");
+                gameEvent.setType(DISCARDSUCCESSFULL);
+                break;
+
+            case 2:
                 discarded.add(card2);
                 setCard2(null);
-            }else{
-                GameEvent gameEvent = new GameEvent();
-                gameEvent.setType(GameEvent.GameEventType.NOSUCHCARDONHAND);
-
-            }
-        }else{
-            GameEvent gameEvent = new GameEvent();
-            gameEvent.setType(GameEvent.GameEventType.PLAYERELIMINATED);
+                gameEvent.setMessage("You chose Card 2");
+                gameEvent.setType(DISCARDSUCCESSFULL);
+                break;
+            default:
+                gameEvent.setMessage("Please enter a valid number");
+                gameEvent.setType(NOSUCHCARDINHAND);
         }
+        return gameEvent;
     }
 
 
     //Chose a player for cardActions
-    public Player choosePlayer(Player player){
-        String playerName = "";
-        if(playerName.equals(player)){
-            Player chosenPlayer = player;
-        }else if(player.immune){
-            GameEvent immunePlayer =  new GameEvent();
-            immunePlayer.setType(GameEvent.GameEventType.PLAYERIMMUNE);
-        }else if(player.inGame){
-            GameEvent notInGame = new GameEvent();
-            notInGame.setType(GameEvent.GameEventType.PLAYERELIMINATED);
+    public Player choosePlayer(int playerNumber){
+        GameEvent chosenPlayerSuccess = new GameEvent(null, null);
+        GameEvent immunePlayer = new GameEvent(null, null);
+        GameEvent notInGame = new GameEvent(null, null);
+        for (Player player: GameApplication.choosePlayer){
+            if(playerNumber  == GameApplication.choosePlayer.indexOf(player)){
+                if(!player.immune){
+                    Player chosenPlayer = player;
+                    chosenPlayerSuccess.setMessage("You chose: " + player.name);
+                    chosenPlayerSuccess.setType(PLAYERCHOSEN);
+                    return chosenPlayer;
+                }else{
+                    immunePlayer.setMessage("Player is immune, choose a new one.");
+                    immunePlayer.setType(PLAYERIMMUNE);
+                }
+            }else{
+                notInGame.setMessage("Player is eliminated. Choose a new one.");
+                notInGame.setType(PLAYERELIMINATED);
+            }
         }
-            return choosePlayer(player);
+        return choosePlayer(playerNumber);
     }
 
     private void clearDiscardedList() {
         //delete all elements in List when a round ends
+
     }
 }
 

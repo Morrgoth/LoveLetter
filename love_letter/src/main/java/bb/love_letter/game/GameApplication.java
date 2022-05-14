@@ -18,6 +18,8 @@ public class GameApplication {
     static ArrayList<Player> playersInGame = new ArrayList<>();
 
     public static ArrayList<Player> playersInRound = new ArrayList<>();
+
+    public static ArrayList<Player> choosePlayer = new ArrayList<>();
     public static HashMap<String, Integer> playerScores = new HashMap<String, Integer>();
     public static ArrayList<Cards> history;
 
@@ -38,15 +40,21 @@ public class GameApplication {
         }
     }
 
+    public void initializePlayersInRound(){
+        playersInRound = (ArrayList<Player>) playersInGame.clone();
+    }
+
     public ArrayList<GameEvent> startGame(){
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
+
         int i = 0;
         if(playersInGame.size() >= 2){
             Deck deck = new Deck();
             //Do the Initialization and shuffling for the deck
             deck.initializeDeck();
             deck.shuffleDeck();
-
+            initializePlayersInRound();
+            initializePlayerScores();
             gameEvents.add(withdrawFirstCards(deck));
         }else{
             GameEvent lackOfPlayer = new GameEvent("Lack of Player!", GAMEISREADY);
