@@ -11,7 +11,7 @@ import static bb.love_letter.game.GameApplication.history;
     The player with the lower-value card is eliminated from the round.
  */
 public class Baron extends Cards {
-    private final String name = "BARON";
+    private final String name = "Baron";
     private final int cardPoints = 3;
     private final String cardAction = "Compare Hands privately.Card with lower value is eliminated";
 
@@ -44,20 +44,13 @@ public class Baron extends Cards {
         int targetCardValue = targetPlayerCard1.getCardPoints();
 
         if (sourceCardValue > targetCardValue) {
-
-            history.add(sourcePlayerCard1);
             GameApplication.history.add(targetPlayerCard1);
             GameApplication.playersInRound.remove(targetPlayer);
-            sourcePlayer.discarded.add(sourcePlayerCard1);
-            targetPlayer.discarded.add(targetPlayerCard1);
             targetPlayer.setInGame(false);
         }
         else if (sourceCardValue < targetCardValue){
             GameApplication.history.add(sourcePlayerCard1);
-            GameApplication.history.add(targetPlayerCard1);
             GameApplication.playersInRound.remove(sourcePlayer);
-            sourcePlayer.discarded.add(sourcePlayerCard1);
-            targetPlayer.discarded.add(targetPlayerCard1);
             sourcePlayer.setInGame(false);
         }
         else {
