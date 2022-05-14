@@ -1,6 +1,7 @@
 package bb.love_letter.game.characters;
 
 
+import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
 
 /*
@@ -30,20 +31,28 @@ public class Baron extends Cards {
     }
 
     //when player looses::
-    //
+    // sourcePlayer + targetPlayer private message with Info :: You played Card+Value - target played Card + Value
+    // sourceCard + targetCard arrayList <Card> history add.
+    // playersInRound delete user
+
     @Override
     public void useAction(Player sourcePlayer, Player targetPlayer) {
         /* compare hands with another player, lower number is out */
         Cards sourcePlayerCard1 = sourcePlayer.getCard1();
         Cards targetPlayerCard1 = targetPlayer.getCard1();
 
-        sourcePlayerCard1.getCardPoints();
+        int sourceCardValue = sourcePlayerCard1.getCardPoints();
+        int targetCardValue = targetPlayerCard1.getCardPoints();
 
-        if (sourcePlayerCard1 > targetPlayerCard1) {
+        if (sourceCardValue > targetCardValue) {
+
 
         }
-        else if (sourcePlayerCard1 < targetPlayerCard1){
+        else if (sourceCardValue < targetCardValue){
 
+        }
+        else {
+            // ignore effect play on; cards to history
         }
 
     }
