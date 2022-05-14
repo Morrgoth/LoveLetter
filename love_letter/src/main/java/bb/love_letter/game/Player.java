@@ -6,6 +6,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import static bb.love_letter.game.GameApplication.history;
 import static bb.love_letter.game.GameEvent.GameEventType.*;
 
 
@@ -93,6 +94,7 @@ public class Player extends User{
             return false;
         }
 
+
     }
 
 
@@ -101,14 +103,17 @@ public class Player extends User{
         GameEvent gameEvent = new GameEvent(null, null);
         switch (cardNumber) {
             case 1:
+                GameApplication.history.add(card1);
                 discarded.add(card1);
                 setCard1(card2);
                 setCard2(null);
                 gameEvent.setMessage("You chose Card 1");
                 gameEvent.setType(DISCARDSUCCESSFULL);
+
                 break;
 
             case 2:
+                GameApplication.history.add(card2);
                 discarded.add(card2);
                 setCard2(null);
                 gameEvent.setMessage("You chose Card 2");
@@ -146,6 +151,31 @@ public class Player extends User{
         return choosePlayer(playerNumber);
     }
 
+    public boolean compareCards(Player sourcePlayer, Player targetPlayer) {
+        Cards sourcePlayerCard1 = sourcePlayer.getCard1();
+        Cards targetPlayerCard1 = targetPlayer.getCard1();
+    }
+
+    /*
+    public void useBaron(Player sourcePlayer, Player targetPlayer) {
+        /* compare hands with another player, lower number is out */
+        Cards sourcePlayerCard1 = sourcePlayer.getCard1();
+        Cards targetPlayerCard1 = targetPlayer.getCard1();
+
+        int sourceCardValue = sourcePlayerCard1.getCardPoints();
+        int targetCardValue = targetPlayerCard1.getCardPoints();
+
+        if (sourceCardValue > targetCardValue) {
+
+            history.add(sourcePlayerCard1);
+            GameApplication.history.add(targetPlayerCard1);
+            GameApplication.playersInRound.remove(targetPlayer);
+            sourcePlayer.discarded.add(sourcePlayerCard1);
+            targetPlayer.discarded.add(targetPlayerCard1);
+            targetPlayer.setInGame(false);
+        }
+        else
+    */
     private void clearDiscardedList() {
         //delete all elements in List when a round ends
 

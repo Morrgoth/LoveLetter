@@ -6,6 +6,8 @@ package bb.love_letter.game.characters;
     If the player plays or discrds this card for any reason, they are eliminated from the round.
  */
 
+import bb.love_letter.game.GameApplication;
+
 public class Princess extends Cards{
 
     private final String name = "PRINCESS";
@@ -29,9 +31,15 @@ public class Princess extends Cards{
     }
 
     @Override
-    public void useAction(){ /* BARON does nothing on pickUp */
+    public void usePrincess(){ /* BARON does nothing on pickUp */
 
         //player1 terminated for Round
+        if()
+        GameApplication.history.add(targetPlayerCard1);
+        GameApplication.playersInRound.remove(targetPlayer);
+        sourcePlayer.discarded.add(sourcePlayerCard1);
+        targetPlayer.discarded.add(targetPlayerCard1);
+        targetPlayer.setInGame(false);
     }
 
 }
