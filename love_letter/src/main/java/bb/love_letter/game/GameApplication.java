@@ -26,22 +26,22 @@ public class GameApplication {
 
 
     public void addPlayers(User user){
-        while(players.size()<4){
-            if(!players.contains(user))
-                players.add(new Player(user.getName(), null, null));
+        while(playersInGame.size()<4){
+            if(!playersInGame.contains(user))
+                playersInGame.add(new Player(user.getName(), null, null));
         }
     }
 
     public void initializePlayerScores(){
-        for(int i = 0; i< players.size();i++){
-            playerScores.put(players.get(i).getName(), 0);
+        for(int i = 0; i< playersInGame.size();i++){
+            playerScores.put(playersInGame.get(i).getName(), 0);
         }
     }
 
     public ArrayList<GameEvent> startGame(){
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
         int i = 0;
-        if(players.size() > 2){
+        if(playersInGame.size() > 2){
             Deck deck = new Deck();
             //Do the Initialization and shuffling for the deck
             deck.initializeDeck();
@@ -57,7 +57,7 @@ public class GameApplication {
     private GameEvent withdrawFirstCards(Deck deck){
         GameEvent broadcast = new GameEvent(null, null);
         //When there are 2 players, 4 cards out of the deck and last 3 cards from them should be seen by all
-        if(players.size() == 2){
+        if(playersInGame.size() == 2){
             for(int i = 0; i<4; i++){
                 if(i > 0){
                     //Print out to all, which last 3 cards are removed from deck
@@ -70,15 +70,15 @@ public class GameApplication {
                 deck.getDeck().remove(0);
             }
         }//When there are more than 2 players, only 1 card is out, and it shouldn't be seen
-        else if(players.size() == 3 || players.size() == 4){
+        else if(playersInGame.size() == 3 || playersInGame.size() == 4){
             history.add(deck.getDeck().get(0));
             deck.getDeck().remove(0);
 
         }
 
         //Players get the first card in the beginning
-        for(int i = 0; i< players.size(); i++){
-            players.get(i).setCard1(deck.getDeck().get(0));
+        for(int i = 0; i< playersInGame.size(); i++){
+            playersInGame.get(i).setCard1(deck.getDeck().get(0));
             deck.getDeck().remove(0);
         }
         return broadcast;
@@ -93,8 +93,8 @@ public class GameApplication {
 
 
         //This list 'players' list is only an example for testing
-        players.add(new Player("Muqiu", null, null));
-        players.add(new Player("Veronika", null, null));
+        playersInGame.add(new Player("Muqiu", null, null));
+        playersInGame.add(new Player("Veronika", null, null));
 
         Deck deck = new Deck();
 
@@ -103,9 +103,9 @@ public class GameApplication {
 
         //Players get the second card in their turns and discard cards in the order of the list 'players'
         int i = 0;
-        while(i< players.size()){
+        while(i< playersInGame.size()){
             //create a current player object to save the information of the player in turn
-            Player currentPlayer = players.get(i);
+            Player currentPlayer = playersInGame.get(i);
 
             //When the current player is not eliminated, he can continue to get new card and discard
             while(currentPlayer.getInGame()){
