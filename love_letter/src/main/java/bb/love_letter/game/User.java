@@ -46,7 +46,6 @@ public class User implements Serializable {
 
     @Override
     public int hashCode() {
-        // TODO
-        return super.hashCode();
+        return getName().hashCode();
     }
 }

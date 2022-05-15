@@ -13,6 +13,7 @@ import java.util.Set;
  *
  * @author Veronika Heckel
  * @author Philipp Keyzman
+ * @author Bence Ament
  */
 public class ClientList {
     public HashMap<User, Socket> clientList = new HashMap<User,Socket>();
@@ -52,12 +53,7 @@ public class ClientList {
      * @return Returns true if a User with the name of the provided user parameter is already in the list, false otherwise
      */
     public boolean containsClient(User user) {
-        for (User u : clientList.keySet()) {
-            if (u.equals(user)) {
-                return true;
-            }
-        }
-        return false;
+        return clientList.containsKey(user);
     }
 
     /**
@@ -66,13 +62,12 @@ public class ClientList {
      * @throws IOException
      */
     public boolean removeClient(User user) throws IOException {
-        for (User u: clientList.keySet()) {
-            if (u.equals(user)) {
-                Socket socket = getClientSocket(u);
-                socket.close();
-                clientList.remove(u);
-                return true;
-            }
+        // TODO: test this when ServerEvents are displayed again
+        if (containsClient(user)) {
+            Socket socket = getClientSocket(user);
+            socket.close();
+            clientList.remove(user);
+            return true;
         }
         return false;
     }
