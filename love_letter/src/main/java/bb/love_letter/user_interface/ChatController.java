@@ -21,13 +21,16 @@ public class ChatController {
         this.model.addChatMessage(chatMessage);
         this.model.addChatMessageString(chatMessage);
     }
+    public void addChatMessageDisplay (ChatMessage chatMessage){
+        ChatMessageDisplay chatMessageDisplay = new ChatMessageDisplay(chatMessage);
+        model.addVBox(chatMessageDisplay.gethBox());
+    }
 
     // This is just a workaround, this method should be deleted when we have the Display class for ChatMessages
     public void addChatMessage(Envelope envelope) {
         if (envelope.getType() == Envelope.EnvelopeType.CHAT_MESSAGE) {
             ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
-            this.model.addChatMessage(chatMessage);
-            this.model.addChatMessageString(chatMessage);
+           addChatMessageDisplay(chatMessage);
         } else if (envelope.getType() == Envelope.EnvelopeType.SERVER_EVENT) {
             ServerEvent serverEvent = (ServerEvent) envelope.getPayload();
             ChatMessage chatMessage = new ChatMessage(new User("Server"), serverEvent.getMessage());

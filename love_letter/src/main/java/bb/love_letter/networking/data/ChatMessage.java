@@ -16,6 +16,7 @@ public class ChatMessage implements EnvelopeSerializable {
     public User sender;
     public String message;
     public boolean isPrivate = false;
+    public ChatMessage(){}
 
     public ChatMessage() {}
 

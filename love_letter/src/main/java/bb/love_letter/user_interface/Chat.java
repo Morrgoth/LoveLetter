@@ -1,5 +1,8 @@
 package bb.love_letter.user_interface;
 
+import bb.love_letter.game.User;
+import bb.love_letter.networking.NetworkConnection;
+import bb.love_letter.networking.data.ChatMessage;
 import bb.love_letter.user_interface.ChatController;
 import bb.love_letter.user_interface.ChatModel;
 import bb.love_letter.user_interface.ChatView;
@@ -19,13 +22,17 @@ public class Chat extends Application {
 
     @Override
     public void start(Stage stage) {
+        NetworkConnection.getInstance().init(null, null, null, new User("Server"));
+
         ChatModel chatModel = new ChatModel();
         ChatController chatController = new ChatController(chatModel);
         ChatView chatView = new ChatView(chatModel, chatController);
+        chatModel.addVBox(new ChatMessageDisplay(new ChatMessage(new User("Server"), "lksfnslk sdf")).gethBox());
 
         Scene scene = new Scene(chatView.asParent(), 700, 500);
-        String css = this.getClass().getResource("Chat.css").toExternalForm();
-        scene.getStylesheets().add(css);
+        String css = String.valueOf(this.getClass().getResource("/Chat.css"));
+        System.out.println(css);
+        scene.getStylesheets().add(getClass().getResource("/Chat.css").toExternalForm());
         stage.setTitle("chat");
         stage.setScene(scene);
         stage.show();
