@@ -24,15 +24,22 @@ public class ChatMessageDisplay {
      private HBox buildDisplay (ChatMessage chatMessage){
         VBox vBox1 = new VBox();
         HBox hBox1 = new HBox();
+        //vBox1.getStyleClass().add("ChatWindow");
         Label username = new Label(chatMessage.getSender().getName());
         username.getStyleClass().add("userName");
         vBox1.getChildren().add(username);
-        Label label = new Label(chatMessage.getMessage());
-        label.getStyleClass().add("messageBubble");
-        vBox1.getChildren().add(label);
+        Label message = new Label(chatMessage.getMessage());
+
+        vBox1.getChildren().add(message);
         hBox1.getChildren().add(vBox1);
+        message.getStyleClass().add("messageBubble");
+
         if (NetworkConnection.getInstance().getUser().equals(chatMessage.getSender())){
              hBox1.setAlignment(Pos.BASELINE_RIGHT);
+            message.getStyleClass().add("sent");
+        } else {
+            message.getStyleClass().add("received");
+
         }
         return hBox1;
      }
