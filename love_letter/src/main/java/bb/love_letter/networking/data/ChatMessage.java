@@ -17,6 +17,8 @@ public class ChatMessage implements EnvelopeSerializable {
     public String message;
     public boolean isPrivate = false;
 
+    public ChatMessage() {}
+
     public ChatMessage(User sender, String message){
         this.sender = sender;
         this.message = message;
@@ -34,11 +36,16 @@ public class ChatMessage implements EnvelopeSerializable {
         return sender;
     }
 
+
     /**
      * @return The contents of the message.
      */
     public String getMessage(){
         return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     /**

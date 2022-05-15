@@ -1,5 +1,6 @@
 package bb.love_letter.networking.type_adapters;
 
+import bb.love_letter.game.User;
 import bb.love_letter.networking.data.ChatMessage;
 import bb.love_letter.networking.data.Envelope;
 import bb.love_letter.networking.data.LoginRequest;
@@ -13,63 +14,106 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 
+/**
+ *
+ * @author Bence Ament
+ * @author Zeynab Baiani
+ * @author Tolga Engin
+ */
 public class EnvelopeTypeAdapter extends TypeAdapter<Envelope> {
     @Override
     public void write(JsonWriter jsonWriter, Envelope envelope) throws IOException {
-        Gson gson = new Gson();
         jsonWriter.beginObject();
-        jsonWriter.name("type");
-        jsonWriter.value(envelope.getType().toString());
-        jsonWriter.name("payload");
+        jsonWriter.name("type").value(envelope.getType().toString());
+        jsonWriter.name("payload").beginObject();
         if (envelope.getType() == Envelope.EnvelopeType.LOGIN_REQUEST) {
             LoginRequest loginRequest = (LoginRequest) envelope.getPayload();
-            String payload = gson.toJson(loginRequest);
-            System.out.println(payload);
-            jsonWriter.value(payload);
+            User user = loginRequest.getUser();
+            jsonWriter.name("user").beginObject();
+            jsonWriter.name("name").value(user.getName());
+            jsonWriter.endObject();
         } else if (envelope.getType() == Envelope.EnvelopeType.SERVER_EVENT) {
             ServerEvent serverEvent = (ServerEvent) envelope.getPayload();
-            String payload = gson.toJson(serverEvent);
-            jsonWriter.value(payload);
+            jsonWriter.name("type").value(serverEvent.getServerEventType().toString());
+            jsonWriter.name("message").value(serverEvent.getMessage());
         } else if (envelope.getType() == Envelope.EnvelopeType.CHAT_MESSAGE) {
             ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
-            String payload = gson.toJson(chatMessage);
-            jsonWriter.value(payload);
+            User sender = chatMessage.getSender();
+            jsonWriter.name("message").value(chatMessage.getMessage());
+            jsonWriter.name("isPrivate").value(chatMessage.isPrivate());
+            jsonWriter.name("sender").beginObject();
+            jsonWriter.name("name").value(sender.getName());
+            jsonWriter.endObject();
         }
+        jsonWriter.endObject();
         jsonWriter.endObject();
     }
 
     @Override
     public Envelope read(JsonReader jsonReader) throws IOException {
-        Gson gson = new Gson();
-        Envelope envelope = new Envelope();
+        final Envelope envelope = new Envelope();
         jsonReader.beginObject();
         String fieldName = null;
-
         while (jsonReader.hasNext()) {
-            JsonToken token = jsonReader.peek();
-
-            if (token.equals(JsonToken.NAME)) {
-                fieldName = jsonReader.nextName();
-            }
-
+            fieldName = jsonReader.nextName();
             if (fieldName.equals("type")) {
-                token = jsonReader.peek();
-                String type = jsonReader.nextString();
-                envelope.setType(Envelope.EnvelopeType.valueOf(type));
-            }
-
-            if(fieldName.equals("payload")) {
-                token = jsonReader.peek();
-                String payload = jsonReader.nextString();
+                envelope.setType(Envelope.EnvelopeType.valueOf(jsonReader.nextString()));
+            } else if (fieldName.equals("payload")) {
                 if (envelope.getType() == Envelope.EnvelopeType.LOGIN_REQUEST) {
-                    LoginRequest loginRequest = gson.fromJson(payload, LoginRequest.class);
+                    LoginRequest loginRequest = new LoginRequest();
+                    jsonReader.beginObject();
+                    while (jsonReader.hasNext()) {
+                        fieldName = jsonReader.nextName();
+                        if (fieldName.equals("user")) {
+                            jsonReader.beginObject();
+                            while (jsonReader.hasNext()) {
+                                fieldName = jsonReader.nextName();
+                                if (fieldName.equals("name")) {
+                                    User user = new User(jsonReader.nextString());
+                                    loginRequest.setUser(user);
+                                }
+                            }
+                            jsonReader.endObject();
+                        }
+                    }
+                    jsonReader.endObject();
                     envelope.setPayload(loginRequest);
                 } else if (envelope.getType() == Envelope.EnvelopeType.SERVER_EVENT) {
-                    ServerEvent serverEvent = gson.fromJson(payload, ServerEvent.class);
+                    ServerEvent serverEvent = new ServerEvent();
+                    jsonReader.beginObject();
+                    while (jsonReader.hasNext()) {
+                        fieldName = jsonReader.nextName();
+                        if (fieldName.equals("type")) {
+                            serverEvent.setServerEventType(ServerEvent.ServerEventType.valueOf(jsonReader.nextString()));
+                        } else if (fieldName.equals("message")) {
+                            serverEvent.setMessage(jsonReader.nextString());
+                        }
+                    }
                     envelope.setPayload(serverEvent);
+                    jsonReader.endObject();
                 } else if (envelope.getType() == Envelope.EnvelopeType.CHAT_MESSAGE) {
-                    ChatMessage chatMessage = gson.fromJson(payload, ChatMessage.class);
+                    ChatMessage chatMessage = new ChatMessage();
+                    jsonReader.beginObject();
+                    while (jsonReader.hasNext()) {
+                        fieldName = jsonReader.nextName();
+                        if (fieldName.equals("message")) {
+                            chatMessage.setMessage(jsonReader.nextString());
+                        } else if(fieldName.equals("isPrivate")) {
+                            chatMessage.setIsPrivate(jsonReader.nextBoolean());
+                        } else if(fieldName.equals("sender")) {
+                            jsonReader.beginObject();
+                            while(jsonReader.hasNext()) {
+                                fieldName = jsonReader.nextName();
+                                if(fieldName.equals("name")) {
+                                    User user = new User(jsonReader.nextString());
+                                    chatMessage.setSender(user);
+                                }
+                            }
+                            jsonReader.endObject();
+                        }
+                    }
                     envelope.setPayload(chatMessage);
+                    jsonReader.endObject();
                 }
             }
         }

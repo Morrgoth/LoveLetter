@@ -45,6 +45,10 @@ public class ServerEvent implements EnvelopeSerializable {
         return message;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     /**
      * @return The type of the UserEvent that happened.
      */
