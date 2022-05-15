@@ -13,9 +13,9 @@ import java.io.Serializable;
  * @author Muqiu Wang
  */
 public class ChatMessage implements EnvelopeSerializable {
-    public User sender;
-    public String message;
-    public boolean isPrivate = false;
+    private User sender;
+    private String message;
+    private boolean isPrivate = false;
     public ChatMessage(){}
 
     public ChatMessage(User sender, String message){
