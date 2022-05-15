@@ -15,35 +15,24 @@ public class LoginRequestTypeAdapter extends TypeAdapter<LoginRequest>{
     @Override
     public void write(JsonWriter jsonWriter, LoginRequest loginRequest) throws IOException {
         jsonWriter.beginObject();
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(User.class, new UserTypeAdapter())
-                .create();
         jsonWriter.name("user");
-        String userJson = gson.toJson(loginRequest.getUser());
-        jsonWriter.value(userJson);
+        new UserTypeAdapter().write(jsonWriter, loginRequest.getUser());
         jsonWriter.endObject();
     }
 
     @Override
     public LoginRequest read(JsonReader jsonReader) throws IOException {
         jsonReader.beginObject();
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(User.class, new UserTypeAdapter())
-                .create();
         LoginRequest loginRequest = new LoginRequest();
         String fieldName = null;
         while (jsonReader.hasNext()) {
-            JsonToken token = jsonReader.peek();
-            if(token.equals(JsonToken.NAME)) {
-                fieldName =jsonReader.nextString();
-            }
+            fieldName = jsonReader.nextName();
             if ("user".equals(fieldName)) {
-                token = jsonReader.peek();
-                String json = jsonReader.nextString();
-                loginRequest.setUser(gson.fromJson(json, User.class));
+                User user = new UserTypeAdapter().read(jsonReader);
+                loginRequest.setUser(user);
             }
         }
         jsonReader.endObject();
-        return null;
+        return loginRequest;
     }
 }

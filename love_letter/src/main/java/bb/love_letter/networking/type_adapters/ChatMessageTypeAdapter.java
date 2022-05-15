@@ -17,43 +17,30 @@ import java.io.IOException;
 public class ChatMessageTypeAdapter extends TypeAdapter<ChatMessage> {
     @Override
     public void write(JsonWriter jsonWriter, ChatMessage chatMessage) throws IOException {
-        Gson gson = new GsonBuilder().create();
         jsonWriter.beginObject();
         jsonWriter.name("sender");
-        jsonWriter.value(gson.toJson(chatMessage.getSender()));
-        jsonWriter.name("message");
-        jsonWriter.value(chatMessage.getMessage());
+        new UserTypeAdapter().write(jsonWriter, chatMessage.getSender());
+        jsonWriter.name("message").value(chatMessage.getMessage());
+        jsonWriter.name("isPrivate").value(chatMessage.isPrivate());
         jsonWriter.endObject();
     }
 
     @Override
     public ChatMessage read(JsonReader jsonReader) throws IOException {
-        Gson gson = new GsonBuilder().create(); // we have to register the other TypeAdapters here
         ChatMessage chatMessage = new ChatMessage();
-        jsonReader.beginObject();
         String fieldName = null;
-
+        jsonReader.beginObject();
         while (jsonReader.hasNext()) {
-            JsonToken token = jsonReader.peek();
-
-            if (token.equals(JsonToken.NAME)) {
-                fieldName = jsonReader.nextName();
-            }
-
+            fieldName = jsonReader.nextName();
             if (fieldName.equals("sender")) {
-                token = jsonReader.peek();
-                String json = jsonReader.nextString();
-                User user = gson.fromJson(json, User.class);
-                chatMessage.setSender (user);
+                User user = new UserTypeAdapter().read(jsonReader);
+                chatMessage.setSender(user);
             }
-
             if(fieldName.equals("message")) {
-                token = jsonReader.peek();
                 String message = jsonReader.nextString();
                 chatMessage.setMessage(message);
             }
             if(fieldName.equals("isPrivate")) {
-                token = jsonReader.peek();
                 boolean isPrivate = jsonReader.nextBoolean();
                 chatMessage.setIsPrivate(isPrivate);
             }

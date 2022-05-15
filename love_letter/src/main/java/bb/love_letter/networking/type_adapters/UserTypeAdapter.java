@@ -16,8 +16,7 @@ public class UserTypeAdapter extends TypeAdapter<User> {
     @Override
     public void write(JsonWriter jsonWriter, User user) throws IOException {
         jsonWriter.beginObject();
-        jsonWriter.name("name");
-        jsonWriter.value(user.getName());
+        jsonWriter.name("name").value(user.getName());
         jsonWriter.endObject();
     }
 
@@ -27,16 +26,10 @@ public class UserTypeAdapter extends TypeAdapter<User> {
         User user = new User();
         String fieldName = null;
         while (jsonReader.hasNext()) {
-            JsonToken token = jsonReader.peek();
-            if (token.equals(JsonToken.NAME)) {
-                fieldName = jsonReader.nextString();
-            }
+            fieldName = jsonReader.nextName();
             if ("name".equals(fieldName)) {
-                token = jsonReader.peek();
                 user.setName(jsonReader.nextString());
             }
-
-            return null;
         }
         jsonReader.endObject();
         return user;

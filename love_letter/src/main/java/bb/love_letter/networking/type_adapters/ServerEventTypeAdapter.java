@@ -15,10 +15,8 @@ public class ServerEventTypeAdapter extends TypeAdapter<ServerEvent> {
     @Override
     public void write(JsonWriter jsonWriter, ServerEvent serverEvent) throws IOException {
         jsonWriter.beginObject();
-        jsonWriter.name("type");
-        jsonWriter.value(serverEvent.getServerEventType().toString());
-        jsonWriter.name("message");
-        jsonWriter.value(serverEvent.getMessage());
+        jsonWriter.name("type").value(serverEvent.getServerEventType().toString());
+        jsonWriter.name("message").value(serverEvent.getMessage());
         jsonWriter.endObject();
     }
 
@@ -26,24 +24,18 @@ public class ServerEventTypeAdapter extends TypeAdapter<ServerEvent> {
     public ServerEvent read(JsonReader jsonReader) throws IOException {
         ServerEvent serverEvent = new ServerEvent();
         String fieldName = null;
+        jsonReader.beginObject();
         while (jsonReader.hasNext()) {
-            JsonToken token = jsonReader.peek();
-
-
-            if(token.equals(JsonToken.NAME)){
-                fieldName =jsonReader.nextString();
-            }
+            fieldName = jsonReader.nextName();
             if ("type".equals(fieldName)) {
-                token = jsonReader.peek();
                 String type = jsonReader.nextString();
                 serverEvent.setServerEventType(ServerEvent.ServerEventType.valueOf(type));
             }
             if ("message".equals(fieldName)) {
-                token = jsonReader.peek();
-                String type = jsonReader.nextString();
-                serverEvent.setServerEventType(ServerEvent.ServerEventType.valueOf(type));
+                serverEvent.setMessage(jsonReader.nextString());
             }
         }
-    return serverEvent;
+        jsonReader.endObject();
+        return serverEvent;
     }
 }
