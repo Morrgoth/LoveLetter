@@ -1,7 +1,7 @@
 package bb.love_letter.user_interface;
 
-import bb.love_letter.networking.ClientReaderThreadUI;
-import bb.love_letter.networking.ClientWriterThreadUI;
+import bb.love_letter.networking.ClientReaderThread;
+import bb.love_letter.networking.ClientWriterThread;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -16,8 +16,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-
-import java.net.URL;
 
 /**
  *
@@ -105,8 +103,8 @@ public class LoginView {
                     stage.setScene(scene);
                     stage.show();
                     view.getScene().getWindow().hide();
-                    ClientReaderThreadUI readerThreadUI = new ClientReaderThreadUI(chatController);
-                    ClientWriterThreadUI writerThreadUI = new ClientWriterThreadUI(chatController);
+                    ClientReaderThread readerThreadUI = new ClientReaderThread(chatController);
+                    ClientWriterThread writerThreadUI = new ClientWriterThread(chatController);
                     readerThreadUI.start();
                     writerThreadUI.start();
                 }

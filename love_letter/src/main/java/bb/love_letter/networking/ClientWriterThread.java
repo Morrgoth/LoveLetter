@@ -1,56 +1,46 @@
 package bb.love_letter.networking;
 
-import bb.love_letter.game.User;
 import bb.love_letter.networking.data.ChatMessage;
-import bb.love_letter.networking.data.Envelope;
+import bb.love_letter.user_interface.ChatController;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-
+import java.io.*;
 /**
  * This is the Thread that sends all the messages from the Client to the Server. It waits for lines on the command line
  * and if a line is fed into it, it forwards it the Server.
  *
- * It is used by the CLI version of Love Letter.
+ * It is used by the GUI version of Love Letter.
  *
  * @author Bence Ament
  * @author Tolga Engin
  */
 public class ClientWriterThread extends Thread{
-    private DataOutputStream dataOutputStream;
-    public BufferedReader bufferedReader;
-    public User user;
-    public ClientWriterThread(DataOutputStream dataOutputStream, User user){
-        this.dataOutputStream = dataOutputStream;
-        this.user = user;
-        try{
-            InputStreamReader isr = new InputStreamReader(System.in);
-            bufferedReader = new BufferedReader(isr);
-        }
-        catch(Exception e)
-        {
-
-        }
+    private ChatController chatController;
+    public ClientWriterThread(ChatController chatController){
+        this.chatController = chatController;
     }
-
     /**
-     * Upon inputting a line of text it is forwarded to the Server.
+     * This method listens to the changes of the ChatModel, and upon detecting a new Message written by the User
+     * it forwards it to the Server.
      */
     public void run()
     {
-        try{
-            while(true){
-                // SEND MESSAGE TO SERVER
-                String msg = bufferedReader.readLine();
-                ChatMessage chatMessage = new ChatMessage(user, msg);
-                Envelope envelope = new Envelope(chatMessage, Envelope.EnvelopeType.CHAT_MESSAGE);
-                String json = envelope.toJson();
-                dataOutputStream.writeUTF(json);
+        System.out.println("ClientWriterThreadUI started running");
+        // Keep listening for messages to send
+        chatController.model.currentMessageProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldVal, String newVal) {
+                if (!newVal.equals("")) {
+                    ChatMessage chatMessage = new ChatMessage(NetworkConnection.getInstance().getUser(), newVal);
+                    try {
+                        NetworkConnection.getInstance().getOutputStream().writeUTF(chatMessage.toEnvelope().toJson());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    chatController.model.resetCurrentMessage();
+                }
             }
-        }
-        catch(Exception e){
-
-        }
+        });
     }
 }
