@@ -8,7 +8,7 @@ package bb.love_letter.game.characters;
 public class King extends Cards {
 
     private String name = "KING";
-    private int cardPoints = 6;
+    private final int cardPoints = 6;
     private String cardAction = "Trade hands with another player.";
 
     @Override
@@ -26,7 +26,7 @@ public class King extends Cards {
         return cardPoints;
     }
 
-    public void useKing(){ /* BARON does nothing on pickUp */
+    public void useKing(){
 
         //player1 chooses player2
         // change hands;;

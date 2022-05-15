@@ -8,7 +8,7 @@ package bb.love_letter.game.characters;
 
 public class Handmaid extends Cards {
     private String name = "Handmaid";
-    private int cardPoints = 4;
+    private final int cardPoints = 4;
     private String cardAction = "This card grants you immunity until your next turn.";
 
     @Override

@@ -16,6 +16,7 @@ import static bb.love_letter.game.GameEvent.GameEventType.*;
  *
  * @author Veronika Heckel
  * @author Muqiu Wang
+ * @author Philipp Keyzman
  */
 public class Player extends User {
 
@@ -142,7 +143,7 @@ public class Player extends User {
 
     //Chose a player for cardActions
     public Player choosePlayer(int playerNumber) {
-        GameEvent chosenPlayerSuccess = new GameEvent(null, null);
+        //GameEvent chosenPlayerSuccess = new GameEvent(null, null);
         GameEvent noChoice = new GameEvent(null, null);
         for (Player player : GameApplication.choosePlayer) {
             if (playerNumber == GameApplication.choosePlayer.indexOf(player)) {
@@ -152,11 +153,12 @@ public class Player extends User {
                 return chosenPlayer;
             } else {
                 noChoice.setMessage("You can't choose that player. Choose a new one.");
-                noChoice.setType(INVALIDCHOICE);
+                noChoice.changeState(true,INVALIDCHOICE);
             }
         }
         return null;
     }
+
 
     private void clearDiscardedList(ArrayList<Cards> discarded) {
         //delete all elements in List when a round ends

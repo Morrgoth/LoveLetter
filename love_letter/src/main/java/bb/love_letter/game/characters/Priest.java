@@ -9,7 +9,7 @@ package bb.love_letter.game.characters;
 public class Priest extends Cards{
 
     private String name = "PRIEST";
-    private int cardPoints = 2;
+    private final int cardPoints = 2;
     private String cardAction = "Look at a player's hand in private.";
 
     @Override
@@ -27,8 +27,7 @@ public class Priest extends Cards{
         return cardPoints;
     }
 
-    @Override
-    public void useAction(){ /* BARON does nothing on pickUp */
+    public void usePriest(){ /* BARON does nothing on pickUp */
 
         //player1 chooses player2
         // see()player2 hand to player1 only;

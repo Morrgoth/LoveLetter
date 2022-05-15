@@ -28,8 +28,7 @@ public class Prince extends Cards{
         return cardPoints;
     }
 
-    @Override
-    public void useAction(){ /* BARON does nothing on pickUp */
+    public void usePrince(){ /* BARON does nothing on pickUp */
 
         //player1 chooses player2
         // swap player2 hand to player1 only;
