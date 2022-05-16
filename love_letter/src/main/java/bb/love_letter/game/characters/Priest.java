@@ -6,6 +6,12 @@ package bb.love_letter.game.characters;
     Player may privately see another player's hand.
  */
 
+import bb.love_letter.game.GameApplication;
+import bb.love_letter.game.GameEvent;
+import bb.love_letter.game.Player;
+
+import static bb.love_letter.game.GameEvent.GameEventType.PRIESTACTION;
+
 public class Priest extends Cards{
 
     private String name = "PRIEST";
@@ -27,10 +33,11 @@ public class Priest extends Cards{
         return cardPoints;
     }
 
-    public void usePriest(){ /* BARON does nothing on pickUp */
-
-        //player1 chooses player2
-        // see()player2 hand to player1 only;
+    public GameEvent usePriest(Player targetPlayer){ /* BARON does nothing on pickUp */
+        GameEvent showCard = new GameEvent("The chosen Player has: " + targetPlayer.getCard1().getCardName(), PRIESTACTION);
+        return showCard;
     }
+        //player1 chooses player2
+        //see()player2 hand to player1 only;
 
 }
