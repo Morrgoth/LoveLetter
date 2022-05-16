@@ -3,7 +3,7 @@ package bb.love_letter.game.characters;
 /*
     Strength: 8
     AmountInDeck: 1
-    If the player plays or discrds this card for any reason, they are eliminated from the round.
+    If the player plays or discards this card for any reason, they are eliminated from the round.
  */
 
 import bb.love_letter.game.GameApplication;
