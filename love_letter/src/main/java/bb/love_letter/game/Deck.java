@@ -10,6 +10,10 @@ import java.util.Collections;
 public class Deck{
     ArrayList<Cards> deck = new ArrayList<>();
 
+    public ArrayList<Cards> getDeck(){
+        return deck;
+    }
+
     public void initializeDeck(){
         for(int i = 0; i<5; i++){
             deck.add(new Guard());
@@ -39,5 +43,6 @@ public class Deck{
     public void shuffleDeck(){
         Collections.shuffle(deck);
     }
+
 
 }

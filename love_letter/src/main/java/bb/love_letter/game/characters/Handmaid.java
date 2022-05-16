@@ -6,9 +6,9 @@ package bb.love_letter.game.characters;
     Effects: Player cannot be affected by any other player's cards until their next turn.
  */
 
-public class Handmaid extends Cards implements Playable {
-    private String name = "HANDMAID";
-    private int cardPoints = 4;
+public class Handmaid extends Cards {
+    private String name = "Handmaid";
+    private final int cardPoints = 4;
     private String cardAction = "This card grants you immunity until your next turn.";
 
     @Override
@@ -26,20 +26,10 @@ public class Handmaid extends Cards implements Playable {
         return cardPoints;
     }
 
-    @Override
-    public int pickUp(){ /* HANDMAID does nothing on pickUp */
-        return 0;
+    public void useHandmaid(){
+
+
+        //player1 gets immunity until amount of Clients in game, count down per turn; ;
     }
 
-    @Override
-    public int putDown(){
-        //player1 gets immunity until amount of Clients in game, count down per turn;
-        return 0;
-    }
-
-    @Override
-    public int see(){
-        //make Hand arrList visible only to player 2
-        return 0;
-    }
 }

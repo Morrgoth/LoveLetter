@@ -6,11 +6,13 @@ package bb.love_letter.game.characters;
     If the player plays or discrds this card for any reason, they are eliminated from the round.
  */
 
-public class Princess extends Cards implements Playable {
+import bb.love_letter.game.GameApplication;
 
-    private String name = "PRINCESS";
-    private int cardPoints = 8;
-    private String cardAction = "Lose if discarded.";
+public class Princess extends Cards{
+
+    private final String name = "PRINCESS";
+    private final int cardPoints = 8;
+    private final String cardAction = "Lose if discarded.";
 
 
     @Override
@@ -28,21 +30,6 @@ public class Princess extends Cards implements Playable {
         return cardPoints;
     }
 
-    @Override
-    public int pickUp(){ /* PRINCESS does nothing on pickUp */
-        return 0;
-    }
+    //checked by usePrince(); method by discardingCard(ifPrincess()) -check;
 
-    @Override
-    public int putDown(){
-        //player1 terminated for Round
-
-        return 0;
-    }
-
-    @Override
-    public int see() {
-        //make Hand arrList visible only to player 2
-        return 0;
-    }
 }

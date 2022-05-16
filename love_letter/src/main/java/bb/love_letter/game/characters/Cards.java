@@ -1,12 +1,16 @@
 package bb.love_letter.game.characters;
 
-import java.security.SecureRandom;
+import bb.love_letter.game.Player;
 
-public class Cards {
-    //add general cards properties or keep empty?
+import java.util.HashMap;
+
+public abstract class Cards {
+
     private String cardName;
     private int cardPoints;
     private String cardAction;
+
+//    public static HashMap<Cards, Integer> overviewCards = new HashMap<Cards, Integer>();
 
     public String getCardName(){
         return cardName;
@@ -16,7 +20,11 @@ public class Cards {
         return cardPoints;
     }
 
-    public String getCardAction(){
-        return cardAction;
+    //needed only to show the info text
+    public String getCardAction() { return cardAction; }
+
+    public void checkInDeck(){
+
     }
+
 }
