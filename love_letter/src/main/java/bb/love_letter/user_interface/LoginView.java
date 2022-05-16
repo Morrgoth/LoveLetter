@@ -15,6 +15,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -99,6 +100,8 @@ public class LoginView {
                     Stage stage = new Stage();
                     stage.setTitle("Chat");
                     Scene scene = new Scene(chatView.asParent(), 700, 500);
+                    scene.setFill(Color.TRANSPARENT);
+
                     //scene.setUserAgentStylesheet("/resources/Chat.css");
                     stage.setScene(scene);
                     stage.show();

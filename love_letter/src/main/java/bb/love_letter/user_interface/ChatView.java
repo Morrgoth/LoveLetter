@@ -36,6 +36,7 @@ public class ChatView {
         view = new GridPane();
         messageField = new TextField();
         messageField.setPromptText("Type your message here...");
+        messageField.setId("messageField");
         sentbutton = new Button("Send");
         controller.addChatMessage(new ChatMessage(new User("Server"), "Welcome " + NetworkConnection.getInstance().getUser().getName() + "!"));
         listView = new ListView<>(model.getvBoxObservableList());

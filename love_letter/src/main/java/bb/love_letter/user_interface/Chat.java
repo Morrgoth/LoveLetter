@@ -28,6 +28,7 @@ public class Chat extends Application {
         ChatController chatController = new ChatController(chatModel);
         ChatView chatView = new ChatView(chatModel, chatController);
         chatModel.addVBox(new ChatMessageDisplay(new ChatMessage(new User("Server"), "lksfnslk sdf")).gethBox());
+        chatModel.addVBox(new ChatMessageDisplay(new ChatMessage(new User("User1"), "lksfnslk sdf")).gethBox());
 
         Scene scene = new Scene(chatView.asParent(), 700, 500);
         String css = String.valueOf(this.getClass().getResource("/Chat.css"));
