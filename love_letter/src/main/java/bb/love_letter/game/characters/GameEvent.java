@@ -16,6 +16,7 @@ public class GameEvent {
         NOVALIDCHOICE,
         GAMEFINISHED,
         KINGACTION,
+        PRIESTACTION,
         INVALIDCHOICE
 
     }
