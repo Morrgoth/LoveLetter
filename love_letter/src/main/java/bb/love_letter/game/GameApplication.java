@@ -1,11 +1,9 @@
 package bb.love_letter.game;
 
 import bb.love_letter.game.characters.Cards;
-import bb.love_letter.game.characters.GameEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Scanner;
 
 import static bb.love_letter.game.characters.GameEvent.GameEventType.*;
@@ -69,9 +67,9 @@ public class GameApplication {
             //initializePlayersInRound();
             initializePlayerScores();
             gameEvents.add(withdrawFirstCards(deck));
+
         }else{
-            GameEvent lackOfPlayer = new GameEvent("Lack of Player!");
-            lackOfPlayer.changeState(true,GAMEISREADY);
+            GameEvent lackOfPlayer = new GameEvent("Lack of Player!", GAMEISREADY);
         }
         return gameEvents;
     }

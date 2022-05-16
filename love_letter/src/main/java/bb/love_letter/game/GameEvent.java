@@ -9,6 +9,7 @@ public class GameEvent {
     public boolean eventState;
     public enum GameEventType{
         GAMEISREADY,
+        GAMENOTREADY,
         DISCARDSUCCESSFULL,
         NOSUCHCARDINHAND,
         PLAYERELIMINATED,
