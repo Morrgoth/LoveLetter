@@ -15,8 +15,8 @@ public class GameEvent {
         PLAYERIMMUNE,
         PLAYERCHOSEN,
         INVALIDCHOICE,
-        GAMEFINISHED,
-        KINGACTION
+        PRIESTACTION,
+        GAMEFINISHED
 
     }
 
