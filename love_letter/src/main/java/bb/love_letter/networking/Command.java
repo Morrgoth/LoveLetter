@@ -22,6 +22,8 @@ public class Command {
     private ChatMessage chatMessage;
     private CommandType commandType;
     private User user;
+
+    private User targetUser;
     private ChatMessage privateMessage;
 
 
@@ -35,6 +37,10 @@ public class Command {
     }
     public User getUser() {
         return user;
+    }
+
+    public User getTargetUser() {
+        return targetUser;
     }
     public ChatMessage getPrivateMessage() {
         return privateMessage;
@@ -54,8 +60,9 @@ public class Command {
             String [] parts = content.split(" ", 2);
             String target = parts [0];
             String message = parts[1];
-            this.user = new User(target);
-            privateMessage = new ChatMessage(chatMessage.getSender(),message);
+            this.targetUser = new User(target);
+            this.user = chatMessage.getSender();
+            privateMessage = new ChatMessage(chatMessage.getSender(), message, true);
             return CommandType.PRIVATE_MESSAGE_COMMAND;
 
         }

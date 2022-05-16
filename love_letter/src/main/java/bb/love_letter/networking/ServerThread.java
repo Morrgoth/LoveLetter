@@ -114,8 +114,7 @@ public class ServerThread extends Thread{
         } else if (command.getCommandType()== Command.CommandType.PRIVATE_MESSAGE_COMMAND) {
             Envelope privateMessageEnvelope = new Envelope(command.getPrivateMessage(),
                     Envelope.EnvelopeType.CHAT_MESSAGE);
-            broadcast(privateMessageEnvelope, new User[] {command.getUser()}, null);
-
+            broadcast(privateMessageEnvelope, new User[] {command.getUser(), command.getTargetUser()}, null);
         }  else if (command.getCommandType()== Command.CommandType.EMPTY_COMMAND) {
             Envelope messageEnvelope = new Envelope(command.getChatMessage(), Envelope.EnvelopeType.CHAT_MESSAGE);
             broadcast(messageEnvelope, null, null);

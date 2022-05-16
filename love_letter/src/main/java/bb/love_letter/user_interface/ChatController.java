@@ -27,9 +27,9 @@ public class ChatController {
     }
 
     public void addMessage(Envelope envelope) {
-        System.out.println(envelope);
         if (envelope.getType() == Envelope.EnvelopeType.CHAT_MESSAGE) {
             ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
+            System.out.println(chatMessage.isPrivate());
             addChatMessageDisplay(chatMessage);
         } else if (envelope.getType() == Envelope.EnvelopeType.SERVER_EVENT) {
             ServerEvent serverEvent = (ServerEvent) envelope.getPayload();

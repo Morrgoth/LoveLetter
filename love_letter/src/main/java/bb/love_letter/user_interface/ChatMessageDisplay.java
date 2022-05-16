@@ -20,7 +20,12 @@ public class ChatMessageDisplay {
      private HBox buildDisplay (ChatMessage chatMessage){
         VBox vBox1 = new VBox();
         HBox hBox1 = new HBox();
-        Label username = new Label(chatMessage.getSender().getName());
+        Label username;
+        if (chatMessage.isPrivate()) {
+            username = new Label(chatMessage.getSender().getName() + " (Private Message)");
+        } else {
+            username = new Label(chatMessage.getSender().getName());
+        }
         username.getStyleClass().add("userName");
         vBox1.getChildren().add(username);
         Label message = new Label(chatMessage.getMessage());
