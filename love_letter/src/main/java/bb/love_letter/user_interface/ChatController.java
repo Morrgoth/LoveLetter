@@ -16,23 +16,23 @@ public class ChatController {
         this.model= chatModel;
     }
 
-    public void addChatMessageDisplay (ChatMessage chatMessage){
+    public void addDisplayItem(ChatMessage chatMessage){
         ChatMessageDisplay chatMessageDisplay = new ChatMessageDisplay(chatMessage);
         model.addVBox(chatMessageDisplay.getHBox());
     }
 
-    public void addChatMessageDisplay (ServerEvent serverEvent){
+    public void addDisplayItem(ServerEvent serverEvent){
         ChatMessageDisplay chatMessageDisplay = new ChatMessageDisplay(serverEvent);
         model.addVBox(chatMessageDisplay.getHBox());
     }
 
-    public void addMessage(Envelope envelope) {
+    public void addDisplayItem(Envelope envelope) {
         if (envelope.getType() == Envelope.EnvelopeType.CHAT_MESSAGE) {
             ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
-            addChatMessageDisplay(chatMessage);
+            addDisplayItem(chatMessage);
         } else if (envelope.getType() == Envelope.EnvelopeType.SERVER_EVENT) {
             ServerEvent serverEvent = (ServerEvent) envelope.getPayload();
-            addChatMessageDisplay(serverEvent);
+            addDisplayItem(serverEvent);
         }
     }
 }

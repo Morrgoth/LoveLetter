@@ -13,14 +13,10 @@ import javafx.scene.layout.*;
 public class ChatView {
     public ChatModel model;
     public ChatController controller;
-
-
     private GridPane view;
     private TextField messageField;
     private Button sentbutton;
     private ListView<HBox> listView;
-
-
     public ChatView (ChatModel model, ChatController controller) {
         this.model = model;
         this.controller = controller;
@@ -37,6 +33,8 @@ public class ChatView {
         sentbutton = new Button("Send");
         sentbutton.setId("sentButton");
         listView = new ListView<>(model.getHBoxObservableList());
+        listView.setMouseTransparent(true);
+        listView.setFocusTraversable(false);
         HBox chatBox = new HBox();
         HBox.setHgrow(messageField, Priority.ALWAYS);
         RowConstraints regRow = new RowConstraints();

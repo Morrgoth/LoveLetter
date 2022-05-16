@@ -104,7 +104,7 @@ public class LoginView {
                     scene.getStylesheets().add(getClass().getResource("/Chat.css").toExternalForm());
                     stage.setScene(scene);
                     stage.show();
-                    chatController.addChatMessageDisplay(model.getLoginConfirmation());
+                    chatController.addDisplayItem(model.getLoginConfirmation());
                     view.getScene().getWindow().hide();
                     ClientReaderThread readerThread = new ClientReaderThread(chatController);
                     ClientWriterThread writerThread = new ClientWriterThread(chatController);
