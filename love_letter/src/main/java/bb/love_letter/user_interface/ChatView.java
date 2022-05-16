@@ -38,6 +38,7 @@ public class ChatView {
         messageField.setPromptText("Type your message here...");
         messageField.setId("messageField");
         sentbutton = new Button("Send");
+        sentbutton.setId("sentButton");
         listView = new ListView<>(model.getvBoxObservableList());
         HBox chatBox = new HBox();
         HBox.setHgrow(messageField, Priority.ALWAYS);

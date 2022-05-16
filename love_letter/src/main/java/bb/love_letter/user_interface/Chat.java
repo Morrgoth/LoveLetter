@@ -3,9 +3,6 @@ package bb.love_letter.user_interface;
 import bb.love_letter.game.User;
 import bb.love_letter.networking.NetworkConnection;
 import bb.love_letter.networking.data.ChatMessage;
-import bb.love_letter.user_interface.ChatController;
-import bb.love_letter.user_interface.ChatModel;
-import bb.love_letter.user_interface.ChatView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -27,8 +24,8 @@ public class Chat extends Application {
         ChatModel chatModel = new ChatModel();
         ChatController chatController = new ChatController(chatModel);
         ChatView chatView = new ChatView(chatModel, chatController);
-        chatModel.addVBox(new ChatMessageDisplay(new ChatMessage(new User("Server"), "lksfnslk sdf")).gethBox());
-        chatModel.addVBox(new ChatMessageDisplay(new ChatMessage(new User("User1"), "lksfnslk sdf")).gethBox());
+        chatModel.addVBox(new ChatMessageDisplay(new ChatMessage(new User("Server"), "lksfnslk sdf")).getHBox());
+        chatModel.addVBox(new ChatMessageDisplay(new ChatMessage(new User("User1"), "lksfnslk sdf")).getHBox());
 
         Scene scene = new Scene(chatView.asParent(), 700, 500);
         String css = String.valueOf(this.getClass().getResource("/Chat.css"));

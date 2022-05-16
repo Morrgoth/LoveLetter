@@ -1,7 +1,6 @@
 package bb.love_letter.user_interface;
 
 
-import bb.love_letter.game.User;
 import bb.love_letter.networking.data.ChatMessage;
 import bb.love_letter.networking.data.Envelope;
 import bb.love_letter.networking.data.ServerEvent;
@@ -19,12 +18,12 @@ public class ChatController {
 
     public void addChatMessageDisplay (ChatMessage chatMessage){
         ChatMessageDisplay chatMessageDisplay = new ChatMessageDisplay(chatMessage);
-        model.addVBox(chatMessageDisplay.gethBox());
+        model.addVBox(chatMessageDisplay.getHBox());
     }
 
     public void addChatMessageDisplay (ServerEvent serverEvent){
         ChatMessageDisplay chatMessageDisplay = new ChatMessageDisplay(serverEvent);
-        model.addVBox(chatMessageDisplay.gethBox());
+        model.addVBox(chatMessageDisplay.getHBox());
     }
 
     public void addMessage(Envelope envelope) {
@@ -37,11 +36,6 @@ public class ChatController {
             addChatMessageDisplay(serverEvent);
         }
     }
-
-    public void addUser(User user){
-        this.model.addUser(user);
-    }
-
 }
 
 
