@@ -143,7 +143,7 @@ public class Player extends User {
 
     //Chose a player for cardActions
     public Player choosePlayer(int playerNumber) {
-        //GameEvent chosenPlayerSuccess = new GameEvent(null, null);
+        GameEvent chosenPlayerSuccess = new GameEvent(null, null);
         GameEvent noChoice = new GameEvent(null, null);
         for (Player player : GameApplication.choosePlayer) {
             if (playerNumber == GameApplication.choosePlayer.indexOf(player)) {
