@@ -1,6 +1,7 @@
 package bb.love_letter.game.characters;
 
 import bb.love_letter.game.GameApplication;
+import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
 
 /*
@@ -29,12 +30,13 @@ public class Guard  extends Cards {
         return cardPoints;
     }
 
+    //need hint for sourcePlayer to input an int corresponding to a cardValue
     public String guessCard(int cardPoints){
         String chosenCard = null;
 
-        if ( cardPoints > 0 && cardPoints < 9){
+        if ( cardPoints > 1 && cardPoints < 9){
             switch (cardPoints) {
-                case 1 -> chosenCard = "Guard";
+                //case 1 -> chosenCard = "Guard";
                 case 2 -> chosenCard = "Priest";
                 case 3 -> chosenCard = "Baron";
                 case 4 -> chosenCard = "Handmaid";
@@ -51,10 +53,8 @@ public class Guard  extends Cards {
         return  chosenCard;
     }
 
-
-    public void useGuard(Player sourcePlayer, Player chosenPlayer, Cards chosenCard){
+    public void useGuard(Player chosenPlayer, String chosenCard){
         //how to set player1? and how to set it automatically during the game?
-
 
         //1.player1 chooses player2
         //      Player.choosePlayer();
@@ -64,13 +64,13 @@ public class Guard  extends Cards {
 
         //compare name, if correct: terminate Round for player;
         //else do nothing;
+        GameEvent guardEvent = new GameEvent(GameEvent.GameEventType.PLAYERIMMUNE);
+        guardEvent.changeState(GameEvent.GameEventType.GUARDACTION);
 
-        if (chosenPlayer.getCard1() == chosenCard) {
+        if (chosenPlayer.getCard1().getCardName().equals(chosenCard)) {
             GameApplication.playersInRound.remove(chosenPlayer);
             chosenPlayer.setInGame(false);
-
-        } else {
-            System.out.println("Your guess is wrong. Better luck next time.");
+            guardEvent.changeState(GameEvent.GameEventType.PLAYERELIMINATED);
         }
     }
 }

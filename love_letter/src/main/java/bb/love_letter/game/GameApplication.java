@@ -1,12 +1,10 @@
 package bb.love_letter.game;
 
 import bb.love_letter.game.characters.Cards;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-
-import static bb.love_letter.game.characters.GameEvent.GameEventType.*;
+import static bb.love_letter.game.GameEvent.GameEventType.*;
 
 public class GameApplication {
 
@@ -23,8 +21,7 @@ public class GameApplication {
     public static HashMap<String, Integer> playerScores = new HashMap<String, Integer>();
     //list of all cards played in the round
     public static ArrayList<Cards> history;
-    //the total winner in the game
-    public Player winner = null;
+
 
 
 
@@ -55,8 +52,7 @@ public class GameApplication {
 
     }
 
-    public ArrayList<GameEvent> startGame(){
-        ArrayList<GameEvent> gameEvents = new ArrayList<>();
+    public void startGame(){
 
         int i = 0;
         if(playersInGame.size() >= 2){
@@ -66,24 +62,30 @@ public class GameApplication {
             deck.shuffleDeck();
             //initializePlayersInRound();
             initializePlayerScores();
-            gameEvents.add(withdrawFirstCards(deck));
 
         }else{
-            GameEvent lackOfPlayer = new GameEvent("Lack of Player!", GAMEISREADY);
+            GameEvent lackOfPlayer = new GameEvent(GameEvent.GameEventType.PLAYERIMMUNE);
         }
-        return gameEvents;
     }
 
-    private GameEvent withdrawFirstCards(Deck deck){
-        GameEvent broadcast = new GameEvent(null, null);
+    public void startRound(){
+
+        for (int i = 0; i < history.size(); i++){
+            history.remove(0);
+        }
+        Deck deck = new Deck();
+        //Do the Initialization and shuffling for the deck
+        deck.initializeDeck();
+        deck.shuffleDeck();
+    }
+
+    private void withdrawFirstCards(Deck deck){
+        GameEvent stateFirstCards = new GameEvent(GameEvent.GameEventType.PLAYERIMMUNE);
         //When there are 2 players, 4 cards out of the deck and last 3 cards from them should be seen by all
         if(playersInGame.size() == 2){
             for(int i = 0; i<4; i++){
                 if(i > 0){
-                    //Print out to all, which last 3 cards are removed from deck
-                    String msg = "Card " + deck.getDeck().get(i).getCardName() + "removed.";
-                    broadcast.setMessage(msg);
-                    broadcast.setType(GAMEISREADY);
+                    stateFirstCards.changeState(GAMEISREADY);
                 }
                 //The removed card is added to the history
                 history.add(deck.getDeck().get(0));
@@ -101,12 +103,8 @@ public class GameApplication {
             playersInGame.get(i).setCard1(deck.getDeck().get(0));
             deck.getDeck().remove(0);
         }
-        return broadcast;
     }
 
-    private void clearHistoryList(){
-        //delete all elements in List when a round ends
-    }
 
     public void buildTurnQueue (ArrayList<Player> playersInRound){
         if (playersInRound.get(0).getInGame()){

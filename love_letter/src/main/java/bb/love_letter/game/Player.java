@@ -2,11 +2,8 @@ package bb.love_letter.game;
 
 import bb.love_letter.game.characters.Cards;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-import static bb.love_letter.game.GameApplication.history;
 import static bb.love_letter.game.GameEvent.GameEventType.*;
 
 
@@ -91,11 +88,17 @@ public class Player extends User {
 
         //check for COUNTESS
         if (card1.getCardName().equals("COUNTESS") && (card2.getCardName().equals("PRINCE") || card2.getCardName().equals("KING"))) {
+            GameEvent countessEvent = new GameEvent(GameEvent.GameEventType.PLAYERIMMUNE);
+            countessEvent.changeState(GameEvent.GameEventType.COUNTESSACTION);
+
             GameApplication.history.add(card1);
             discarded.add(card1);
             setCard1(null);
             return true;
         } else if (card2.getCardName().equals("COUNTESS") && (card1.getCardName().equals("PRINCE") || card1.getCardName().equals("KING"))) {
+            GameEvent countessEvent = new GameEvent(GameEvent.GameEventType.PLAYERIMMUNE);
+            countessEvent.changeState(GameEvent.GameEventType.COUNTESSACTION);
+
             GameApplication.history.add(card2);
             discarded.add(card2);
             setCard2(null);
@@ -116,15 +119,15 @@ public class Player extends User {
 
     //discard a Card during each round
     public GameEvent discardCard(int cardNumber) {
-        GameEvent gameEvent = new GameEvent(null, null);
+        GameEvent gameEvent = new GameEvent(GameEvent.GameEventType.PLAYERIMMUNE);
         switch (cardNumber) {
             case 1:
                 GameApplication.history.add(card1);
                 discarded.add(card1);
                 setCard1(card2);
                 setCard2(null);
-                gameEvent.setMessage("You chose Card 1");
-                gameEvent.changeState(true,DISCARDSUCCESSFULL);
+                //gameEvent.setMessage("You chose Card 1");
+                gameEvent.changeState(DISCARDSUCCESSFULL);
 
                 break;
 
@@ -132,33 +135,30 @@ public class Player extends User {
                 GameApplication.history.add(card2);
                 discarded.add(card2);
                 setCard2(null);
-                gameEvent.setMessage("You chose Card 2");
-                gameEvent.changeState(true,DISCARDSUCCESSFULL);;
+                gameEvent.changeState(DISCARDSUCCESSFULL);;
                 break;
             default:
-                gameEvent.setMessage("Please enter a valid number");
-                gameEvent.changeState(true,NOSUCHCARDINHAND);
+                gameEvent.changeState(NOSUCHCARDINHAND);
         }
         return gameEvent;
     }
 
-
+/*
     //Chose a player for cardActions
     public GameEvent choosePlayerMessage(int playerNumber) {
-        GameEvent chosenPlayerSuccess = new GameEvent(null, null);
-        GameEvent noChoice = new GameEvent(null, null);
+        GameEvent chosenPlayerSuccess = new GameEvent();
+        GameEvent noChoice = new GameEvent();
         if (chosenPlayer(playerNumber) != null) {
-            chosenPlayerSuccess.setMessage("You chose: " + chosenPlayer(playerNumber).name);
-            chosenPlayerSuccess.setType(PLAYERCHOSEN);
+            chosenPlayerSuccess.changeState(PLAYERCHOSEN);
             return chosenPlayerSuccess;
         } else {
             noChoice.setMessage("You can't choose that player. Choose a new one.");
-            noChoice.changeState(true, INVALIDCHOICE);
+            noChoice.changeState(INVALIDCHOICE);
             return noChoice;
         }
     }
 
-
+*/
     public Player chosenPlayer(int playerNumber) {
         for (Player player : GameApplication.choosablePlayers) {
             if (playerNumber == GameApplication.choosablePlayers.indexOf(player)) {

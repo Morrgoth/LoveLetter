@@ -1,8 +1,8 @@
 package bb.love_letter.game.characters;
 
 import bb.love_letter.game.GameApplication;
+import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
-import static bb.love_letter.game.GameApplication.history;
 
 /*
     Strength: 3
@@ -37,6 +37,9 @@ public class Baron extends Cards {
 
     public void useBaron(Player sourcePlayer, Player targetPlayer) {
         /* compare hands with another player, lower number is out */
+        GameEvent baronEvent = new GameEvent(GameEvent.GameEventType.PLAYERIMMUNE);
+        baronEvent.changeState(GameEvent.GameEventType.BARONACTION);
+
         Cards sourcePlayerCard1 = sourcePlayer.getCard1();
         Cards targetPlayerCard1 = targetPlayer.getCard1();
 
@@ -47,18 +50,13 @@ public class Baron extends Cards {
             GameApplication.history.add(targetPlayerCard1);
             GameApplication.playersInRound.remove(targetPlayer);
             targetPlayer.setInGame(false);
+            baronEvent.changeState(GameEvent.GameEventType.PLAYERELIMINATED);
         }
         else if (sourceCardValue < targetCardValue){
             GameApplication.history.add(sourcePlayerCard1);
             GameApplication.playersInRound.remove(sourcePlayer);
             sourcePlayer.setInGame(false);
+            baronEvent.changeState(GameEvent.GameEventType.PLAYERELIMINATED);
         }
-        else {
-            // ignore effect play on; cards to history
-            GameApplication.history.add(sourcePlayerCard1);
-            GameApplication.history.add(targetPlayerCard1);
-            //finish turn;
-        }
-
     }
 }

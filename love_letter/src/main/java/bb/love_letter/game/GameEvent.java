@@ -1,47 +1,40 @@
 package bb.love_letter.game;
 
-import javafx.event.Event;
-
 public class GameEvent {
-    String message;
+    private GameEventType gameEventType;
     GameEventType type;
 
-    public boolean eventState;
+    public boolean eventState = false;
+
+    public GameEvent (GameEventType gameEventType){
+        this.gameEventType = gameEventType;
+    }
     public enum GameEventType{
         GAMEISREADY,
-        GAMENOTREADY,
+        GAMEISNOTREADY,
         DISCARDSUCCESSFULL,
         NOSUCHCARDINHAND,
         PLAYERELIMINATED,
         PLAYERIMMUNE,
         PLAYERCHOSEN,
         INVALIDCHOICE,
+        GUARDACTION,
         PRIESTACTION,
+        BARONACTION,
+        HANDMAIDACTION,
+        PRINCEACTION,
         KINGACTION,
+        COUNTESSACTION,
+        PRINCESSACTION,
         GAMEFINISHED
 
     }
 
-    public GameEvent (String message, GameEventType type){
-        this.message = message;
-        this.type = type;
-    }
 
-    public String getMessage() {
-        return message;
-    }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public void setType(GameEventType type) {
-        this.type = type;
-    }
-
-    public void changeState (boolean eventState, GameEventType newState){
+    public void changeState (GameEventType newState){
         GameEventType currentStateType = newState;
-        this.eventState = true;
+        boolean eventState = true;
         int counterState = 0;
     }
 }

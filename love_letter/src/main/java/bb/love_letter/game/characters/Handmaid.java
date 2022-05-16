@@ -1,11 +1,6 @@
 package bb.love_letter.game.characters;
 
-/*
-    Strength: 4
-    AmountInDeck: 2
-    Effects: Player cannot be affected by any other player's cards until their next turn.
- */
-
+import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
 
 public class Handmaid extends Cards {
@@ -29,9 +24,14 @@ public class Handmaid extends Cards {
     }
 
     public GameEvent useHandmaid(Player sourcePlayer){
+
+        GameEvent handmaidEvent = new GameEvent (GameEvent.GameEventType.HANDMAIDACTION);
+
         sourcePlayer.setImmune(true);
-        GameEvent playerImmune = new GameEvent(sourcePlayer.getName() + " is immuned until next tern.", GameEvent.GameEventType.PLAYERIMMUNE);
-        return playerImmune;
+
+        handmaidEvent.changeState(GameEvent.GameEventType.PLAYERIMMUNE);
+
+        return handmaidEvent;
     }
 
 }

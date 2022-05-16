@@ -1,5 +1,6 @@
 package bb.love_letter.game.characters;
 
+import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
 
 /*
@@ -32,7 +33,7 @@ public class King extends Cards {
         Cards temp = targetPlayer.getCard1();
         targetPlayer.setCard1(sourcePlayer.getCard1());
         sourcePlayer.setCard1(temp);
-        GameEvent swapCard = new GameEvent(sourcePlayer.getName() + " swapped the card with " + targetPlayer.getName(), GameEvent.GameEventType.KINGACTION);
+        GameEvent swapCard = new GameEvent(GameEvent.GameEventType.KINGACTION);
         return swapCard;
         //player1 chooses player2
         // change hands;;

@@ -23,8 +23,4 @@ public abstract class Cards {
     //needed only to show the info text
     public String getCardAction() { return cardAction; }
 
-    public void checkInDeck(){
-
-    }
-
 }

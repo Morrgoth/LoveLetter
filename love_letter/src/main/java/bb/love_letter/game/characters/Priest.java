@@ -10,7 +10,7 @@ import bb.love_letter.game.GameApplication;
 import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
 
-import static bb.love_letter.game.GameEvent.GameEventType.PRIESTACTION;
+import static bb.love_letter.game.GameEvent.GameEventType.*;
 
 public class Priest extends Cards{
 
@@ -33,8 +33,8 @@ public class Priest extends Cards{
         return cardPoints;
     }
 
-    public GameEvent usePriest(Player targetPlayer){ /* BARON does nothing on pickUp */
-        GameEvent showCard = new GameEvent("The chosen Player has: " + targetPlayer.getCard1().getCardName(), PRIESTACTION);
+    public GameEvent usePriest(Player targetPlayer){
+        GameEvent showCard = new GameEvent(PRIESTACTION);
         return showCard;
     }
         //player1 chooses player2
