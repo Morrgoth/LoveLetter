@@ -101,15 +101,15 @@ public class LoginView {
                     stage.setTitle("Chat");
                     Scene scene = new Scene(chatView.asParent(), 700, 500);
                     scene.setFill(Color.TRANSPARENT);
-
-                    //scene.setUserAgentStylesheet("/resources/Chat.css");
+                    scene.getStylesheets().add(getClass().getResource("/Chat.css").toExternalForm());
                     stage.setScene(scene);
                     stage.show();
+                    chatController.addChatMessageDisplay(model.getLoginConfirmation());
                     view.getScene().getWindow().hide();
-                    ClientReaderThread readerThreadUI = new ClientReaderThread(chatController);
-                    ClientWriterThread writerThreadUI = new ClientWriterThread(chatController);
-                    readerThreadUI.start();
-                    writerThreadUI.start();
+                    ClientReaderThread readerThread = new ClientReaderThread(chatController);
+                    ClientWriterThread writerThread = new ClientWriterThread(chatController);
+                    readerThread.start();
+                    writerThread.start();
                 }
             }
         });

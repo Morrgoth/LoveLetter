@@ -17,25 +17,24 @@ public class ChatController {
         this.model= chatModel;
     }
 
-    public void addChatMessage(ChatMessage chatMessage) {
-        this.model.addChatMessage(chatMessage);
-        this.model.addChatMessageString(chatMessage);
-    }
     public void addChatMessageDisplay (ChatMessage chatMessage){
         ChatMessageDisplay chatMessageDisplay = new ChatMessageDisplay(chatMessage);
         model.addVBox(chatMessageDisplay.gethBox());
     }
 
-    // This is just a workaround, this method should be deleted when we have the Display class for ChatMessages
-    public void addChatMessage(Envelope envelope) {
+    public void addChatMessageDisplay (ServerEvent serverEvent){
+        ChatMessageDisplay chatMessageDisplay = new ChatMessageDisplay(serverEvent);
+        model.addVBox(chatMessageDisplay.gethBox());
+    }
+
+    public void addMessage(Envelope envelope) {
+        System.out.println(envelope);
         if (envelope.getType() == Envelope.EnvelopeType.CHAT_MESSAGE) {
             ChatMessage chatMessage = (ChatMessage) envelope.getPayload();
-           addChatMessageDisplay(chatMessage);
+            addChatMessageDisplay(chatMessage);
         } else if (envelope.getType() == Envelope.EnvelopeType.SERVER_EVENT) {
             ServerEvent serverEvent = (ServerEvent) envelope.getPayload();
-            ChatMessage chatMessage = new ChatMessage(new User("Server"), serverEvent.getMessage());
-            this.model.addChatMessage(chatMessage);
-            this.model.addChatMessageString(chatMessage);
+            addChatMessageDisplay(serverEvent);
         }
     }
 

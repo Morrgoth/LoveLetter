@@ -1,5 +1,6 @@
 package bb.love_letter.user_interface;
 
+import bb.love_letter.game.User;
 import bb.love_letter.networking.NetworkConnection;
 import bb.love_letter.networking.data.ChatMessage;
 import bb.love_letter.networking.data.ServerEvent;
@@ -44,7 +45,19 @@ public class ChatMessageDisplay {
         return hBox1;
      }
     private HBox buildDisplay (ServerEvent serverEvent){
-        return null;
+        ChatMessage chatMessage = new ChatMessage(new User("Server"), serverEvent.getMessage());
+        HBox hBox1 = new HBox();
+        VBox vBox1 = new VBox();
+        Label username = new Label(chatMessage.getSender().getName());
+        username.getStyleClass().add("userName");
+        vBox1.getChildren().add(username);
+        Label message = new Label(chatMessage.getMessage());
+
+        vBox1.getChildren().add(message);
+        hBox1.getChildren().add(vBox1);
+        message.getStyleClass().add("messageBubble");
+        message.getStyleClass().add("received");
+        return hBox1;
     }
 
     public HBox gethBox(){

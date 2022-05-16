@@ -1,5 +1,6 @@
 package bb.love_letter.user_interface;
 
+import bb.love_letter.networking.data.ServerEvent;
 import javafx.beans.property.*;
 
 /**
@@ -12,6 +13,7 @@ public class LoginModel {
     private final StringProperty username = new SimpleStringProperty();
     private final StringProperty errorMessage = new SimpleStringProperty();
     private final BooleanProperty successfulLogin = new SimpleBooleanProperty(false);
+    private ServerEvent loginConfirmation = null;
     public final StringProperty ipProperty() {
         return this.ip;
     }
@@ -56,5 +58,11 @@ public class LoginModel {
     }
     public final void setSuccessfulLogin(boolean successfulLogin) {
         this.successfulLoginProperty().set(successfulLogin);
+    }
+    public ServerEvent getLoginConfirmation() {
+        return loginConfirmation;
+    }
+    public void setLoginConfirmation(ServerEvent loginConfirmation) {
+        this.loginConfirmation = loginConfirmation;
     }
 }

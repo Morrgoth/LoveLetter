@@ -41,6 +41,7 @@ public class LoginController {
                 ServerEvent loginResponseEvent = (ServerEvent) envelope.getPayload();
                 if (loginResponseEvent.getServerEventType() == ServerEvent.ServerEventType.LOGIN_CONFIRMATION) {
                     NetworkConnection.getInstance().init(client, dataInputStream, dataOutputStream, user);
+                    model.setLoginConfirmation(loginResponseEvent);
                     model.setSuccessfulLogin(true);
                 } else if (loginResponseEvent.getServerEventType() == ServerEvent.ServerEventType.NAME_ALREADY_TAKEN) {
                     model.setErrorMessage("Error: The username " + user.getName() + " is already taken!");

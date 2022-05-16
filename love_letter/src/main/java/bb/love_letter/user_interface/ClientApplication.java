@@ -18,6 +18,7 @@ public class ClientApplication extends Application {
         LoginView loginView = new LoginView(loginModel, loginController);
 
         Scene scene = new Scene(loginView.asParent(), 300, 350);
+        scene.getStylesheets().add(getClass().getResource("/Chat.css").toExternalForm());
         stage.setTitle("Login");
         stage.setScene(scene);
         stage.show();

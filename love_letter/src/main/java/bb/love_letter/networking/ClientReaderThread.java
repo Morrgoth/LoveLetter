@@ -32,7 +32,8 @@ public class ClientReaderThread extends Thread{
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            chatController.addChatMessage(envelope);
+                            System.out.println(envelope);
+                            chatController.addMessage(envelope);
                         }
                     });
                 }
