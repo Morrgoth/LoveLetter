@@ -82,7 +82,9 @@ public class Player extends User {
 
     //player's action - draw the top most  card from deck
     public void drawCard(Deck deck) {
+
         card2 = deck.getDeck().get(0);
+        deck.getDeck().remove(0);
     }
 
     public boolean checkIfCountess(Cards card1, Cards card2) {
@@ -122,7 +124,7 @@ public class Player extends User {
                 setCard1(card2);
                 setCard2(null);
                 gameEvent.setMessage("You chose Card 1");
-                gameEvent.setType(DISCARDSUCCESSFULL);
+                gameEvent.changeState(true,DISCARDSUCCESSFULL);
 
                 break;
 
@@ -131,11 +133,11 @@ public class Player extends User {
                 discarded.add(card2);
                 setCard2(null);
                 gameEvent.setMessage("You chose Card 2");
-                gameEvent.setType(DISCARDSUCCESSFULL);
+                gameEvent.changeState(true,DISCARDSUCCESSFULL);;
                 break;
             default:
                 gameEvent.setMessage("Please enter a valid number");
-                gameEvent.setType(NOSUCHCARDINHAND);
+                gameEvent.changeState(true,NOSUCHCARDINHAND);
         }
         return gameEvent;
     }

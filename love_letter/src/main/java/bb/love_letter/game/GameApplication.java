@@ -70,7 +70,8 @@ public class GameApplication {
             initializePlayerScores();
             gameEvents.add(withdrawFirstCards(deck));
         }else{
-            GameEvent lackOfPlayer = new GameEvent("Lack of Player!", GAMEISREADY);
+            GameEvent lackOfPlayer = new GameEvent("Lack of Player!");
+            lackOfPlayer.changeState(true,GAMEISREADY);
         }
         return gameEvents;
     }
