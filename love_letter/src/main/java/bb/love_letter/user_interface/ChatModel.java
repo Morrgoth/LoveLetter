@@ -7,48 +7,21 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 /**
  *
  * @author Zeynab Baiani
  */
 public class ChatModel {
-   private ObservableList <ChatMessage> chatMessageObservableList = FXCollections.observableArrayList();
-   private ObservableList <String> chatMessageStringObservableList = FXCollections.observableArrayList();
-   private ObservableList<User> userObservableList = FXCollections.observableArrayList();
 
-   private ObservableList<HBox> vBoxObservableList = FXCollections.observableArrayList();
-   public ObservableList<HBox> getvBoxObservableList(){
+    private ObservableList<HBox> vBoxObservableList = FXCollections.observableArrayList();
+    private StringProperty currentMessage = new SimpleStringProperty("");
+    public ObservableList<HBox> getHBoxObservableList(){
        return vBoxObservableList;
    }
    public void addVBox (HBox hbox){
        vBoxObservableList.add(hbox);
    }
-
-
-   private StringProperty currentMessage = new SimpleStringProperty("");
-
-    public ObservableList<ChatMessage> getChatMessageObservableList() {
-        return chatMessageObservableList;
-    }
-
-    public void addChatMessage(ChatMessage chatMessage){
-        chatMessageObservableList.add(chatMessage);
-    }
-
-    public ObservableList<User> getUserObservableList() {
-        return userObservableList;
-    }
-
-    public ObservableList<String> getChatMessageStringObservableList() {return chatMessageStringObservableList;}
-    public void addChatMessageString(ChatMessage chatMessage) {
-        chatMessageStringObservableList.add(chatMessage.getSender().getName() + ": " + chatMessage.getMessage());
-    }
-
-    public void addUser(User user){
-        userObservableList.add(user);
-    }
 
     public StringProperty currentMessageProperty() {
         return currentMessage;

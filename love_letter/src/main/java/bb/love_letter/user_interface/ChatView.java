@@ -1,8 +1,5 @@
 package bb.love_letter.user_interface;
 
-import bb.love_letter.game.User;
-import bb.love_letter.networking.data.ChatMessage;
-import bb.love_letter.networking.NetworkConnection;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -39,7 +36,7 @@ public class ChatView {
         messageField.setId("messageField");
         sentbutton = new Button("Send");
         sentbutton.setId("sentButton");
-        listView = new ListView<>(model.getvBoxObservableList());
+        listView = new ListView<>(model.getHBoxObservableList());
         HBox chatBox = new HBox();
         HBox.setHgrow(messageField, Priority.ALWAYS);
         RowConstraints regRow = new RowConstraints();
