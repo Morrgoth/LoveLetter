@@ -104,8 +104,8 @@ public class Player extends User {
 
     }
 
-    public boolean checkIfPrincess(Cards card){
-        if(card.getCardName().equals("PRINCESS")){
+    public boolean checkIfPrincess(Cards card) {
+        if (card.getCardName().equals("PRINCESS")) {
             return true;
         }
         return false;
@@ -142,29 +142,36 @@ public class Player extends User {
 
 
     //Chose a player for cardActions
-    public Player choosePlayer(int playerNumber) {
-        //GameEvent chosenPlayerSuccess = new GameEvent(null, null);
+    public GameEvent choosePlayerMessage(int playerNumber) {
+        GameEvent chosenPlayerSuccess = new GameEvent(null, null);
         GameEvent noChoice = new GameEvent(null, null);
-        for (Player player : GameApplication.choosePlayer) {
-            if (playerNumber == GameApplication.choosePlayer.indexOf(player)) {
+        if (chosenPlayer(playerNumber) != null) {
+            chosenPlayerSuccess.setMessage("You chose: " + chosenPlayer(playerNumber).name);
+            chosenPlayerSuccess.setType(PLAYERCHOSEN);
+            return chosenPlayerSuccess;
+        } else {
+            noChoice.setMessage("You can't choose that player. Choose a new one.");
+            noChoice.changeState(true, INVALIDCHOICE);
+            return noChoice;
+        }
+    }
+
+
+    public Player chosenPlayer(int playerNumber) {
+        for (Player player : GameApplication.choosablePlayers) {
+            if (playerNumber == GameApplication.choosablePlayers.indexOf(player)) {
                 Player chosenPlayer = player;
-                chosenPlayerSuccess.setMessage("You chose: " + player.name);
-                chosenPlayerSuccess.setType(PLAYERCHOSEN);
                 return chosenPlayer;
-            } else {
-                noChoice.setMessage("You can't choose that player. Choose a new one.");
-                noChoice.changeState(true,INVALIDCHOICE);
             }
         }
         return null;
     }
 
 
-    private void clearDiscardedList(ArrayList<Cards> discarded) {
-        //delete all elements in List when a round ends
-        for(int i = 0; i<discarded.size(); i++){
+    private void clearDiscardedList (ArrayList < Cards > discarded) {
+        //delete all elements in List when a round end
+        for (int i = 0; i < discarded.size(); i++) {
             discarded.remove(0);
         }
     }
 }
-

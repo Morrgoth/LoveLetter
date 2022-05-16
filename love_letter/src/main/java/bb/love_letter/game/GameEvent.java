@@ -15,6 +15,7 @@ public class GameEvent {
         PLAYERIMMUNE,
         PLAYERCHOSEN,
         INVALIDCHOICE,
+        PRIESTACTION,
         GAMEFINISHED
 
     }
