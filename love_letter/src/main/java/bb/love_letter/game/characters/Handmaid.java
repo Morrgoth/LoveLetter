@@ -1,0 +1,37 @@
+package bb.love_letter.game.characters;
+
+/*
+    Strength: 4
+    AmountInDeck: 2
+    Effects: Player cannot be affected by any other player's cards until their next turn.
+ */
+
+import bb.love_letter.game.Player;
+
+public class Handmaid extends Cards {
+    private String name = "Handmaid";
+    private final int cardPoints = 4;
+    private String cardAction = "This card grants you immunity until your next turn.";
+
+    @Override
+    public String getCardName() {
+        return name;
+    }
+
+    @Override
+    public String getCardAction() {
+        return cardAction;
+    }
+
+    @Override
+    public int getCardPoints() {
+        return cardPoints;
+    }
+
+    public GameEvent useHandmaid(Player sourcePlayer){
+        sourcePlayer.setImmune(true);
+        GameEvent playerImmune = new GameEvent(sourcePlayer.getName() + " is immuned until next tern.", GameEvent.GameEventType.PLAYERIMMUNE);
+        return playerImmune;
+    }
+
+}
