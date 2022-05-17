@@ -36,7 +36,7 @@ public class Game {
             isGameOver = false;
             isGameStarted = false;
             isRoundOver = false;
-            return new GameEvent(GameEvent.GameEventType.GAME_INITIALIZED); // TODO:
+            return new GameEvent(GameEvent.GameEventType.GAME_INITIALIZED); // TODO: print the available commands
         } else {
             return new GameEvent(GameEvent.GameEventType.ERROR, "A Game is already active, wait for it to finish!");
         }
