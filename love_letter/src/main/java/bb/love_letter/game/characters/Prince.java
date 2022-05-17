@@ -50,6 +50,7 @@ public class Prince extends Cards{
         return princeEvent;
     }
 
+
         //player1 chooses player2
         // swap player2 hand to player1 only;
         //if PRINCESS --> player2 terminate round;
