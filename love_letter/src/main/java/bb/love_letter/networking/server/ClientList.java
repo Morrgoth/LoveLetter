@@ -1,4 +1,4 @@
-package bb.love_letter.networking;
+package bb.love_letter.networking.server;
 import bb.love_letter.game.User;
 
 import java.io.IOException;

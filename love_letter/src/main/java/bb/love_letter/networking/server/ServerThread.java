@@ -1,9 +1,11 @@
-package bb.love_letter.networking;
+package bb.love_letter.networking.server;
 
 import bb.love_letter.game.User;
 import bb.love_letter.networking.data.ChatMessage;
 import bb.love_letter.networking.data.Envelope;
 import bb.love_letter.networking.data.ServerEvent;
+import bb.love_letter.networking.server.ClientList;
+import bb.love_letter.networking.server.Command;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

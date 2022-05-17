@@ -1,5 +1,8 @@
-package bb.love_letter.user_interface;
+package bb.love_letter.user_interface.view;
 
+import bb.love_letter.user_interface.Client;
+import bb.love_letter.user_interface.controller.ChatController;
+import bb.love_letter.user_interface.model.ChatModel;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -17,7 +20,7 @@ public class ChatView {
     private TextField messageField;
     private Button sentbutton;
     private ListView<HBox> listView;
-    public ChatView (ChatModel model, ChatController controller) {
+    public ChatView (ChatModel model, ChatController controllert) {
         this.model = model;
         this.controller = controller;
         buildUI();

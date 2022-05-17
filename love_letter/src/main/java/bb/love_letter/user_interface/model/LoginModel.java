@@ -1,4 +1,4 @@
-package bb.love_letter.user_interface;
+package bb.love_letter.user_interface.model;
 
 import bb.love_letter.networking.data.ServerEvent;
 import javafx.beans.property.*;

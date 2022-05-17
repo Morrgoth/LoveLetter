@@ -1,4 +1,4 @@
-package bb.love_letter.user_interface;
+package bb.love_letter.user_interface.model;
 
 import bb.love_letter.game.User;
 import bb.love_letter.networking.data.ChatMessage;

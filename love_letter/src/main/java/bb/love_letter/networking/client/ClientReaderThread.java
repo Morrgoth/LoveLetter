@@ -1,7 +1,7 @@
-package bb.love_letter.networking;
+package bb.love_letter.networking.client;
 
 import bb.love_letter.networking.data.Envelope;
-import bb.love_letter.user_interface.ChatController;
+import bb.love_letter.user_interface.controller.ChatController;
 import javafx.application.Platform;
 
 /**
@@ -32,7 +32,7 @@ public class ClientReaderThread extends Thread{
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            chatController.addDisplayItem(envelope);
+                            chatController.processMessage(envelope);
                         }
                     });
                 }

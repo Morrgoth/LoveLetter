@@ -1,22 +1,20 @@
-package bb.love_letter.user_interface;
+package bb.love_letter.user_interface.view;
 
-import bb.love_letter.networking.ClientReaderThread;
-import bb.love_letter.networking.ClientWriterThread;
+import bb.love_letter.user_interface.Client;
+import bb.love_letter.user_interface.controller.LoginController;
+import bb.love_letter.user_interface.model.LoginModel;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
 /**
  *
@@ -73,7 +71,7 @@ public class LoginView {
                 String ip = ipField.getText();
                 int port = Integer.parseInt(portField.getText());
                 String username = usernameField.getText();
-                controller.connectToServer(ip, port, username);
+                controller.requestLogin(ip, port, username);
             }
         });
     }
@@ -84,32 +82,6 @@ public class LoginView {
             public void changed(ObservableValue<? extends String> observableValue, String oldVal, String newVal) {
                 if (!newVal.equals(oldVal) && !newVal.equals("")) {
                     errorLabel.setText(newVal);
-                }
-            }
-        });
-
-        model.successfulLoginProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldVal, Boolean newVal) {
-                if (newVal) {
-                    // Successful login, open new window etc.
-                    System.out.println("Successful Login!");
-                    ChatModel chatModel = new ChatModel();
-                    ChatController chatController = new ChatController(chatModel);
-                    ChatView chatView = new ChatView(chatModel, chatController);
-                    Stage stage = new Stage();
-                    stage.setTitle("Chat");
-                    Scene scene = new Scene(chatView.asParent(), 700, 500);
-                    scene.setFill(Color.TRANSPARENT);
-                    scene.getStylesheets().add(getClass().getResource("/Chat.css").toExternalForm());
-                    stage.setScene(scene);
-                    stage.show();
-                    chatController.addDisplayItem(model.getLoginConfirmation());
-                    view.getScene().getWindow().hide();
-                    ClientReaderThread readerThread = new ClientReaderThread(chatController);
-                    ClientWriterThread writerThread = new ClientWriterThread(chatController);
-                    readerThread.start();
-                    writerThread.start();
                 }
             }
         });

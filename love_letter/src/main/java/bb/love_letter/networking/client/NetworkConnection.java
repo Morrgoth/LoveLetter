@@ -1,4 +1,4 @@
-package bb.love_letter.networking;
+package bb.love_letter.networking.client;
 
 import bb.love_letter.game.User;
 
@@ -61,6 +61,13 @@ public class NetworkConnection {
         this.dataInputStream = dataInputStream;
         this.dataOutputStream = dataOutputStream;
         this.user = user;
+    }
+
+    public void reset() {
+        this.socket = null;
+        this.dataInputStream = null;
+        this.dataOutputStream = null;
+        this.user = null;
     }
 
     /**

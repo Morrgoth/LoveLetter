@@ -1,8 +1,12 @@
-package bb.love_letter.user_interface;
+package bb.love_letter.user_interface.test;
 
 import bb.love_letter.game.User;
-import bb.love_letter.networking.NetworkConnection;
+import bb.love_letter.networking.client.NetworkConnection;
 import bb.love_letter.networking.data.ChatMessage;
+import bb.love_letter.user_interface.controller.ChatController;
+import bb.love_letter.user_interface.model.ChatModel;
+import bb.love_letter.user_interface.view.ChatMessageDisplayItem;
+import bb.love_letter.user_interface.view.ChatView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -11,7 +15,7 @@ import javafx.stage.Stage;
  *
  * @author Zeynab Baiani
  */
-public class Chat extends Application {
+public class ChatViewTest extends Application {
 
     public static void main(String[] args) {
         launch(args);
@@ -22,10 +26,10 @@ public class Chat extends Application {
         NetworkConnection.getInstance().init(null, null, null, new User("Server"));
 
         ChatModel chatModel = new ChatModel();
-        ChatController chatController = new ChatController(chatModel);
+        ChatController chatController = new ChatController(chatModel, null);
         ChatView chatView = new ChatView(chatModel, chatController);
-        chatModel.addVBox(new ChatMessageDisplay(new ChatMessage(new User("Server"), "lksfnslk sdf")).getHBox());
-        chatModel.addVBox(new ChatMessageDisplay(new ChatMessage(new User("User1"), "lksfnslk sdf")).getHBox());
+        chatModel.addVBox(new ChatMessageDisplayItem(new ChatMessage(new User("Server"), "lksfnslk sdf")).getHBox());
+        chatModel.addVBox(new ChatMessageDisplayItem(new ChatMessage(new User("User1"), "lksfnslk sdf")).getHBox());
 
         Scene scene = new Scene(chatView.asParent(), 700, 500);
         String css = String.valueOf(this.getClass().getResource("/Chat.css"));

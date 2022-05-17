@@ -1,20 +1,20 @@
-package bb.love_letter.user_interface;
+package bb.love_letter.user_interface.view;
 
 import bb.love_letter.game.User;
-import bb.love_letter.networking.NetworkConnection;
+import bb.love_letter.networking.client.NetworkConnection;
 import bb.love_letter.networking.data.ChatMessage;
 import bb.love_letter.networking.data.ServerEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
-public class ChatMessageDisplay {
+public class ChatMessageDisplayItem {
     private HBox hBox;
 
-    public ChatMessageDisplay (ChatMessage chatMessage){
+    public ChatMessageDisplayItem(ChatMessage chatMessage){
         hBox = buildDisplay(chatMessage);
     }
-    public ChatMessageDisplay(ServerEvent serverEvent){
+    public ChatMessageDisplayItem(ServerEvent serverEvent){
         hBox = buildDisplay(serverEvent);
     }
      private HBox buildDisplay (ChatMessage chatMessage){
