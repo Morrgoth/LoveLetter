@@ -36,7 +36,7 @@ public class Game {
             isGameOver = false;
             isGameStarted = false;
             isRoundOver = false;
-            return new GameEvent(GameEvent.GameEventType.GAME_INITIALIZED); // After this the Server will publish the possible commands
+            return new GameEvent(GameEvent.GameEventType.GAME_INITIALIZED); // TODO:
         } else {
             return new GameEvent(GameEvent.GameEventType.ERROR, "A Game is already active, wait for it to finish!");
         }
@@ -76,6 +76,7 @@ public class Game {
         Player player = playersInRound.get(currentPlayer);
         Cards card = deck.draw();
         player.addCard(card);
+        player.setImmune(false);
         gameEvents.add(new GameEvent(GameEvent.GameEventType.TURN_STARTED, "The turn of " + player.getName()
                 + " started!"));
         gameEvents.add(new GameEvent(GameEvent.GameEventType.CARD_ADDED, "You drew a " + card.getCardName() +
@@ -138,7 +139,7 @@ public class Game {
         if (playersInRound.size() == 1) {
             return playersInRound.get(0);
         } else {
-            // Find the winner if the deck is empty and there are at least 2 players still in the round
+            // TODO: Find the winner if the deck is empty and there are at least 2 players still in the round
             return null;
         }
     }
