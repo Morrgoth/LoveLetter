@@ -143,7 +143,11 @@ public class Game {
 
     private Player findGameWinner() {
         for (Player player: playersInGame) {
-            if (player.getScore() >= 4) {
+            if (playersInGame.size() == 4 && player.getScore() >= 4) {
+                return player;
+            }else if(playersInGame.size() == 3 && player.getScore() >= 5){
+                return player;
+            }else if (playersInGame.size() == 2 && player.getScore() >= 7){
                 return player;
             }
         }
