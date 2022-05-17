@@ -23,8 +23,13 @@ public class Player extends User {
     private boolean inGame;
 
     private boolean immune;
+
+    private int score = 0;
     public ArrayList<Cards> discarded = new ArrayList<>();
 
+    public Player(User user) {
+        super(user.getName());
+    }
 
     public Player(String name, Cards card1, Cards card2) {
         super(name);
@@ -48,12 +53,40 @@ public class Player extends User {
         this.card2 = card2;
     }
 
+    public void addCard(Cards card) {
+        if (card1 == null) {
+            setCard1(card);
+        } else {
+            setCard2(card);
+        }
+    }
+
+    public void discard(int cardIndex) {
+        if (cardIndex == 1) {
+            setCard1(null);
+        } else {
+            setCard2(null);
+        }
+    }
+
+    public String printHand() {
+        return "1: " + card1.getCardName() + "\n2: " + card2.getCardName();
+    }
+
     public boolean getImmune() {
         return getImmune();
     }
 
     public void setImmune(boolean immune) {
         this.immune = immune;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public boolean getInGame() {
