@@ -79,11 +79,12 @@ public class Game {
         gameEvents.add(new GameEvent(GameEvent.GameEventType.TURN_STARTED, "The turn of " + player.getName()
                 + " started!"));
         gameEvents.add(new GameEvent(GameEvent.GameEventType.CARD_ADDED, "You drew a " + card.getCardName() +
-                ".\n Your current hand is: \n" + player.printHand(), true));
+                ".\n Your current hand is: \n" + player.printHand(), player));
         return gameEvents;
     }
 
-    public GameEvent playCard(User user, GameAction action) {
+    public ArrayList<GameEvent> playCard(User user, GameAction action) {
+        ArrayList<GameEvent> gameEvents = new ArrayList<>();
         if (getCurrentPlayer().equals(user)) {
             Player player = playersInRound.get(currentPlayer);
             // TODO: Countess check - Anti-cheat clause -> automatically returns VALID_ACTION
@@ -91,12 +92,13 @@ public class Game {
             // TODO: Check if the action is valid or invalid -> return either VALID_ACTION or INVALID_ACTION, if valid change the game state and apply effects
             return null;
         } else {
-            return new GameEvent(GameEvent.GameEventType.ERROR, "It is not your turn. It is the turn of " +
-                    playersInRound.get(currentPlayer) + "!", true);
+            gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "It is not your turn. It is the turn of " +
+                    playersInRound.get(currentPlayer) + "!", user));
         }
+        return gameEvents;
     }
 
-    private GameEvent finishTurn() {
+    public GameEvent finishTurn() {
         if (deck.size() == 0 || playersInRound.size() == 1) {
             // ROUND IS OVER
             isRoundOver = true;

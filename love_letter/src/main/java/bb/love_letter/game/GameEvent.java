@@ -3,8 +3,7 @@ package bb.love_letter.game;
 public class GameEvent {
     private GameEventType gameEventType;
     private String message;
-    private boolean isPrivate = false;
-
+    private User target = null;
     public boolean eventState = false;
 
     public GameEvent (GameEventType gameEventType){
@@ -16,10 +15,10 @@ public class GameEvent {
         this.message = message;
     }
 
-    public GameEvent (GameEventType gameEventType, String message, boolean isPrivate){
+    public GameEvent (GameEventType gameEventType, String message, User target){
         this.gameEventType = gameEventType;
         this.message = message;
-        this.isPrivate = isPrivate;
+        this.target = target;
     }
     public enum GameEventType{
         GAME_INITIALIZED,
@@ -32,6 +31,7 @@ public class GameEvent {
         CARD_ADDED,
         VALID_ACTION,
         INVALID_ACTION,
+        PLAYER_EFFECT,
         TURN_ENDED,
         ERROR,
         GAMEISREADY,
