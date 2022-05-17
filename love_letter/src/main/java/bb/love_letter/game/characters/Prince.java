@@ -33,9 +33,9 @@ public class Prince extends Cards{
     }
 
 
-    public GameEvent usePrince(Player targetPlayer, ArrayList<Cards> discarded, Deck deck){
+    public GameEvent usePrince(Player targetPlayer, Deck deck){
         GameApplication.history.add(targetPlayer.getCard1());
-        discarded.add(targetPlayer.getCard1());
+        targetPlayer.discarded.add(targetPlayer.getCard1());
         targetPlayer.setCard1(deck.getDeck().get(0));
         GameEvent princeEvent = new GameEvent( PRINCEACTION);
         if(targetPlayer.checkIfPrincess(targetPlayer.getCard1())) {
