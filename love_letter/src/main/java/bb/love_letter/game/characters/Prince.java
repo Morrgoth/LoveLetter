@@ -32,6 +32,7 @@ public class Prince extends Cards{
         return cardPoints;
     }
 
+
     public GameEvent usePrince(Player targetPlayer, ArrayList<Cards> discarded, Deck deck){
         GameApplication.history.add(targetPlayer.getCard1());
         discarded.add(targetPlayer.getCard1());
