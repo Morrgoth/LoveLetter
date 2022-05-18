@@ -15,8 +15,7 @@ public class GameApplication {
     static ArrayList<Player> playersInGame = new ArrayList<>();
     //list of current players still in the round
     public static ArrayList<Player> playersInRound = new ArrayList<>();
-    //list of players in the round that are not immune and can be choosen for a cardEffect
-    public static ArrayList<Player> choosablePlayers = new ArrayList<>();
+
     //saving playerName and the total amount of tokens in the game he won
     public static HashMap<String, Integer> playerScores = new HashMap<String, Integer>();
     //list of all cards played in the round
@@ -42,15 +41,7 @@ public class GameApplication {
         playersInRound = (ArrayList<Player>) playersInGame.clone();
     }
 
-    public void initializeChoosablePlayer(){
-        choosablePlayers = (ArrayList<Player>) playersInRound.clone();
-        for(int i = 0; i < choosablePlayers.size(); i++){
-            if(choosablePlayers.get(i).getImmune() == true){
-                choosablePlayers.remove(i);
-            }
-        }
 
-    }
 
     public void startGame(){
 
