@@ -6,6 +6,8 @@ import bb.love_letter.user_interface.model.ChatModel;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
@@ -38,13 +40,17 @@ public class ChatView {
         listView = new ListView<>(model.getHBoxObservableList());
         listView.setMouseTransparent(true);
         listView.setFocusTraversable(false);
-        HBox chatBox = new HBox();
-        HBox.setHgrow(messageField, Priority.ALWAYS);
+        listView.getStyleClass().add("listView");
+        GridPane chatBox = new GridPane();
+        chatBox.getStyleClass().add("chatbox");
         RowConstraints regRow = new RowConstraints();
+        chatBox.addColumn(1, messageField  );
+        chatBox.addColumn(2, sentbutton);
+        chatBox.setHgap(10);
         regRow.setVgrow(Priority.ALWAYS);
+        //chatBox.getRowConstraints().add(regRow);
         view.getRowConstraints().add(regRow);
 
-        chatBox.getChildren().addAll(messageField, sentbutton);
         messageField.setPrefWidth(600);
         sentbutton.setPrefWidth(100);
         view.addRow(0,listView);
@@ -64,5 +70,6 @@ public class ChatView {
                 messageField.setText("");
             }
         });
+
     }
 }
