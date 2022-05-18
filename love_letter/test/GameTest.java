@@ -97,8 +97,8 @@ public class GameTest {
         assertEquals(2, gameEvents.size());
         assertSame(GameEvent.GameEventType.DISCARD_NOTIFICATION, gameEvents.get(0).getGameEventType());
         assertEquals(10, game.getDeck().getDeck().size());
-        assertNotNull(game.getPlayersInRound().get(0).getCard1());
-        assertNotNull(game.getPlayersInRound().get(1).getCard1());
+        assertNotNull(game.getPlayerQueue().getPlayersInRound().get(0).getCard1());
+        assertNotNull(game.getPlayerQueue().getPlayersInRound().get(1).getCard1());
         assertSame(GameEvent.GameEventType.ROUND_STARTED, gameEvents.get(1).getGameEventType());
         assertEquals("A new round has started!", gameEvents.get(1).getMessage());
     }
@@ -115,9 +115,9 @@ public class GameTest {
         ArrayList<GameEvent> gameEvents = game.startRound();
         assertEquals(1, gameEvents.size());
         assertEquals(12, game.getDeck().getDeck().size());
-        assertNotNull(game.getPlayersInRound().get(0).getCard1());
-        assertNotNull(game.getPlayersInRound().get(1).getCard1());
-        assertNotNull(game.getPlayersInRound().get(2).getCard1());
+        assertNotNull(game.getPlayerQueue().getPlayersInRound().get(0).getCard1());
+        assertNotNull(game.getPlayerQueue().getPlayersInRound().get(1).getCard1());
+        assertNotNull(game.getPlayerQueue().getPlayersInRound().get(2).getCard1());
         assertSame(GameEvent.GameEventType.ROUND_STARTED, gameEvents.get(0).getGameEventType());
         assertEquals("A new round has started!", gameEvents.get(0).getMessage());
     }
@@ -141,9 +141,9 @@ public class GameTest {
         game.startRound();
         ArrayList<GameEvent> gameEvents = game.startTurn();
         assertEquals(2, gameEvents.size());
-        assertNotNull(game.getPlayersInRound().get(0).getCard1());
-        assertNotNull(game.getPlayersInRound().get(0).getCard2());
-        assertFalse(game.getPlayersInRound().get(0).isImmune());
+        assertNotNull(game.getPlayerQueue().getPlayersInRound().get(0).getCard1());
+        assertNotNull(game.getPlayerQueue().getPlayersInRound().get(0).getCard2());
+        assertFalse(game.getPlayerQueue().getPlayersInRound().get(0).isImmune());
         assertSame(GameEvent.GameEventType.TURN_STARTED, gameEvents.get(0).getGameEventType());
         assertEquals("The turn of alice has started!", gameEvents.get(0).getMessage());
         assertSame(GameEvent.GameEventType.CARD_ADDED, gameEvents.get(1).getGameEventType());
@@ -250,7 +250,7 @@ public class GameTest {
         assertEquals("This round has ended. The winner is alice!", gameEvent.getMessage());
         ArrayList<GameEvent> newRound = game.startRound();
         assertEquals(2, newRound.size());
-        assertNotNull(game.getPlayersInRound().get(0).getCard1());
+        assertNotNull(game.getPlayerQueue().getPlayersInRound().get(0).getCard1());
         ArrayList<GameEvent> turn = game.startTurn();
         assertSame(GameEvent.GameEventType.TURN_STARTED, turn.get(0).getGameEventType());
         assertEquals("The turn of alice has started!", turn.get(0).getMessage());
@@ -264,7 +264,7 @@ public class GameTest {
         game.startGame();
         game.startRound();
         game.startTurn();
-        game.getCurrentPlayer().setScore(6);
+        game.getPlayerQueue().getCurrentPlayer().setScore(6);
         game.getPlayerQueue().getPlayersInRound().get(1).eliminate();
         game.endTurn();
         GameEvent gameEvent = game.finishTurn();

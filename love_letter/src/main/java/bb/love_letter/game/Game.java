@@ -5,14 +5,11 @@ import bb.love_letter.game.characters.Cards;
 import java.util.ArrayList;
 
 public class Game {
-    private Deck deck;
-    private PlayerQueue playerQueue;
-    private Player roundWinner;
-    private Player gameWinner;
+    private final Deck deck;
+    private final PlayerQueue playerQueue;
     private boolean isGameStarted;
     private boolean isGameOver;
     private boolean isRoundOver;
-
     private boolean isTurnOver;
 
     public Game() {
@@ -26,8 +23,6 @@ public class Game {
         if (isGameOver && isGameStarted) {
             deck.reset();
             playerQueue.clear();
-            roundWinner = null;
-            gameWinner = null;
             isGameOver = false;
             isGameStarted = false;
             isRoundOver = true;
@@ -66,7 +61,7 @@ public class Game {
             isRoundOver = false;
             deck.reset();
             playerQueue.resetRound();
-            Cards discarded = deck.draw();
+            Cards removedCard = deck.draw();
             if (playerQueue.getPlayerCount() == 2) {
                 Cards extraDiscraded1 = deck.draw();
                 Cards extraDiscarded2 = deck.draw();
@@ -79,7 +74,6 @@ public class Game {
             for (Player player: playerQueue.getPlayers()) {
                 player.addCard(deck.draw());
             }
-            //currentPlayer = 0;
             gameEvents.add(new GameEvent(GameEvent.GameEventType.ROUND_STARTED, "A new round has started!"));
         } else {
             gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "The current round hasn't ended yet!"));
@@ -107,7 +101,7 @@ public class Game {
 
     public ArrayList<GameEvent> playCard(User user, GameAction action) {
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
-        if (getCurrentPlayer().equals(user)) {
+        if (playerQueue.getCurrentPlayer().equals(user)) {
             Player player = playerQueue.getCurrentPlayer();
             // TODO: Countess check - Anti-cheat clause -> automatically returns VALID_ACTION
 
@@ -121,7 +115,7 @@ public class Game {
     }
 
     /**
-     * This method is to be called in each successful playCard() call
+     * This method is to be called in each successful playCard() call, it is public for testing purposes
      */
     public void endTurn() {
         isTurnOver = true;
@@ -133,11 +127,11 @@ public class Game {
             if (deck.size() == 0 || playerQueue.getPlayersInRoundCount() == 1) {
                 // ROUND IS OVER
                 isRoundOver = true;
-                roundWinner = playerQueue.findRoundWinner();
+                Player roundWinner = playerQueue.findRoundWinner();
                 roundWinner.setScore(roundWinner.getScore() + 1);
                 if (playerQueue.findGameWinner() != null) {
                     // GAME OVER: A Player has at least 4 tokens
-                    gameWinner = playerQueue.findGameWinner();
+                    Player gameWinner = playerQueue.findGameWinner();
                     isGameOver = true;
                     String message = "This round has ended. The winner is " + roundWinner.getName() + "!\n"
                             + "This game has ended. The winner is " + gameWinner.getName() + "! Congratulations!";
@@ -171,18 +165,6 @@ public class Game {
      * Used for testing purposes
      * @return
      */
-    public ArrayList<Player> getPlayersInRound() {
-        return playerQueue.getPlayersInRound();
-    }
-
-    /**
-     * Used for testing purposes
-     * @return
-     */
-    public Player getCurrentPlayer() {
-        return playerQueue.getCurrentPlayer();
-    }
-
     public PlayerQueue getPlayerQueue() {
         return playerQueue;
     }
