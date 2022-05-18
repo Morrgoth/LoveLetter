@@ -45,7 +45,7 @@ public class GameApplication {
     public void initializeChoosablePlayer(){
         choosablePlayers = (ArrayList<Player>) playersInRound.clone();
         for(int i = 0; i < choosablePlayers.size(); i++){
-            if(choosablePlayers.get(i).getImmune() == true){
+            if(choosablePlayers.get(i).isImmune() == true){
                 choosablePlayers.remove(i);
             }
         }

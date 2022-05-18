@@ -22,7 +22,9 @@ public class Player extends User {
 
     private boolean inGame;
 
-    private boolean immune;
+    private boolean immune = false;
+
+    private boolean eliminated = false;
 
     private int score = 0;
     public ArrayList<Cards> discarded = new ArrayList<>();
@@ -61,6 +63,18 @@ public class Player extends User {
         }
     }
 
+    public boolean isEliminated() {
+        return eliminated;
+    }
+
+    public void eliminate() {
+        setEliminated(true);
+    }
+
+    public void setEliminated(boolean eliminated) {
+        this.eliminated = eliminated;
+    }
+
     public void discard(int cardIndex) {
         if (cardIndex == 1) {
             setCard1(null);
@@ -73,8 +87,8 @@ public class Player extends User {
         return "1: " + card1.getCardName() + "\n2: " + card2.getCardName();
     }
 
-    public boolean getImmune() {
-        return getImmune();
+    public boolean isImmune() {
+        return immune;
     }
 
     public void setImmune(boolean immune) {

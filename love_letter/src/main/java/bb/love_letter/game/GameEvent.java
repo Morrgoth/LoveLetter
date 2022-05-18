@@ -27,6 +27,7 @@ public class GameEvent {
         PLAYER_ADDED,
         ROUND_STARTED,
         ROUND_ENDED,
+        DISCARD_NOTIFICATION,
         TURN_STARTED,
         CARD_ADDED,
         VALID_ACTION,
@@ -54,7 +55,13 @@ public class GameEvent {
 
     }
 
+    public GameEventType getGameEventType() {
+        return gameEventType;
+    }
 
+    public String getMessage() {
+        return message;
+    }
 
     public void changeState (GameEventType newState){
         GameEventType currentStateType = newState;
