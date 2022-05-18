@@ -143,12 +143,28 @@ public class CardTest {
 
     @Test
     public void testBaronWin() {
-
+        game.getPlayerQueue().getPlayerByName("alice").setCard1(new King());
+        game.getPlayerQueue().getPlayerByName("alice").setCard2(new Baron());
+        game.getPlayerQueue().getPlayerByName("bob").setCard1(new Prince());
+        GameAction gameAction = new GameAction(2, "bob");
+        ArrayList<GameEvent> gameEvents = game.playCard(new User("alice"), gameAction);
+        assertEquals(1, gameEvents.size());
+        GameEvent gameEvent = gameEvents.get(0);
+        assertSame(GameEvent.GameEventType.VALID_ACTION, gameEvent.getGameEventType());
+        assertEquals("alice discarded the Baron, and targeted bob; bob was eliminated", gameEvent.getMessage());
     }
 
     @Test
     public void testBaronLose() {
-
+        game.getPlayerQueue().getPlayerByName("alice").setCard1(new Prince());
+        game.getPlayerQueue().getPlayerByName("alice").setCard2(new Baron());
+        game.getPlayerQueue().getPlayerByName("bob").setCard1(new King());
+        GameAction gameAction = new GameAction(2, "bob");
+        ArrayList<GameEvent> gameEvents = game.playCard(new User("alice"), gameAction);
+        assertEquals(1, gameEvents.size());
+        GameEvent gameEvent = gameEvents.get(0);
+        assertSame(GameEvent.GameEventType.VALID_ACTION, gameEvent.getGameEventType());
+        assertEquals("alice discarded the Baron, and targeted bob; alice was eliminated", gameEvent.getMessage());
     }
 
     @Test
@@ -166,7 +182,16 @@ public class CardTest {
 
     @Test
     public void testPriest() {
-
+        game.getPlayerQueue().getPlayerByName("alice").setCard1(new Prince());
+        game.getPlayerQueue().getPlayerByName("bob").setCard1(new Countess());
+        GameAction gameAction = new GameAction(1, "bob");
+        ArrayList<GameEvent> gameEvents = game.playCard(new User("alice"), gameAction);
+        assertEquals(2, gameEvents.size());
+        assertSame(GameEvent.GameEventType.VALID_ACTION, gameEvents.get(0).getGameEventType());
+        assertEquals("alice discarded the Priest, and targeted bob", gameEvents.get(0).getMessage());
+        assertSame(GameEvent.GameEventType.CARD_EFFECT, gameEvents.get(1).getGameEventType());
+        assertEquals("bob has a Countess", gameEvents.get(1).getMessage());
+        assertEquals("alice", gameEvents.get(1).getTarget().getName());
     }
 
     @Test
@@ -184,12 +209,26 @@ public class CardTest {
 
     @Test
     public void testGuardCorrect() {
-
+        game.getPlayerQueue().getPlayerByName("alice").setCard1(new Guard());
+        game.getPlayerQueue().getPlayerByName("bob").setCard1(new King());
+        GameAction gameAction = new GameAction(1, "bob", "King");
+        ArrayList<GameEvent> gameEvents = game.playCard(new User("alice"), gameAction);
+        assertEquals(1, gameEvents.size());
+        GameEvent gameEvent = gameEvents.get(0);
+        assertSame(GameEvent.GameEventType.VALID_ACTION, gameEvents.get(0).getGameEventType());
+        assertEquals("alice discarded the Guard, and targeted bob and guessed King; bob was eliminated", gameEvents.get(0).getMessage());
     }
 
     @Test
     public void testGuardIncorrect() {
-
+        game.getPlayerQueue().getPlayerByName("alice").setCard1(new Guard());
+        game.getPlayerQueue().getPlayerByName("bob").setCard1(new King());
+        GameAction gameAction = new GameAction(1, "bob", "Countess");
+        ArrayList<GameEvent> gameEvents = game.playCard(new User("alice"), gameAction);
+        assertEquals(1, gameEvents.size());
+        GameEvent gameEvent = gameEvents.get(0);
+        assertSame(GameEvent.GameEventType.VALID_ACTION, gameEvents.get(0).getGameEventType());
+        assertEquals("alice discarded the Guard, and targeted bob and guessed Countess; bob was not eliminated", gameEvents.get(0).getMessage());
     }
 
     @Test
