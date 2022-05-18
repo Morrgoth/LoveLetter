@@ -69,9 +69,6 @@ public class Guard  extends Cards {
                 return new GameEvent(GameEvent.GameEventType.INVALIDCHOICE, "You can't guess Guard!", sourcePlayer);
         }
 
-
-
-
     }
 }
 
