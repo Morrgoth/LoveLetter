@@ -102,12 +102,11 @@ public class Game {
 
     public ArrayList<GameEvent> playCard(User user, GameAction action) {
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
-        if (playerQueue.getCurrentPlayer().equals(user)) {
+        if (playerQueue.getCurrentPlayer().getName().equals(user.getName())) {
             Player player = playerQueue.getCurrentPlayer();
             // TODO: Countess check - Anti-cheat clause -> automatically returns VALID_ACTION
 
             // TODO: Check if the action is valid or invalid -> return either VALID_ACTION or INVALID_ACTION, if valid change the game state and apply effects
-            return null;
         } else {
             gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "It is not your turn. It is the turn of " +
                     playerQueue.getCurrentPlayer() + "!", user));

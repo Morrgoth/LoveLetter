@@ -20,6 +20,15 @@ public class GameEvent {
         this.message = message;
         this.target = target;
     }
+
+    public User getTarget() {
+        return target;
+    }
+
+    public void setTarget(User target) {
+        this.target = target;
+    }
+
     public enum GameEventType{
         GAME_INITIALIZED,
         GAME_STARTED,
@@ -32,7 +41,7 @@ public class GameEvent {
         CARD_ADDED,
         VALID_ACTION,
         INVALID_ACTION,
-        PLAYER_EFFECT,
+        CARD_EFFECT,
         TURN_ENDED,
         ERROR,
         GAMEISREADY,

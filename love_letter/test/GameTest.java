@@ -147,7 +147,6 @@ public class GameTest {
         assertSame(GameEvent.GameEventType.TURN_STARTED, gameEvents.get(0).getGameEventType());
         assertEquals("The turn of alice has started!", gameEvents.get(0).getMessage());
         assertSame(GameEvent.GameEventType.CARD_ADDED, gameEvents.get(1).getGameEventType());
-        // TODO: Added test for specific cards (it is necessary to modify the deck)
     }
 
     @Test
