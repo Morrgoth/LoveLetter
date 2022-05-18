@@ -48,7 +48,8 @@ public class Game {
                 isGameStarted = true;
                 return new GameEvent(GameEvent.GameEventType.GAME_STARTED, "A new game has started!");
             } else {
-                return new GameEvent(GameEvent.GameEventType.ERROR, "At least 2 Players must be in the lobby for the game to start!");
+                return new GameEvent(GameEvent.GameEventType.ERROR, "At least 2 Players must be in the lobby " +
+                        "for the game to start!");
             }
         } else {
             return new GameEvent(GameEvent.GameEventType.ERROR, "A Game has already started, wait for it to end!");
