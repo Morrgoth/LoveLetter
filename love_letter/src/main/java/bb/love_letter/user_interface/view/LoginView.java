@@ -39,16 +39,21 @@ public class LoginView {
 
     private void buildUI() {
         view = new GridPane();
+        view.setId("loginView");
         Label title = new Label("Login");
         Separator separator = new Separator();
         ipField = new TextField();
         ipField.setPromptText("IP");
+        ipField.getStyleClass().add("loginField");
         portField = new TextField();
         portField.setPromptText("Port");
+        portField.getStyleClass().add("loginField");
         usernameField = new TextField();
         usernameField.setPromptText("Username");
+        usernameField.getStyleClass().add("loginField");
         errorLabel = new Label();
         button = new Button("Login");
+        button.setId("loginButton");
 
         view.setVgap(16);
         view.setAlignment(Pos.CENTER);

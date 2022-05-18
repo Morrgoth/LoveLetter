@@ -35,7 +35,7 @@
 /*type Message Bubble*/
 #messageField{
 
-    -fx-background-color: rgba(153, 197, 236, 0.87);
+    -fx-background-color: rgba(149, 195, 236, 0.87);
     -fx-text-box-border: red ;
     -fx-focus-color: green ;
     /*-fx-border-radius: 25px;*/
@@ -77,7 +77,7 @@
 #sentButton{
     /*bubble*/
 
-    -fx-background-color: rgba(153, 197, 236, 0.87);
+    -fx-background-color: rgba(149, 195, 236, 0.87);
     /*-fx-border-color: #0085FF ;*/
     -fx-padding: 7 7 7 7;
     -fx-background-radius: 6 6 6 6;
@@ -92,5 +92,18 @@
 
 }
 
+.loginField {
+    -fx-background-color: rgba(239, 246, 252, 0.87);
+    -fx-background-radius: 6 6 6 6;
+}
 
+#loginView{
+    -fx-background-color: white;
+}
+
+#loginButton{
+    -fx-background-color: #0085FF;
+    -fx-background-radius: 6 6 6 6;
+
+}
 
