@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Game {
     private Deck deck;
     private ArrayList<Player> playersInGame;
-    private static ArrayList<Player> playersInRound;
+    public static ArrayList<Player> playersInRound;
     private int currentPlayer;
     private Player roundWinner;
     private Player gameWinner;
@@ -22,6 +22,8 @@ public class Game {
     public static ArrayList<Cards> history;
     //list of players in the round that are not immune and can be choosen for a cardEffect
     public static ArrayList<Player> playerOption = new ArrayList<>();
+    //list of current players still in the round
+    public static ArrayList<Player> playersInRound = new ArrayList<>();
 
     public Game() {
         deck = new Deck();
@@ -204,6 +206,17 @@ public class Game {
             if(playerOption.get(i).getImmune() == true){
                 playerOption.remove(i);
             }
+        }
+    }
+
+    public void buildTurnQueue (ArrayList<Player> playersInRound) {
+        if (playersInRound.get(0).getInGame()){
+            Player currentPlayer = playersInRound.get(0);
+            playersInRound.remove(0);
+            playersInRound.add(currentPlayer);
+        }
+        else{
+            playersInRound.remove(0);
         }
     }
 }
