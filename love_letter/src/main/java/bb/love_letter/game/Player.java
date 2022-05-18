@@ -151,7 +151,7 @@ public class Player extends User {
 
 
     //discard a Card during each round
-    public GameEvent discardCard(int cardNumber) {
+    public void discardCard(int cardNumber) {
         GameEvent gameEvent = new GameEvent(GameEvent.GameEventType.PLAYERIMMUNE);
         switch (cardNumber) {
             case 1:
@@ -173,7 +173,7 @@ public class Player extends User {
             default:
                 gameEvent.changeState(NOSUCHCARDINHAND);
         }
-        return gameEvent;
+        //return gameEvent;
     }
 
 /*

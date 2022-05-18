@@ -1,6 +1,9 @@
 package bb.love_letter.game;
 
+import bb.love_letter.game.characters.Baron;
 import bb.love_letter.game.characters.Cards;
+import bb.love_letter.game.characters.Countess;
+import bb.love_letter.game.characters.Guard;
 
 import java.util.ArrayList;
 
@@ -14,6 +17,9 @@ public class Game {
     private boolean isGameStarted;
     private boolean isGameOver;
     private boolean isRoundOver;
+
+    //list of all cards played in the round
+    public static ArrayList<Cards> history;
 
     public Game() {
         deck = new Deck();
@@ -89,6 +95,38 @@ public class Game {
         if (getCurrentPlayer().equals(user)) {
             Player player = playersInRound.get(currentPlayer);
             // TODO: Countess check - Anti-cheat clause -> automatically returns VALID_ACTION
+            switch(action.getCardIndex()){
+                case 1:
+                    Cards card1 = player.getCard1();
+                    //Firstly, check if it is the effect of COUNTESS
+                    if(player.checkIfCountess(player.getCard1(), player.getCard2())){
+                        if(card1 instanceof Countess){
+                            player.discardCard(1);
+                            gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() + " discarded " + player.getCard1().getCardName() + "."));
+                        }else{
+                            gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "You can only discard COUNTESS.", player));
+                            player.discardCard(2);
+                        }
+                    }//Exclude the effect of COUNTESS
+                    else{
+                        Player targetPlayer = null;
+                        if(card1 instanceof Baron){
+                            for(Player target: playersInRound){
+                                if(target.getName().equals(action.getTarget())){
+                                    targetPlayer = target;
+                                }
+                            }
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "Please choose a target player."));
+                            }else{
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() + " discarded " + player.getCard1().getCardName() + "."));
+                                gameEvents.add(((Baron) card1).useBaron(player, targetPlayer));
+                            }
+                        }else if(card1 instanceof Guard){
+
+                        }
+                    }
+            }
 
             // TODO: Check if the action is valid or invalid -> return either VALID_ACTION or INVALID_ACTION, if valid change the game state and apply effects
             return null;
