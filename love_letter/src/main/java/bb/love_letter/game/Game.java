@@ -10,8 +10,8 @@ public class Game {
     private ArrayList<Player> playersInGame;
     private ArrayList<Player> playersInRound;
     private int currentPlayer;
-    private Player roundWinner;
-    private Player gameWinner;
+    private ArrayList<Player> roundWinner;
+    private ArrayList <Player> gameWinner;
     private boolean isGameStarted;
     private boolean isGameOver;
     private boolean isRoundOver;
@@ -277,25 +277,43 @@ public class Game {
         if (deck.size() == 0 || playersInRound.size() == 1) {
             // ROUND IS OVER
             isRoundOver = true;
-            roundWinner = findRoundWinner();
-            roundWinner.setScore(roundWinner.getScore() + 1);
-            if (findGameWinner() != null) {
-                // GAME OVER: A Player has at least 4 tokens
-                gameWinner = findGameWinner();
+            for (Player player : roundWinner) {
+                player.setScore(player.getScore() + 1);
+            }
+            if (findGameWinner(gameWinner) != null) {
+                // GAME OVER: A Player has the required amount of tokens to win
                 isGameOver = true;
-                String message = "This round has ended. The winner is " + roundWinner.getName() + "!\n"
-                        + "This game has ended. The winner is " + gameWinner.getName() + "! Congratulations!";
-                return new GameEvent(GameEvent.GameEventType.GAME_ENDED, message);
+                if(roundWinner.size() == 1 && gameWinner.size() == 1){
+                    String message = "This round has ended. The winner is " + roundWinner.get(0).getName() + "!\n"
+                            + "This game has ended. The winner is " + gameWinner.get(0).getName() + "! Congratulations!";
+                    return new GameEvent(GameEvent.GameEventType.GAME_ENDED, message);
+                }else if(roundWinner.size() > 1 && gameWinner.size() == 1){
+                    String message = "This round has ended. The winner is " + roundWinner.get(0).getName() + " and " + roundWinner.get(1).getName() +"!\n"
+                            + "This game has ended. The winner is " + gameWinner.get(0).getName() + "! Congratulations!";
+                    return new GameEvent(GameEvent.GameEventType.GAME_ENDED, message);
+                }else{
+                    String message = "This round has ended. The winner is " + roundWinner.get(0).getName() + " and " + roundWinner.get(1).getName() +"!\n"
+                            + "This game has ended. The winners are " + gameWinner.get(0).getName() + " and " + gameWinner.get(1).getName() + "! Congratulations!";
+                    return new GameEvent(GameEvent.GameEventType.GAME_ENDED, message);
+                }
             } else {
                 // Next round can begin
-                return new GameEvent(GameEvent.GameEventType.ROUND_ENDED, "This round has ended. The winner is " +
-                        roundWinner.getName() + "!");
+                if(roundWinner.size() == 1){
+                    return new GameEvent(GameEvent.GameEventType.ROUND_ENDED, "This round has ended. The winner is " +
+                            roundWinner.get(0).getName() + "!");
+                }else{
+                    return new GameEvent(GameEvent.GameEventType.ROUND_ENDED, "This round has ended. The winners are " +
+                        roundWinner.get(0).getName() + " and " + roundWinner.get(1).getName() + "!");
+
+                }
+
             }
         } else {
             // ROUND IS NOT YET OVER
             return new GameEvent(GameEvent.GameEventType.TURN_ENDED, "The turn of " +
                     playersInRound.get(currentPlayer++).getName() + " ended!");
         }
+
     }
 
     private User getCurrentPlayer() {
@@ -309,25 +327,42 @@ public class Game {
         playersInRound.remove(player);
     }
 
-    private Player findRoundWinner() {
+    private ArrayList<Player>  findRoundWinner(ArrayList <Player> roundWinner) {
+        roundWinner = new ArrayList<>();
         if (playersInRound.size() == 1) {
-            return playersInRound.get(0);
-        } else {
+            roundWinner.add(playersInRound.get(0));
+        } else if (deck.size() == 0 && playersInRound.size() >= 2) {
+            if (playersInRound.get(0).getCard1().getCardPoints() > playersInRound.get(1).getCard1().getCardPoints()) {
+                roundWinner.add(playersInRound.get(0));
+            } else if (playersInRound.get(0).getCard1().getCardPoints() < playersInRound.get(1).getCard1().getCardPoints()) {
+                roundWinner.add(playersInRound.get(1));
+            } else {
+                if (playersInRound.get(0).discardedPoints(playersInRound.get(0).discarded) > playersInRound.get(1).discardedPoints(playersInRound.get(1).discarded)) {
+                    roundWinner.add(playersInRound.get(0));
+                } else if (playersInRound.get(0).discardedPoints(playersInRound.get(0).discarded) < playersInRound.get(1).discardedPoints(playersInRound.get(1).discarded)) {
+                    roundWinner.add(playersInRound.get(1));
+                }
+                else{
+                    roundWinner.add(playersInRound.get(0));
+                    roundWinner.add(playersInRound.get(1));
+                    }
+                }
             // TODO: Find the winner if the deck is empty and there are at least 2 players still in the round
-            return null;
+
         }
+        return roundWinner;
     }
 
-    private Player findGameWinner() {
-        for (Player player: playersInGame) {
-            if (playersInGame.size() == 4 && player.getScore() >= 4) {
-                return player;
-            }else if(playersInGame.size() == 3 && player.getScore() >= 5){
-                return player;
-            }else if (playersInGame.size() == 2 && player.getScore() >= 7){
-                return player;
+        private ArrayList<Player> findGameWinner (ArrayList <Player> gameWinner) {
+            for (Player player : playersInGame) {
+                if (playersInGame.size() == 4 && player.getScore() >= 4) {
+                    gameWinner.add(player);
+                } else if (playersInGame.size() == 3 && player.getScore() >= 5) {
+                    gameWinner.add(player);
+                } else if (playersInGame.size() == 2 && player.getScore() >= 7) {
+                    gameWinner.add(player);
+                }
             }
+            return gameWinner;
         }
-        return null;
     }
-}
