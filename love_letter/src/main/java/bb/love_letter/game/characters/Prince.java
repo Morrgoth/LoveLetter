@@ -1,9 +1,6 @@
 package bb.love_letter.game.characters;
 
-import bb.love_letter.game.Deck;
-import bb.love_letter.game.GameApplication;
-import bb.love_letter.game.GameEvent;
-import bb.love_letter.game.Player;
+import bb.love_letter.game.*;
 
 import java.util.ArrayList;
 
@@ -33,21 +30,16 @@ public class Prince extends Cards{
     }
 
 
-    public GameEvent usePrince(Player targetPlayer, Deck deck){
-        GameApplication.history.add(targetPlayer.getCard1());
-        targetPlayer.discarded.add(targetPlayer.getCard1());
-        targetPlayer.setCard1(deck.getDeck().get(0));
-        GameEvent princeEvent = new GameEvent(PRINCEACTION);
-        if(targetPlayer.checkIfPrincess(targetPlayer.getCard1())) {
+    public GameEvent usePrince(Player sourcePlayer, Player targetPlayer, Deck deck){
+        targetPlayer.discardCard(1);
+        if(targetPlayer.checkIfPrincess(targetPlayer.getCard1())){
             targetPlayer.setInGame(false);
-            GameEvent eliminated = new GameEvent(PLAYERELIMINATED);
-            return eliminated;
-        }else if(targetPlayer.checkIfPrincess(targetPlayer.getCard1())){
-                GameEvent princessEvent = new GameEvent(PRINCESSACTION);
-                return princessEvent;
-            }
-
-        return princeEvent;
+            return new GameEvent(PLAYER_EFFECT, sourcePlayer.getName() + " discarded Prince on " +
+                    targetPlayer.getName() + " and " + targetPlayer.getName() + " is out, because the card of  is PRINCESS.");
+        }else{
+            targetPlayer.addCard(deck.draw());
+            return new GameEvent(PLAYER_EFFECT, "You get the card " + deck.draw().getCardName() + " from deck.", targetPlayer);
+        }
     }
 
 

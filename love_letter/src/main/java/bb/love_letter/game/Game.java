@@ -1,10 +1,8 @@
 package bb.love_letter.game;
 
-import bb.love_letter.game.characters.Baron;
-import bb.love_letter.game.characters.Cards;
-import bb.love_letter.game.characters.Countess;
-import bb.love_letter.game.characters.Guard;
+import bb.love_letter.game.characters.*;
 
+import java.time.temporal.ValueRange;
 import java.util.ArrayList;
 
 public class Game {
@@ -12,8 +10,8 @@ public class Game {
     private ArrayList<Player> playersInGame;
     public static ArrayList<Player> playersInRound;
     private int currentPlayer;
-    private Player roundWinner;
-    private Player gameWinner;
+    private ArrayList<Player> roundWinner;
+    private ArrayList <Player> gameWinner;
     private boolean isGameStarted;
     private boolean isGameOver;
     private boolean isRoundOver;
@@ -91,7 +89,8 @@ public class Game {
         gameEvents.add(new GameEvent(GameEvent.GameEventType.TURN_STARTED, "The turn of " + player.getName()
                 + " started!"));
         gameEvents.add(new GameEvent(GameEvent.GameEventType.CARD_ADDED, "You drew a " + card.getCardName() +
-                ".\n Your current hand is: \n" + player.printHand(), player));
+                ".\n The effect of the card is: " + card.getCardAction() + "\n Your current hand is: \n" +
+                player.printHand() + ".\n The effect of the card is: " + player.getCard1().getCardAction(), player));
         return gameEvents;
     }
 
@@ -99,42 +98,179 @@ public class Game {
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
         if (getCurrentPlayer().equals(user)) {
             Player player = playersInRound.get(currentPlayer);
-            // TODO: Countess check - Anti-cheat clause -> automatically returns VALID_ACTION
             switch(action.getCardIndex()){
                 case 1:
                     Cards card1 = player.getCard1();
-                    //Firstly, check if it is the effect of COUNTESS
-                    if(player.checkIfCountess(player.getCard1(), player.getCard2())){
+                    //Check if the card is PRINCESS
+                    if(player.checkIfPrincess(card1)){
+                        player.discardCard(1);
+                        gameEvents.add(new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, player.getName() + " discarded PRINCESS."));
+                        player.setInGame(false);
+                        gameEvents.add(new GameEvent(GameEvent.GameEventType.PLAYERELIMINATED, player.getName()
+                                + " is out because of discarding the PRINCESS."));
+                    }//Check if the player has COUNTESS and PRINCE or KING at the same time
+                    else if(player.checkIfCountess(player.getCard1(), player.getCard2())){
                         if(card1 instanceof Countess){
                             player.discardCard(1);
-                            gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() + " discarded " + player.getCard1().getCardName() + "."));
+                            gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() + " discarded COUNTESS."));
                         }else{
                             gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "You can only discard COUNTESS.", player));
                             player.discardCard(2);
+                            gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() + " discarded COUNTESS."));
                         }
-                    }//Exclude the effect of COUNTESS
+                    }//Exclude the effect of COUNTESS and PRINCESS
                     else{
                         Player targetPlayer = null;
-                        if(card1 instanceof Baron){
-                            for(Player target: playersInRound){
-                                if(target.getName().equals(action.getTarget())){
-                                    targetPlayer = target;
-                                }
+                        for(Player target: playersInRound){
+                            if(target.getName().equalsIgnoreCase(action.getTarget()) && !target.getImmune()){
+                                targetPlayer = target;
                             }
+                        }
+                        if(card1 instanceof Baron){
                             if(targetPlayer == null){
-                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "Please choose a target player."));
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
                             }else{
-                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() + " discarded " + player.getCard1().getCardName() + "."));
+                                player.discardCard(1);
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION,
+                                        player.getName() + " discarded BARON."));
                                 gameEvents.add(((Baron) card1).useBaron(player, targetPlayer));
                             }
                         }else if(card1 instanceof Guard){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                player.discardCard(1);
+                                gameEvents.add(((Guard) card1).useGuard(player, targetPlayer, action.getGuess()));
+                            }
+                        }else if(card1 instanceof Handmaid){
+                            player.discardCard(1);
+                            gameEvents.add(((Handmaid) card1).useHandmaid(player));
+                        }else if(card1 instanceof King){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                player.discardCard(1);
+                                gameEvents.add(((King) card1).useKing(player, targetPlayer));
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, "You get the card "
+                                        + player.getCard1().getCardName() + " from " + targetPlayer.getName()));
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, "You get the card "
+                                        + targetPlayer.getCard1().getCardName() + " from " + player.getName()));
+                            }
+                        }else if(card1 instanceof Prince){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                player.discardCard(1);
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
+                                        " discarded PRINCE on " + targetPlayer.getName() + "."));
+                                gameEvents.add(((Prince) card1).usePrince(player, targetPlayer, deck));
+                            }
 
+                        }else if(card1 instanceof Priest){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                player.discardCard(1);
+                                gameEvents.add(((Priest) card1).usePriest(player, targetPlayer));
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName()
+                                        + " discarded PRIEST and saw the hand of " + targetPlayer.getName()));
+                            }
                         }
                     }
-            }
+                    break;
 
-            // TODO: Check if the action is valid or invalid -> return either VALID_ACTION or INVALID_ACTION, if valid change the game state and apply effects
-            return null;
+                case 2:
+                    Cards card2 = player.getCard2();
+                    //Check if the card is PRINCESS
+                    if(player.checkIfPrincess(card2)){
+                        player.discardCard(2);
+                        gameEvents.add(new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, player.getName() + " discarded PRINCESS."));
+                        player.setInGame(false);
+                        gameEvents.add(new GameEvent(GameEvent.GameEventType.PLAYERELIMINATED, player.getName()
+                                + " is out because of discarding the PRINCESS."));
+                    }//Check if the player has COUNTESS and PRINCE or KING at the same time
+                    else if(player.checkIfCountess(player.getCard1(), player.getCard2())){
+                        if(card2 instanceof Countess){
+                            player.discardCard(2);
+                            gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() + " discarded COUNTESS."));
+                        }else{
+                            gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "You can only discard COUNTESS.", player));
+                            player.discardCard(1);
+                            gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() + " discarded COUNTESS."));
+                        }
+                    }//Exclude the effect of COUNTESS and PRINCESS
+                    else{
+                        Player targetPlayer = null;
+                        for(Player target: playersInRound){
+                            if(target.getName().equalsIgnoreCase(action.getTarget()) && !target.getImmune()){
+                                targetPlayer = target;
+                            }
+                        }
+                        if(card2 instanceof Baron){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                player.discardCard(2);
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION,
+                                        player.getName() + " discarded BARON."));
+                                gameEvents.add(((Baron) card2).useBaron(player, targetPlayer));
+                            }
+                        }else if(card2 instanceof Guard){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                player.discardCard(2);
+                                gameEvents.add(((Guard) card2).useGuard(player, targetPlayer, action.getGuess()));
+                            }
+                        }else if(card2 instanceof Handmaid){
+                            player.discardCard(2);
+                            gameEvents.add(((Handmaid) card2).useHandmaid(player));
+                        }else if(card2 instanceof King){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                player.discardCard(2);
+                                gameEvents.add(((King) card2).useKing(player, targetPlayer));
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, "You get the card "
+                                        + player.getCard1().getCardName() + " from " + targetPlayer.getName()));
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, "You get the card "
+                                        + targetPlayer.getCard1().getCardName() + " from " + player.getName()));
+                            }
+                        }else if(card2 instanceof Prince){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                player.discardCard(2);
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
+                                        " discarded PRINCE on " + targetPlayer.getName() + "."));
+                                gameEvents.add(((Prince) card2).usePrince(player, targetPlayer, deck));
+                            }
+
+                        }else if(card2 instanceof Priest){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                player.discardCard(2);
+                                gameEvents.add(((Priest) card2).usePriest(player, targetPlayer));
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName()
+                                        + " discarded PRIEST and saw the hand of " + targetPlayer.getName()));
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "Please enter a (valid) card index: 1 or 2.", player));
+            }
         } else {
             gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "It is not your turn. It is the turn of " +
                     playersInRound.get(currentPlayer) + "!", user));
@@ -146,25 +282,43 @@ public class Game {
         if (deck.size() == 0 || playersInRound.size() == 1) {
             // ROUND IS OVER
             isRoundOver = true;
-            roundWinner = findRoundWinner();
-            roundWinner.setScore(roundWinner.getScore() + 1);
-            if (findGameWinner() != null) {
-                // GAME OVER: A Player has at least 4 tokens
-                gameWinner = findGameWinner();
+            for (Player player : roundWinner) {
+                player.setScore(player.getScore() + 1);
+            }
+            if (findGameWinner(gameWinner) != null) {
+                // GAME OVER: A Player has the required amount of tokens to win
                 isGameOver = true;
-                String message = "This round has ended. The winner is " + roundWinner.getName() + "!\n"
-                        + "This game has ended. The winner is " + gameWinner.getName() + "! Congratulations!";
-                return new GameEvent(GameEvent.GameEventType.GAME_ENDED, message);
+                if(roundWinner.size() == 1 && gameWinner.size() == 1){
+                    String message = "This round has ended. The winner is " + roundWinner.get(0).getName() + "!\n"
+                            + "This game has ended. The winner is " + gameWinner.get(0).getName() + "! Congratulations!";
+                    return new GameEvent(GameEvent.GameEventType.GAME_ENDED, message);
+                }else if(roundWinner.size() > 1 && gameWinner.size() == 1){
+                    String message = "This round has ended. The winner is " + roundWinner.get(0).getName() + " and " + roundWinner.get(1).getName() +"!\n"
+                            + "This game has ended. The winner is " + gameWinner.get(0).getName() + "! Congratulations!";
+                    return new GameEvent(GameEvent.GameEventType.GAME_ENDED, message);
+                }else{
+                    String message = "This round has ended. The winner is " + roundWinner.get(0).getName() + " and " + roundWinner.get(1).getName() +"!\n"
+                            + "This game has ended. The winners are " + gameWinner.get(0).getName() + " and " + gameWinner.get(1).getName() + "! Congratulations!";
+                    return new GameEvent(GameEvent.GameEventType.GAME_ENDED, message);
+                }
             } else {
                 // Next round can begin
-                return new GameEvent(GameEvent.GameEventType.ROUND_ENDED, "This round has ended. The winner is " +
-                        roundWinner.getName() + "!");
+                if(roundWinner.size() == 1){
+                    return new GameEvent(GameEvent.GameEventType.ROUND_ENDED, "This round has ended. The winner is " +
+                            roundWinner.get(0).getName() + "!");
+                }else{
+                    return new GameEvent(GameEvent.GameEventType.ROUND_ENDED, "This round has ended. The winners are " +
+                        roundWinner.get(0).getName() + " and " + roundWinner.get(1).getName() + "!");
+
+                }
+
             }
         } else {
             // ROUND IS NOT YET OVER
             return new GameEvent(GameEvent.GameEventType.TURN_ENDED, "The turn of " +
                     playersInRound.get(currentPlayer++).getName() + " ended!");
         }
+
     }
 
     private User getCurrentPlayer() {
@@ -178,26 +332,44 @@ public class Game {
         playersInRound.remove(player);
     }
 
-    private Player findRoundWinner() {
+    private ArrayList<Player>  findRoundWinner(ArrayList <Player> roundWinner) {
+        roundWinner = new ArrayList<>();
         if (playersInRound.size() == 1) {
-            return playersInRound.get(0);
-        } else {
+            roundWinner.add(playersInRound.get(0));
+        } else if (deck.size() == 0 && playersInRound.size() >= 2) {
+            if (playersInRound.get(0).getCard1().getCardPoints() > playersInRound.get(1).getCard1().getCardPoints()) {
+                roundWinner.add(playersInRound.get(0));
+            } else if (playersInRound.get(0).getCard1().getCardPoints() < playersInRound.get(1).getCard1().getCardPoints()) {
+                roundWinner.add(playersInRound.get(1));
+            } else {
+                if (playersInRound.get(0).discardedPoints(playersInRound.get(0).discarded) > playersInRound.get(1).discardedPoints(playersInRound.get(1).discarded)) {
+                    roundWinner.add(playersInRound.get(0));
+                } else if (playersInRound.get(0).discardedPoints(playersInRound.get(0).discarded) < playersInRound.get(1).discardedPoints(playersInRound.get(1).discarded)) {
+                    roundWinner.add(playersInRound.get(1));
+                }
+                else{
+                    roundWinner.add(playersInRound.get(0));
+                    roundWinner.add(playersInRound.get(1));
+                    }
+                }
             // TODO: Find the winner if the deck is empty and there are at least 2 players still in the round
-            return null;
+
         }
+        return roundWinner;
     }
 
-    private Player findGameWinner() {
-        for (Player player: playersInGame) {
-            if (playersInGame.size() == 4 && player.getScore() >= 4) {
-                return player;
-            }else if(playersInGame.size() == 3 && player.getScore() >= 5){
-                return player;
-            }else if (playersInGame.size() == 2 && player.getScore() >= 7){
-                return player;
+        private ArrayList<Player> findGameWinner (ArrayList <Player> gameWinner) {
+            for (Player player : playersInGame) {
+                if (playersInGame.size() == 4 && player.getScore() >= 4) {
+                    gameWinner.add(player);
+                } else if (playersInGame.size() == 3 && player.getScore() >= 5) {
+                    gameWinner.add(player);
+                } else if (playersInGame.size() == 2 && player.getScore() >= 7) {
+                    gameWinner.add(player);
+                }
             }
+            return gameWinner;
         }
-        return null;
     }
 
     public static void initializePlayerOption(){
