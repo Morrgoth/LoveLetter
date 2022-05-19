@@ -29,5 +29,4 @@ public class Handmaid extends Cards {
         sourcePlayer.setImmune(true);
         return handmaidEvent;
     }
-
 }

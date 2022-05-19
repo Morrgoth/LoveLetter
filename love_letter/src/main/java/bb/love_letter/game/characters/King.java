@@ -37,5 +37,4 @@ public class King extends Cards {
                 " discarded the King and targeted " + targetPlayer.getName());
         return swapCard;
     }
-
 }

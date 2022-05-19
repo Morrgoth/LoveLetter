@@ -2,7 +2,6 @@ package bb.love_letter.game;
 
 import bb.love_letter.game.characters.*;
 
-import java.time.temporal.ValueRange;
 import java.util.ArrayList;
 
 import static bb.love_letter.game.GameEvent.GameEventType.CARD_EFFECT;
