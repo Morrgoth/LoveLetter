@@ -12,17 +12,17 @@ import bb.love_letter.game.Player;
     If the chosen player's hand contains that card, that player is eliminated from the round.
  */
 public class Guard  extends Cards {
-    private String name = "Guard";
+    private static String name = "Guard";
     private final int cardPoints = 1;
-    private String cardAction = "Choose a player and a specific card. If you're right and it's his in his hand, this player is terminated for the Round.";
+    private static String cardAction = "Choose a player and a specific card. If you're right and it's his in his hand, this player is terminated for the Round.";
 
     @Override
-    public String getCardName() {
+    public static String getCardName() {
         return name;
     }
 
-    @Override
-    public String getCardAction() {
+
+    public static String getCardAction() {
         return cardAction;
     }
 

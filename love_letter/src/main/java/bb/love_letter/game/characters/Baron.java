@@ -14,15 +14,14 @@ import bb.love_letter.game.Player;
 public class Baron extends Cards {
     private final String name = "Baron";
     private final int cardPoints = 3;
-    private final String cardAction = "Compare Hands privately.Card with lower value is eliminated";
+    private static final String cardAction = "Compare Hands privately.Card with lower value is eliminated";
 
     @Override
     public String getCardName() {
         return name;
     }
 
-    @Override
-    public String getCardAction() {
+    public static String getCardAction() {
         return cardAction;
     }
 

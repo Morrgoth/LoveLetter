@@ -12,15 +12,15 @@ public class King extends Cards {
 
     private String name = "King";
     private final int cardPoints = 6;
-    private String cardAction = "Trade hands with another player.";
+    private static String cardAction = "Trade hands with another player.";
 
     @Override
     public String getCardName() {
         return name;
     }
 
-    @Override
-    public String getCardAction() {
+
+    public static String getCardAction() {
         return cardAction;
     }
 

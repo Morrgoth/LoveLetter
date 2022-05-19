@@ -6,13 +6,11 @@ package bb.love_letter.game.characters;
     If the player plays or discards this card for any reason, they are eliminated from the round.
  */
 
-import bb.love_letter.game.GameApplication;
-
 public class Princess extends Cards{
 
     private final String name = "Princess";
     private final int cardPoints = 8;
-    private final String cardAction = "Lose if discarded.";
+    private static final String cardAction = "Lose if discarded.";
 
 
     @Override
@@ -20,8 +18,8 @@ public class Princess extends Cards{
         return name;
     }
 
-    @Override
-    public String getCardAction() {
+
+    public static String getCardAction() {
         return cardAction;
     }
 

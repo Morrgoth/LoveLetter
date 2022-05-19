@@ -50,8 +50,12 @@ public class GameEvent {
         PLAYERELIMINATED,
         PLAYERIMMUNE,
         INVALIDCHOICE,
-        GAMEFINISHED
-
+        GAMEFINISHED,
+        POSTHELP,
+        POSTSCORE,
+        POSTHISTORY,
+        POSTCARDS,
+        POSTMETHODS
     }
 
     public GameEventType getGameEventType() {

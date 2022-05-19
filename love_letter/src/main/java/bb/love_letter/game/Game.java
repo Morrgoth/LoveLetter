@@ -26,6 +26,7 @@ public class Game {
     public static ArrayList<Player> playerOption = new ArrayList<>();
     //list of current players still in the round
     static ArrayList<Player> playersInGame = new ArrayList<>();
+
     public static HashMap<String, Integer> playerScores = new HashMap<String, Integer>();
 
     public Game() {
@@ -68,7 +69,7 @@ public class Game {
             isGameStarted = false;
             isRoundOver = true;
             isTurnOver = true;
-            return new GameEvent(GameEvent.GameEventType.GAME_INITIALIZED); // TODO: print the available commands
+            return new GameEvent(GameEvent.GameEventType.GAME_INITIALIZED,"Print #help to see more information."); // TODO: print the available commands
         } else {
             return new GameEvent(GameEvent.GameEventType.ERROR, "A Game is already active, wait for it to finish!");
         }
@@ -136,6 +137,25 @@ public class Game {
                 ".\n The effect of the card is: " + card.getCardAction() + "\n Your current hand is: \n" +
                 player.printHand() + ".\n The effect of the card is: " + player.getCard1().getCardAction(), player));
         return gameEvents;
+    }
+
+    //später nach Server schieben damit es direkt die userCommand aus dem chat holen kann
+    public final GameEvent infoPost (String userCommand){
+        try {
+            switch (userCommand) {
+                case "#help":
+                    return new GameEvent(GameEvent.GameEventType.POSTHELP, "Print the following commands to receive further information:\n #score: see the current player scores. \n #cards: get information, about the distinct card effects.\n #history: see what cards have been played in this round.");
+                case "#score":
+                    return new GameEvent(GameEvent.GameEventType.POSTSCORE, " " + playerScores);
+                case "#cards":
+                    return new GameEvent(GameEvent.GameEventType.POSTCARDS,"Guard: " + Guard.getCardAction()\n "Priest: " + Priest.getCardAction()\n "Baron: " + Baron.getCardAction()\n "Handmaid: " +Handmaid.getCardAction()\n"Prince: " + Prince.getCardAction()\n "King: " +King.getCardAction()\n "Countess: " +Countess.getCardAction()\n"Prince: " + Cards.getCardAction());
+                case "#history":
+                    return new GameEvent(GameEvent.GameEventType.POSTHISTORY, " " + history);
+            }
+        }catch (NullPointerException e)
+            {
+                System.out.print("Not a valid command.");
+            }
     }
 
     public ArrayList<GameEvent> playCard(User user, GameAction action) {

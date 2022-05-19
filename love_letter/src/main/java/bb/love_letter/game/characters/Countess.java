@@ -11,15 +11,15 @@ package bb.love_letter.game.characters;
 public class Countess extends Cards {
     private String name = "Countess";
     private final int cardPoints = 7;
-    private String cardAction = "Play out if either King or Prince in hand.";
+    private static String cardAction = "Play out if either King or Prince in hand.";
 
     @Override
     public String getCardName() {
         return name;
     }
 
-    @Override
-    public String getCardAction() {
+
+    public static String getCardAction() {
         return cardAction;
     }
 

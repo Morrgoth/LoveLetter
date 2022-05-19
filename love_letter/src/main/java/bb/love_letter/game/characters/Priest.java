@@ -16,15 +16,15 @@ public class Priest extends Cards{
 
     private String name = "Priest";
     private final int cardPoints = 2;
-    private String cardAction = "Look at a player's hand in private.";
+    private static String cardAction = "Look at a player's hand in private.";
 
     @Override
     public String getCardName() {
         return name;
     }
 
-    @Override
-    public String getCardAction() {
+
+    public static String getCardAction() {
         return cardAction;
     }
 

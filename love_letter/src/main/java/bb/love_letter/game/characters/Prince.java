@@ -11,7 +11,7 @@ public class Prince extends Cards{
 
     private final String name = "Prince";
     private final int cardPoints = 5;
-    private final String cardAction = "Choose a player. They discard their hand and draw a new card.";
+    private static final String cardAction = "Choose a player. They discard their hand and draw a new card.";
 
 
     @Override
@@ -19,8 +19,8 @@ public class Prince extends Cards{
         return name;
     }
 
-    @Override
-    public String getCardAction() {
+
+    public static String getCardAction() {
         return cardAction;
     }
 
