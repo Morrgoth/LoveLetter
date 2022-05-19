@@ -10,7 +10,7 @@ import bb.love_letter.game.Player;
  */
 public class King extends Cards {
 
-    private String name = "KING";
+    private String name = "King";
     private final int cardPoints = 6;
     private String cardAction = "Trade hands with another player.";
 

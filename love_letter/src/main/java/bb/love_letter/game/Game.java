@@ -174,35 +174,37 @@ public class Game {
                         }else if(card1 instanceof Priest){
                             if(targetPlayer == null){
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
-                                        "Please choose a (valid) target player."));
+                                        "Please choose a (valid) target player.", player));
                             }else{
                                 discardCard(1, player);
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
+                                        " discarded the Priest, and targeted " + targetPlayer.getName()));
                                 gameEvents.add(((Priest) card1).usePriest(player, targetPlayer));
-                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName()
-                                        + " discarded PRIEST and saw the hand of " + targetPlayer.getName()));
                             }
                         }
                     }
                     break;
 
                 case 2:
-                    Cards card2 = player.getCard2();
+                    Cards card2 = player.getCard1();
                     //Check if the card is PRINCESS
                     if(checkIfPrincess(card2)){
                         discardCard(2, player);
-                        gameEvents.add(new GameEvent(GameEvent.GameEventType.CARD_EFFECT, player.getName() + " discarded PRINCESS."));
+                        gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
+                                " discarded the Princess and was eliminated."));
                         player.setInGame(false);
-                        gameEvents.add(new GameEvent(GameEvent.GameEventType.PLAYERELIMINATED, player.getName()
-                                + " is out because of discarding the PRINCESS."));
                     }//Check if the player has COUNTESS and PRINCE or KING at the same time
                     else if(checkIfCountess(player.getCard1(), player.getCard2())){
                         if(card2 instanceof Countess){
                             discardCard(2, player);
-                            gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() + " discarded COUNTESS."));
+                            gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName()
+                                    + " discarded the Countess."));
                         }else{
-                            gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "You can only discard COUNTESS.", player));
+                            gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                    "You can only discard COUNTESS.", player));
                             discardCard(1, player);
-                            gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() + " discarded COUNTESS."));
+                            gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION,
+                                    player.getName() + " discarded the Countess."));
                         }
                     }//Exclude the effect of COUNTESS and PRINCESS
                     else{
@@ -215,17 +217,15 @@ public class Game {
                         if(card2 instanceof Baron){
                             if(targetPlayer == null){
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
-                                        "Please choose a (valid) target player."));
+                                        "Please choose a (valid) target player.", player));
                             }else{
                                 discardCard(2, player);
-                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION,
-                                        player.getName() + " discarded BARON."));
                                 gameEvents.add(((Baron) card2).useBaron(player, targetPlayer));
                             }
                         }else if(card2 instanceof Guard){
                             if(targetPlayer == null){
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
-                                        "Please choose a (valid) target player."));
+                                        "Please choose a (valid) target player.", player));
                             }else{
                                 discardCard(2, player);
                                 gameEvents.add(((Guard) card2).useGuard(player, targetPlayer, action.getGuess()));
@@ -236,35 +236,35 @@ public class Game {
                         }else if(card2 instanceof King){
                             if(targetPlayer == null){
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
-                                        "Please choose a (valid) target player."));
+                                        "Please choose a (valid) target player.", player));
                             }else{
                                 discardCard(2, player);
                                 gameEvents.add(((King) card2).useKing(player, targetPlayer));
-                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, "You get the card "
-                                        + player.getCard1().getCardName() + " from " + targetPlayer.getName()));
-                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, "You get the card "
-                                        + targetPlayer.getCard1().getCardName() + " from " + player.getName()));
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.CARD_EFFECT, "You switched hands with " +
+                                        targetPlayer.getName() + ", you got a " + player.getCard1().getCardName(), player));
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.CARD_EFFECT, "You switched hands with " +
+                                        player.getName() + ", you got a " + targetPlayer.getCard1().getCardName(), targetPlayer));
                             }
                         }else if(card2 instanceof Prince){
                             if(targetPlayer == null){
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
-                                        "Please choose a (valid) target player."));
+                                        "Please choose a (valid) target player.", player));
                             }else{
                                 discardCard(2, player);
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
-                                        " discarded PRINCE on " + targetPlayer.getName() + "."));
+                                        " discarded the Prince and targeted " + targetPlayer.getName()));
                                 gameEvents.add(usePrince(player, targetPlayer, deck));
                             }
 
                         }else if(card2 instanceof Priest){
                             if(targetPlayer == null){
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
-                                        "Please choose a (valid) target player."));
+                                        "Please choose a (valid) target player.", player));
                             }else{
                                 discardCard(2, player);
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
+                                        " discarded the Priest, and targeted " + targetPlayer.getName()));
                                 gameEvents.add(((Priest) card2).usePriest(player, targetPlayer));
-                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName()
-                                        + " discarded PRIEST and saw the hand of " + targetPlayer.getName()));
                             }
                         }
                     }

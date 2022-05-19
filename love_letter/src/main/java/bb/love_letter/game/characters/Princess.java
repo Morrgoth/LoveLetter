@@ -10,7 +10,7 @@ import bb.love_letter.game.GameApplication;
 
 public class Princess extends Cards{
 
-    private final String name = "PRINCESS";
+    private final String name = "Princess";
     private final int cardPoints = 8;
     private final String cardAction = "Lose if discarded.";
 

@@ -14,7 +14,7 @@ import static bb.love_letter.game.GameEvent.GameEventType.*;
 
 public class Priest extends Cards{
 
-    private String name = "PRIEST";
+    private String name = "Priest";
     private final int cardPoints = 2;
     private String cardAction = "Look at a player's hand in private.";
 
@@ -34,8 +34,8 @@ public class Priest extends Cards{
     }
 
     public GameEvent usePriest(Player sourcePlayer, Player targetPlayer){
-        GameEvent showCard = new GameEvent(CARD_EFFECT, "The hand of " + targetPlayer.getName() + " is " +
-                targetPlayer.getCard1().getCardName() + ".", sourcePlayer);
+        GameEvent showCard = new GameEvent(CARD_EFFECT,  targetPlayer.getName() + " has a " +
+                targetPlayer.getCard1().getCardName(), sourcePlayer);
         return showCard;
     }
 }
