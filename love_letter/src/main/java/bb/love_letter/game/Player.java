@@ -121,25 +121,12 @@ public class Player extends User {
 
         //check for COUNTESS
         if (card1.getCardName().equals("COUNTESS") && (card2.getCardName().equals("PRINCE") || card2.getCardName().equals("KING"))) {
-            GameEvent countessEvent = new GameEvent(GameEvent.GameEventType.PLAYERIMMUNE);
-            countessEvent.changeState(GameEvent.GameEventType.COUNTESSACTION);
-
-            GameApplication.history.add(card1);
-            discarded.add(card1);
-            setCard1(null);
             return true;
-        } else if (card2.getCardName().equals("COUNTESS") && (card1.getCardName().equals("PRINCE") || card1.getCardName().equals("KING"))) {
-            GameEvent countessEvent = new GameEvent(GameEvent.GameEventType.PLAYERIMMUNE);
-            countessEvent.changeState(GameEvent.GameEventType.COUNTESSACTION);
-
-            GameApplication.history.add(card2);
-            discarded.add(card2);
-            setCard2(null);
+        }else if (card2.getCardName().equals("COUNTESS") && (card1.getCardName().equals("PRINCE") || card1.getCardName().equals("KING"))) {
             return true;
         } else {
             return false;
         }
-
     }
 
     public boolean checkIfPrincess(Cards card) {
@@ -152,28 +139,23 @@ public class Player extends User {
 
     //discard a Card during each round
     public void discardCard(int cardNumber) {
-        GameEvent gameEvent = new GameEvent(GameEvent.GameEventType.PLAYERIMMUNE);
         switch (cardNumber) {
             case 1:
-                GameApplication.history.add(card1);
+                Game.history.add(card1);
                 discarded.add(card1);
                 setCard1(card2);
                 setCard2(null);
-                //gameEvent.setMessage("You chose Card 1");
-                gameEvent.changeState(DISCARDSUCCESSFULL);
-
                 break;
 
             case 2:
-                GameApplication.history.add(card2);
+                Game.history.add(card2);
                 discarded.add(card2);
                 setCard2(null);
-                gameEvent.changeState(DISCARDSUCCESSFULL);;
                 break;
+
             default:
-                gameEvent.changeState(NOSUCHCARDINHAND);
+                break;
         }
-        //return gameEvent;
     }
 
 /*
