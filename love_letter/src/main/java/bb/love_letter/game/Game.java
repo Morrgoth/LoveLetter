@@ -3,8 +3,10 @@ package bb.love_letter.game;
 import bb.love_letter.game.characters.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static bb.love_letter.game.GameEvent.GameEventType.CARD_EFFECT;
+import static bb.love_letter.game.GameEvent.GameEventType.GAMEISREADY;
 
 public class Game {
     private Deck deck;
@@ -23,6 +25,8 @@ public class Game {
     //list of players in the round that are not immune and can be choosen for a cardEffect
     public static ArrayList<Player> playerOption = new ArrayList<>();
     //list of current players still in the round
+    static ArrayList<Player> playersInGame = new ArrayList<>();
+    public static HashMap<String, Integer> playerScores = new HashMap<String, Integer>();
 
     public Game() {
         deck = new Deck();
@@ -31,6 +35,31 @@ public class Game {
         isGameStarted = true;
     }
 
+    private void withdrawFirstCards(Deck deck){
+        GameEvent stateFirstCards = new GameEvent(GameEvent.GameEventType.PLAYERIMMUNE);
+        //When there are 2 players, 4 cards out of the deck and last 3 cards from them should be seen by all
+        if(playersInGame.size() == 2){
+            for(int i = 0; i<4; i++){
+                if(i > 0){
+                    stateFirstCards.changeState(GAMEISREADY);
+                }
+                //The removed card is added to the history
+                history.add(deck.getDeck().get(0));
+                deck.getDeck().remove(0);
+            }
+        }//When there are more than 2 players, only 1 card is out, and it shouldn't be seen
+        else if(playersInGame.size() == 3 || playersInGame.size() == 4){
+            history.add(deck.getDeck().get(0));
+            deck.getDeck().remove(0);
+
+        }
+
+        //Players get the first card in the beginning
+        for(int i = 0; i< playersInGame.size(); i++){
+            playersInGame.get(i).setCard1(deck.getDeck().get(0));
+            deck.getDeck().remove(0);
+        }
+    }
     public GameEvent init() {
         if (isGameOver && isGameStarted) {
             deck.reset();

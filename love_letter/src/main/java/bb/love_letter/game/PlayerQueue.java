@@ -21,7 +21,7 @@ public class PlayerQueue {
             return new GameEvent(GameEvent.GameEventType.ERROR, "The Game is already full! You cannot join.");
         }
     }
-
+/*
     public int getPlayerCount() {
         return players.size();
     }
@@ -35,7 +35,7 @@ public class PlayerQueue {
         }
         return uneliminatedPlayerCount;
     }
-
+*/
     public void resetRound() {
         for (Player player: players) {
             player.setCard1(null);
