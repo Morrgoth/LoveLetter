@@ -1,9 +1,6 @@
 package bb.love_letter.game;
 
-import bb.love_letter.game.characters.Baron;
-import bb.love_letter.game.characters.Cards;
-import bb.love_letter.game.characters.Countess;
-import bb.love_letter.game.characters.Guard;
+import bb.love_letter.game.characters.*;
 
 import java.util.ArrayList;
 
@@ -86,7 +83,8 @@ public class Game {
         gameEvents.add(new GameEvent(GameEvent.GameEventType.TURN_STARTED, "The turn of " + player.getName()
                 + " started!"));
         gameEvents.add(new GameEvent(GameEvent.GameEventType.CARD_ADDED, "You drew a " + card.getCardName() +
-                ".\n Your current hand is: \n" + player.printHand(), player));
+                ".\n The effect of the card is: " + card.getCardAction() + "\n Your current hand is: \n" +
+                player.printHand() + ".\n The effect of the card is: " + player.getCard1().getCardAction(), player));
         return gameEvents;
     }
 
@@ -94,42 +92,171 @@ public class Game {
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
         if (getCurrentPlayer().equals(user)) {
             Player player = playersInRound.get(currentPlayer);
-            // TODO: Countess check - Anti-cheat clause -> automatically returns VALID_ACTION
             switch(action.getCardIndex()){
                 case 1:
                     Cards card1 = player.getCard1();
-                    //Firstly, check if it is the effect of COUNTESS
-                    if(player.checkIfCountess(player.getCard1(), player.getCard2())){
+                    //Check if the card is PRINCESS
+                    if(player.checkIfPrincess(card1)){
+                        player.discardCard(1);
+                        gameEvents.add(new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, player.getName() + " discarded PRINCESS."));
+                        player.setInGame(false);
+                        gameEvents.add(new GameEvent(GameEvent.GameEventType.PLAYERELIMINATED, player.getName()
+                                + " is out because of discarding the PRINCESS."));
+                    }//Check if the player has COUNTESS and PRINCE or KING at the same time
+                    else if(player.checkIfCountess(player.getCard1(), player.getCard2())){
                         if(card1 instanceof Countess){
                             player.discardCard(1);
-                            gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() + " discarded " + player.getCard1().getCardName() + "."));
+                            gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() + " discarded COUNTESS."));
                         }else{
                             gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "You can only discard COUNTESS.", player));
                             player.discardCard(2);
+                            gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() + " discarded COUNTESS."));
                         }
-                    }//Exclude the effect of COUNTESS
+                    }//Exclude the effect of COUNTESS and PRINCESS
                     else{
                         Player targetPlayer = null;
-                        if(card1 instanceof Baron){
-                            for(Player target: playersInRound){
-                                if(target.getName().equals(action.getTarget())){
-                                    targetPlayer = target;
-                                }
+                        for(Player target: playersInRound){
+                            if(target.getName().equalsIgnoreCase(action.getTarget()) && !target.getImmune()){
+                                targetPlayer = target;
                             }
+                        }
+                        if(card1 instanceof Baron){
                             if(targetPlayer == null){
-                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "Please choose a target player."));
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
                             }else{
-                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() + " discarded " + player.getCard1().getCardName() + "."));
+                                player.discardCard(1);
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION,
+                                        player.getName() + " discarded BARON."));
                                 gameEvents.add(((Baron) card1).useBaron(player, targetPlayer));
                             }
                         }else if(card1 instanceof Guard){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                //TODO:fill Guard effect
+                            }
+                        }else if(card1 instanceof Handmaid){
+                            player.discardCard(1);
+                            gameEvents.add(((Handmaid) card1).useHandmaid(player));
+                        }else if(card1 instanceof King){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                player.discardCard(1);
+                                gameEvents.add(((King) card1).useKing(player, targetPlayer));
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, "You get the card "
+                                        + player.getCard1().getCardName() + " from " + targetPlayer.getName()));
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, "You get the card "
+                                        + targetPlayer.getCard1().getCardName() + " from " + player.getName()));
+                            }
+                        }else if(card1 instanceof Prince){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                //TODO:fill Prince effect
+                            }
 
+                        }else if(card1 instanceof Priest){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                player.discardCard(1);
+                                gameEvents.add(((Priest) card1).usePriest(player, targetPlayer));
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName()
+                                        + " discarded PRIEST and saw the hand of " + targetPlayer.getName()));
+                            }
                         }
                     }
-            }
+                    break;
 
-            // TODO: Check if the action is valid or invalid -> return either VALID_ACTION or INVALID_ACTION, if valid change the game state and apply effects
-            return null;
+                case 2:
+                    Cards card2 = player.getCard2();
+                    //Check if the card is PRINCESS
+                    if(player.checkIfPrincess(card2)){
+                        player.discardCard(2);
+                        gameEvents.add(new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, player.getName() + " discarded PRINCESS."));
+                        player.setInGame(false);
+                        gameEvents.add(new GameEvent(GameEvent.GameEventType.PLAYERELIMINATED, player.getName()
+                                + " is out because of discarding the PRINCESS."));
+                    }//Check if the player has COUNTESS and PRINCE or KING at the same time
+                    else if(player.checkIfCountess(player.getCard1(), player.getCard2())){
+                        if(card2 instanceof Countess){
+                            player.discardCard(2);
+                            gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() + " discarded COUNTESS."));
+                        }else{
+                            gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "You can only discard COUNTESS.", player));
+                            player.discardCard(1);
+                            gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() + " discarded COUNTESS."));
+                        }
+                    }//Exclude the effect of COUNTESS and PRINCESS
+                    else{
+                        Player targetPlayer = null;
+                        for(Player target: playersInRound){
+                            if(target.getName().equalsIgnoreCase(action.getTarget()) && !target.getImmune()){
+                                targetPlayer = target;
+                            }
+                        }
+                        if(card2 instanceof Baron){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                player.discardCard(2);
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION,
+                                        player.getName() + " discarded BARON."));
+                                gameEvents.add(((Baron) card2).useBaron(player, targetPlayer));
+                            }
+                        }else if(card2 instanceof Guard){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                //TODO:fill Guard effect
+                            }
+                        }else if(card2 instanceof Handmaid){
+                            player.discardCard(2);
+                            gameEvents.add(((Handmaid) card2).useHandmaid(player));
+                        }else if(card2 instanceof King){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                player.discardCard(2);
+                                gameEvents.add(((King) card2).useKing(player, targetPlayer));
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, "You get the card "
+                                        + player.getCard1().getCardName() + " from " + targetPlayer.getName()));
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, "You get the card "
+                                        + targetPlayer.getCard1().getCardName() + " from " + player.getName()));
+                            }
+                        }else if(card2 instanceof Prince){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                //TODO:fill Prince effect
+                            }
+
+                        }else if(card2 instanceof Priest){
+                            if(targetPlayer == null){
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
+                                        "Please choose a (valid) target player."));
+                            }else{
+                                player.discardCard(2);
+                                gameEvents.add(((Priest) card2).usePriest(player, targetPlayer));
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName()
+                                        + " discarded PRIEST and saw the hand of " + targetPlayer.getName()));
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "Please enter a (valid) card index: 1 or 2.", player));
+            }
         } else {
             gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "It is not your turn. It is the turn of " +
                     playersInRound.get(currentPlayer) + "!", user));
