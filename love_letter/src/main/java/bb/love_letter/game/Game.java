@@ -16,6 +16,7 @@ public class Game {
     private boolean isGameStarted;
     private boolean isGameOver;
     private boolean isRoundOver;
+    private boolean isTurnOver;
 
     //list of all cards played in the round
     public static ArrayList<Cards> history;
@@ -25,25 +26,19 @@ public class Game {
 
     public Game() {
         deck = new Deck();
-        playersInGame = new ArrayList<>();
-        playersInRound = new ArrayList<>();
-        roundWinner = null;
-        gameWinner = null;
-        isGameOver = false;
-        isGameStarted = false;
-        isRoundOver = false;
+        playerQueue = new PlayerQueue();
+        isGameOver = true;
+        isGameStarted = true;
     }
 
     public GameEvent init() {
         if (isGameOver && isGameStarted) {
             deck.reset();
-            playersInGame.clear();
-            playersInRound.clear();
-            roundWinner = null;
-            gameWinner = null;
+            playerQueue.clear();
             isGameOver = false;
             isGameStarted = false;
-            isRoundOver = false;
+            isRoundOver = true;
+            isTurnOver = true;
             return new GameEvent(GameEvent.GameEventType.GAME_INITIALIZED); // TODO: print the available commands
         } else {
             return new GameEvent(GameEvent.GameEventType.ERROR, "A Game is already active, wait for it to finish!");
@@ -54,29 +49,49 @@ public class Game {
         if (isGameStarted) {
             return new GameEvent(GameEvent.GameEventType.ERROR, "The Game has already started! Wait for the next" +
                     " game to start.");
-        } else if (playersInGame.size() >= 4) {
-            return new GameEvent(GameEvent.GameEventType.ERROR, "The Game is already full! You cannot join.");
         } else {
-            playersInGame.add((new Player(user)));
-            return new GameEvent(GameEvent.GameEventType.PLAYER_ADDED, user.getName() + " has joined the Game!");
+            return playerQueue.addPlayer(user);
         }
     }
 
     public GameEvent startGame() {
-        isGameStarted = true;
-        return new GameEvent(GameEvent.GameEventType.GAME_STARTED, "A new game has started!");
+        if (!isGameStarted) {
+            if (playerQueue.getPlayerCount() >= 2) {
+                isGameStarted = true;
+                return new GameEvent(GameEvent.GameEventType.GAME_STARTED, "A new game has started!");
+            } else {
+                return new GameEvent(GameEvent.GameEventType.ERROR, "At least 2 Players must be in the lobby " +
+                        "for the game to start!");
+            }
+        } else {
+            return new GameEvent(GameEvent.GameEventType.ERROR, "A Game has already started, wait for it to end!");
+        }
     }
 
-    public GameEvent startRound() {
+    public ArrayList<GameEvent> startRound() {
+        ArrayList<GameEvent> gameEvents = new ArrayList<>();
         if (isRoundOver) {
+            isRoundOver = false;
             deck.reset();
-            playersInRound.clear();
-            playersInRound.addAll(playersInGame);
-            currentPlayer = 0;
-            return new GameEvent(GameEvent.GameEventType.ROUND_STARTED, "A new round has started!");
+            playerQueue.resetRound();
+            Cards removedCard = deck.draw();
+            if (playerQueue.getPlayerCount() == 2) {
+                Cards extraDiscraded1 = deck.draw();
+                Cards extraDiscarded2 = deck.draw();
+                Cards extraDiscarded3 = deck.draw();
+                GameEvent discardNotification = new GameEvent(GameEvent.GameEventType.DISCARD_NOTIFICATION, "The" +
+                        " following cards were removed from the deck: " + extraDiscraded1.getCardName() + ", "
+                        + extraDiscarded2.getCardName() + ", " + extraDiscarded3.getCardName());
+                gameEvents.add(discardNotification);
+            }
+            for (Player player: playerQueue.getPlayers()) {
+                player.addCard(deck.draw());
+            }
+            gameEvents.add(new GameEvent(GameEvent.GameEventType.ROUND_STARTED, "A new round has started!"));
         } else {
-            return new GameEvent(GameEvent.GameEventType.ERROR, "The current round hasn't ended yet!");
+            gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "The current round hasn't ended yet!"));
         }
+        return gameEvents;
     }
 
     public ArrayList<GameEvent> startTurn() {
@@ -273,9 +288,16 @@ public class Game {
             }
         } else {
             gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "It is not your turn. It is the turn of " +
-                    playersInRound.get(currentPlayer) + "!", user));
+                    playerQueue.getCurrentPlayer() + "!", user));
         }
         return gameEvents;
+    }
+
+    /**
+     * This method is to be called in each successful playCard() call, it is public for testing purposes
+     */
+    public void endTurn() {
+        isTurnOver = true;
     }
 
     public GameEvent finishTurn() {
@@ -314,22 +336,18 @@ public class Game {
 
             }
         } else {
-            // ROUND IS NOT YET OVER
-            return new GameEvent(GameEvent.GameEventType.TURN_ENDED, "The turn of " +
-                    playersInRound.get(currentPlayer++).getName() + " ended!");
+            return new GameEvent(GameEvent.GameEventType.ERROR, "The current player ("
+                    + player.getName() + ") hasn't discarded their card, yet!");
         }
 
     }
 
-    private User getCurrentPlayer() {
-        return (User) playersInRound.get(currentPlayer);
-    }
-
-    private void eliminatePlayer(Player player) {
-        if (player.equals(playersInRound.get(currentPlayer))) {
-            currentPlayer -= 1;
-        }
-        playersInRound.remove(player);
+    /**
+     * Used for testing purposes
+     * @return
+     */
+    public Deck getDeck() {
+        return deck;
     }
 
     private ArrayList<Player>  findRoundWinner(ArrayList <Player> roundWinner) {

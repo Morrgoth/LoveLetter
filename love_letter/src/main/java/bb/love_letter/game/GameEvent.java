@@ -20,6 +20,15 @@ public class GameEvent {
         this.message = message;
         this.target = target;
     }
+
+    public User getTarget() {
+        return target;
+    }
+
+    public void setTarget(User target) {
+        this.target = target;
+    }
+
     public enum GameEventType{
         GAME_INITIALIZED,
         GAME_STARTED,
@@ -27,6 +36,7 @@ public class GameEvent {
         PLAYER_ADDED,
         ROUND_STARTED,
         ROUND_ENDED,
+        DISCARD_NOTIFICATION,
         TURN_STARTED,
         CARD_ADDED,
         VALID_ACTION,
@@ -44,7 +54,13 @@ public class GameEvent {
 
     }
 
+    public GameEventType getGameEventType() {
+        return gameEventType;
+    }
 
+    public String getMessage() {
+        return message;
+    }
 
     public void changeState (GameEventType newState){
         GameEventType currentStateType = newState;
