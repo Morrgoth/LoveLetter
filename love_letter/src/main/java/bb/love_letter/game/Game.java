@@ -21,7 +21,6 @@ public class Game {
     //list of players in the round that are not immune and can be choosen for a cardEffect
     public static ArrayList<Player> playerOption = new ArrayList<>();
     //list of current players still in the round
-    public static ArrayList<Player> playersInRound = new ArrayList<>();
 
     public Game() {
         deck = new Deck();
@@ -358,18 +357,17 @@ public class Game {
         return roundWinner;
     }
 
-        private ArrayList<Player> findGameWinner (ArrayList <Player> gameWinner) {
-            for (Player player : playersInGame) {
-                if (playersInGame.size() == 4 && player.getScore() >= 4) {
-                    gameWinner.add(player);
-                } else if (playersInGame.size() == 3 && player.getScore() >= 5) {
-                    gameWinner.add(player);
-                } else if (playersInGame.size() == 2 && player.getScore() >= 7) {
-                    gameWinner.add(player);
-                }
+    private ArrayList<Player> findGameWinner (ArrayList <Player> gameWinner) {
+        for (Player player : playersInGame) {
+            if (playersInGame.size() == 4 && player.getScore() >= 4) {
+                gameWinner.add(player);
+            } else if (playersInGame.size() == 3 && player.getScore() >= 5) {
+                gameWinner.add(player);
+            } else if (playersInGame.size() == 2 && player.getScore() >= 7) {
+                gameWinner.add(player);
             }
-            return gameWinner;
         }
+        return gameWinner;
     }
 
     public static void initializePlayerOption(){
