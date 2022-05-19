@@ -53,24 +53,7 @@ public class Guard  extends Cards {
         return  chosenCard;
     }
 
-    public void useGuard(Player chosenPlayer, String chosenCard){
-        //how to set player1? and how to set it automatically during the game?
-
-        //1.player1 chooses player2
-        //      Player.choosePlayer();
-
-        //choose card to guess
-        //  Guard.guessCard();
-
-        //compare name, if correct: terminate Round for player;
-        //else do nothing;
-        GameEvent guardEvent = new GameEvent(GameEvent.GameEventType.PLAYERIMMUNE);
-        guardEvent.changeState(GameEvent.GameEventType.GUARDACTION);
-
-        if (chosenPlayer.getCard1().getCardName().equals(chosenCard)) {
-            GameApplication.playersInRound.remove(chosenPlayer);
-            chosenPlayer.setInGame(false);
-            guardEvent.changeState(GameEvent.GameEventType.PLAYERELIMINATED);
-        }
+    public GameEvent useGuard(Player sourcePlayer, Player chosenPlayer, String chosenCard){
+        return null;
     }
 }
