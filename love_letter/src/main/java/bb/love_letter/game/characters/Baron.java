@@ -1,5 +1,6 @@
 package bb.love_letter.game.characters;
 
+import bb.love_letter.game.Game;
 import bb.love_letter.game.GameApplication;
 import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
@@ -45,16 +46,16 @@ public class Baron extends Cards {
         int targetCardValue = targetPlayerCard1.getCardPoints();
 
         if (sourceCardValue > targetCardValue) {
-            GameApplication.history.add(targetPlayerCard1);
-            GameApplication.playersInRound.remove(targetPlayer);
+            Game.history.add(targetPlayerCard1);
+            Game.playersInRound.remove(targetPlayer);
             targetPlayer.setInGame(false);
-            return new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, targetPlayer.getName() + " is out!");
+            return new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, targetPlayer.getName() + " is out with lower points!");
         }
         else if (sourceCardValue < targetCardValue){
-            GameApplication.history.add(sourcePlayerCard1);
-            GameApplication.playersInRound.remove(sourcePlayer);
+            Game.history.add(sourcePlayerCard1);
+            Game.playersInRound.remove(sourcePlayer);
             sourcePlayer.setInGame(false);
-            return new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, sourcePlayer.getName() + " is out!");
+            return new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, sourcePlayer.getName() + " is out with lower points!");
         }else{
             return new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, "Nothing happened.");
         }
