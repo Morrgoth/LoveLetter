@@ -33,11 +33,9 @@ public class Priest extends Cards{
         return cardPoints;
     }
 
-    public GameEvent usePriest(Player targetPlayer){
-        GameEvent showCard = new GameEvent(PRIESTACTION);
+    public GameEvent usePriest(Player sourcePlayer, Player targetPlayer){
+        GameEvent showCard = new GameEvent(PLAYER_EFFECT, "The hand of " + targetPlayer.getName() + " is " +
+                targetPlayer.getCard1().getCardName() + ".", sourcePlayer);
         return showCard;
     }
-        //player1 chooses player2
-        //see()player2 hand to player1 only;
-
 }
