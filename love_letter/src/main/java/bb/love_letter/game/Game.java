@@ -2,6 +2,7 @@ package bb.love_letter.game;
 
 import bb.love_letter.game.characters.*;
 
+import java.time.temporal.ValueRange;
 import java.util.ArrayList;
 
 public class Game {
@@ -135,7 +136,8 @@ public class Game {
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
                                         "Please choose a (valid) target player."));
                             }else{
-                                //TODO:fill Guard effect
+                                player.discardCard(1);
+                                gameEvents.add(((Guard) card1).useGuard(player, targetPlayer, action.getGuess()));
                             }
                         }else if(card1 instanceof Handmaid){
                             player.discardCard(1);
@@ -147,9 +149,9 @@ public class Game {
                             }else{
                                 player.discardCard(1);
                                 gameEvents.add(((King) card1).useKing(player, targetPlayer));
-                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, "You get the card "
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, "You get the card "
                                         + player.getCard1().getCardName() + " from " + targetPlayer.getName()));
-                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, "You get the card "
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, "You get the card "
                                         + targetPlayer.getCard1().getCardName() + " from " + player.getName()));
                             }
                         }else if(card1 instanceof Prince){
@@ -157,7 +159,10 @@ public class Game {
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
                                         "Please choose a (valid) target player."));
                             }else{
-                                //TODO:fill Prince effect
+                                player.discardCard(1);
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
+                                        " discarded PRINCE on " + targetPlayer.getName() + "."));
+                                gameEvents.add(((Prince) card1).usePrince(player, targetPlayer, deck));
                             }
 
                         }else if(card1 instanceof Priest){
@@ -216,7 +221,8 @@ public class Game {
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
                                         "Please choose a (valid) target player."));
                             }else{
-                                //TODO:fill Guard effect
+                                player.discardCard(2);
+                                gameEvents.add(((Guard) card2).useGuard(player, targetPlayer, action.getGuess()));
                             }
                         }else if(card2 instanceof Handmaid){
                             player.discardCard(2);
@@ -238,7 +244,10 @@ public class Game {
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
                                         "Please choose a (valid) target player."));
                             }else{
-                                //TODO:fill Prince effect
+                                player.discardCard(2);
+                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
+                                        " discarded PRINCE on " + targetPlayer.getName() + "."));
+                                gameEvents.add(((Prince) card2).usePrince(player, targetPlayer, deck));
                             }
 
                         }else if(card2 instanceof Priest){
