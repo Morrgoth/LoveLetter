@@ -34,7 +34,7 @@ public class King extends Cards {
         targetPlayer.setCard1(sourcePlayer.getCard1());
         sourcePlayer.setCard1(temp);
         GameEvent swapCard = new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
-                " and "+ targetPlayer.getName() + " secretly changed their hands.");
+                " discarded the King and targeted " + targetPlayer.getName());
         return swapCard;
     }
 

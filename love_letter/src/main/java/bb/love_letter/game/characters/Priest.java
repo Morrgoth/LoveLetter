@@ -34,7 +34,7 @@ public class Priest extends Cards{
     }
 
     public GameEvent usePriest(Player sourcePlayer, Player targetPlayer){
-        GameEvent showCard = new GameEvent(PLAYER_EFFECT, "The hand of " + targetPlayer.getName() + " is " +
+        GameEvent showCard = new GameEvent(CARD_EFFECT, "The hand of " + targetPlayer.getName() + " is " +
                 targetPlayer.getCard1().getCardName() + ".", sourcePlayer);
         return showCard;
     }

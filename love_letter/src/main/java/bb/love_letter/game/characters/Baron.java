@@ -49,15 +49,17 @@ public class Baron extends Cards {
             Game.history.add(targetPlayerCard1);
             Game.playersInRound.remove(targetPlayer);
             targetPlayer.setInGame(false);
-            return new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, targetPlayer.getName() + " is out with lower points!");
+            return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
+                    " discarded the Baron, and targeted " + targetPlayer.getName() + "; " + targetPlayer.getName() + " was eliminated");
         }
         else if (sourceCardValue < targetCardValue){
             Game.history.add(sourcePlayerCard1);
             Game.playersInRound.remove(sourcePlayer);
             sourcePlayer.setInGame(false);
-            return new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, sourcePlayer.getName() + " is out with lower points!");
+            return new GameEvent(GameEvent.GameEventType.CARD_EFFECT, sourcePlayer.getName() +
+                    " discarded the Baron, and targeted " + targetPlayer.getName() + "; " + sourcePlayer.getName() + " was eliminated");
         }else{
-            return new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, "Nothing happened.");
+            return new GameEvent(GameEvent.GameEventType.CARD_EFFECT, "Nothing happened.");
         }
     }
 }

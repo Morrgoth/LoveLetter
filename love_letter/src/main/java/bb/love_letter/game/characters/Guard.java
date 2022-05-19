@@ -38,14 +38,17 @@ public class Guard  extends Cards {
             if (chosenPlayer.getCard1().getCardName().equalsIgnoreCase(chosenCard)) {
                 Game.playersInRound.remove(chosenPlayer);
                 chosenPlayer.setInGame(false);
-                return new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, sourcePlayer.getName() + " discarded GUARD on " + chosenPlayer.getName()  + " and guesses " + chosenCard +" correctly.\n" + chosenPlayer.getName() + " is out!");
+                return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
+                        " discarded the Guard, and targeted " + chosenPlayer.getName()  + " and guessed " + chosenCard
+                        + "; " + chosenPlayer.getName() + " was eliminated");
             } else {
-                return new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, chosenPlayer.getName() + " you guessed wrong!", sourcePlayer);
+                return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
+                        "discarded the Guard, and targeted " + chosenPlayer.getName() + " and guessed " + chosenCard
+                        + "; " + chosenPlayer.getName() + " was not eliminated");
             }
         } else {
                 return new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "You can't guess Guard!", sourcePlayer);
         }
-
     }
 }
 

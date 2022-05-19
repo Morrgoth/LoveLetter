@@ -30,19 +30,17 @@ public class Prince extends Cards{
     }
 
 
-    public GameEvent usePrince(Player sourcePlayer, Player targetPlayer, Deck deck){
-        targetPlayer.discardCard(1);
-        if(targetPlayer.checkIfPrincess(targetPlayer.getCard1())){
+    /*public GameEvent usePrince(Player sourcePlayer, Player targetPlayer, Deck deck){
+        discardCard(1, targetPlayer);
+        if(checkIfPrincess(targetPlayer.getCard1())){
             targetPlayer.setInGame(false);
             return new GameEvent(PLAYER_EFFECT, sourcePlayer.getName() + " discarded Prince on " +
                     targetPlayer.getName() + " and " + targetPlayer.getName() + " is out, because the card of  is PRINCESS.");
         }else{
-            targetPlayer.addCard(deck.draw());
+            addCard(deck.draw(), targetPlayer);
             return new GameEvent(PLAYER_EFFECT, "You get the card " + deck.draw().getCardName() + " from deck.", targetPlayer);
         }
-    }
-
-
+    }*/
         //player1 chooses player2
         // swap player2 hand to player1 only;
         //if PRINCESS --> player2 terminate round;

@@ -31,7 +31,7 @@ public class GameEvent {
         CARD_ADDED,
         VALID_ACTION,
         INVALID_ACTION,
-        PLAYER_EFFECT,
+        CARD_EFFECT,
         TURN_ENDED,
         ERROR,
         GAMEISREADY,
