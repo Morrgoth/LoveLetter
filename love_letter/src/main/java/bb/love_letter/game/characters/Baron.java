@@ -1,5 +1,6 @@
 package bb.love_letter.game.characters;
 
+import bb.love_letter.game.Game;
 import bb.love_letter.game.GameApplication;
 import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
@@ -35,10 +36,8 @@ public class Baron extends Cards {
     // sourceCard + targetCard arrayList <Card> history add.
     // playersInRound delete user
 
-    public void useBaron(Player sourcePlayer, Player targetPlayer) {
+    public GameEvent useBaron(Player sourcePlayer, Player targetPlayer) {
         /* compare hands with another player, lower number is out */
-        GameEvent baronEvent = new GameEvent(GameEvent.GameEventType.PLAYERIMMUNE);
-        baronEvent.changeState(GameEvent.GameEventType.BARONACTION);
 
         Cards sourcePlayerCard1 = sourcePlayer.getCard1();
         Cards targetPlayerCard1 = targetPlayer.getCard1();
@@ -47,16 +46,20 @@ public class Baron extends Cards {
         int targetCardValue = targetPlayerCard1.getCardPoints();
 
         if (sourceCardValue > targetCardValue) {
-            GameApplication.history.add(targetPlayerCard1);
-            GameApplication.playersInRound.remove(targetPlayer);
+            Game.history.add(targetPlayerCard1);
+            Game.playersInRound.remove(targetPlayer);
             targetPlayer.setInGame(false);
-            baronEvent.changeState(GameEvent.GameEventType.PLAYERELIMINATED);
+            return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
+                    " discarded the Baron, and targeted " + targetPlayer.getName() + "; " + targetPlayer.getName() + " was eliminated");
         }
         else if (sourceCardValue < targetCardValue){
-            GameApplication.history.add(sourcePlayerCard1);
-            GameApplication.playersInRound.remove(sourcePlayer);
+            Game.history.add(sourcePlayerCard1);
+            Game.playersInRound.remove(sourcePlayer);
             sourcePlayer.setInGame(false);
-            baronEvent.changeState(GameEvent.GameEventType.PLAYERELIMINATED);
+            return new GameEvent(GameEvent.GameEventType.CARD_EFFECT, sourcePlayer.getName() +
+                    " discarded the Baron, and targeted " + targetPlayer.getName() + "; " + sourcePlayer.getName() + " was eliminated");
+        }else{
+            return new GameEvent(GameEvent.GameEventType.CARD_EFFECT, "Nothing happened.");
         }
     }
 }

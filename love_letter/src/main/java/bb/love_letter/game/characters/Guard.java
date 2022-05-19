@@ -1,5 +1,6 @@
 package bb.love_letter.game.characters;
 
+import bb.love_letter.game.Game;
 import bb.love_letter.game.GameApplication;
 import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
@@ -30,47 +31,24 @@ public class Guard  extends Cards {
         return cardPoints;
     }
 
-    //need hint for sourcePlayer to input an int corresponding to a cardValue
-    public String guessCard(int cardPoints){
-        String chosenCard = null;
 
-        if ( cardPoints > 1 && cardPoints < 9){
-            switch (cardPoints) {
-                //case 1 -> chosenCard = "Guard";
-                case 2 -> chosenCard = "Priest";
-                case 3 -> chosenCard = "Baron";
-                case 4 -> chosenCard = "Handmaid";
-                case 5 -> chosenCard = "Prince";
-                case 6 -> chosenCard = "King";
-                case 7 -> chosenCard = "Countess";
-                case 8 -> chosenCard = "Princess";
-            }
-
-        }
-        else {
-            System.out.println ("This card doesn't exist. Try again.");
-        }
-        return  chosenCard;
-    }
-
-    public void useGuard(Player chosenPlayer, String chosenCard){
+    public GameEvent useGuard(Player sourcePlayer,Player chosenPlayer, String chosenCard){
         //how to set player1? and how to set it automatically during the game?
-
-        //1.player1 chooses player2
-        //      Player.choosePlayer();
-
-        //choose card to guess
-        //  Guard.guessCard();
-
-        //compare name, if correct: terminate Round for player;
-        //else do nothing;
-        GameEvent guardEvent = new GameEvent(GameEvent.GameEventType.PLAYERIMMUNE);
-        guardEvent.changeState(GameEvent.GameEventType.GUARDACTION);
-
-        if (chosenPlayer.getCard1().getCardName().equals(chosenCard)) {
-            GameApplication.playersInRound.remove(chosenPlayer);
-            chosenPlayer.setInGame(false);
-            guardEvent.changeState(GameEvent.GameEventType.PLAYERELIMINATED);
+        if(!chosenCard.equalsIgnoreCase("Guard")){
+            if (chosenPlayer.getCard1().getCardName().equalsIgnoreCase(chosenCard)) {
+                Game.playersInRound.remove(chosenPlayer);
+                chosenPlayer.setInGame(false);
+                return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
+                        " discarded the Guard, and targeted " + chosenPlayer.getName()  + " and guessed " + chosenCard
+                        + "; " + chosenPlayer.getName() + " was eliminated");
+            } else {
+                return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
+                        "discarded the Guard, and targeted " + chosenPlayer.getName() + " and guessed " + chosenCard
+                        + "; " + chosenPlayer.getName() + " was not eliminated");
+            }
+        } else {
+                return new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "You can't guess Guard!", sourcePlayer);
         }
     }
 }
+

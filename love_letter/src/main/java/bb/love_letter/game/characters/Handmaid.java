@@ -24,14 +24,9 @@ public class Handmaid extends Cards {
     }
 
     public GameEvent useHandmaid(Player sourcePlayer){
-
-        GameEvent handmaidEvent = new GameEvent (GameEvent.GameEventType.HANDMAIDACTION);
-
+        GameEvent handmaidEvent = new GameEvent (GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
+                " discarded the Handmaid, and is immune until their next turn");
         sourcePlayer.setImmune(true);
-
-        handmaidEvent.changeState(GameEvent.GameEventType.PLAYERIMMUNE);
-
         return handmaidEvent;
     }
-
 }

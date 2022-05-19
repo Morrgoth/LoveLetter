@@ -10,7 +10,7 @@ import bb.love_letter.game.Player;
  */
 public class King extends Cards {
 
-    private String name = "KING";
+    private String name = "King";
     private final int cardPoints = 6;
     private String cardAction = "Trade hands with another player.";
 
@@ -33,10 +33,8 @@ public class King extends Cards {
         Cards temp = targetPlayer.getCard1();
         targetPlayer.setCard1(sourcePlayer.getCard1());
         sourcePlayer.setCard1(temp);
-        GameEvent swapCard = new GameEvent(GameEvent.GameEventType.KINGACTION);
+        GameEvent swapCard = new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
+                " discarded the King and targeted " + targetPlayer.getName());
         return swapCard;
-        //player1 chooses player2
-        // change hands;;
     }
-
 }
