@@ -34,7 +34,6 @@ public class ServerThread extends Thread{
      */
     public void run(){
         String json = "";
-        System.out.println("ServerThread started");
         try{
             DataInputStream dataInputStream = new DataInputStream(clientSocket.getInputStream());
             while(!clientSocket.isClosed()) {
@@ -54,6 +53,5 @@ public class ServerThread extends Thread{
         catch(Exception e) {
             System.out.println("ServerThreadError: " + e.getMessage());
         }
-        System.out.println("ServerThread stopped");
     }
 }

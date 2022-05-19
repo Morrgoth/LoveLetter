@@ -1,15 +1,17 @@
 package bb.love_letter.user_interface.view;
 
-import bb.love_letter.user_interface.Client;
 import bb.love_letter.user_interface.controller.ChatController;
 import bb.love_letter.user_interface.model.ChatModel;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 
 /**
  *
@@ -43,12 +45,11 @@ public class ChatView {
         listView.getStyleClass().add("listView");
         GridPane chatBox = new GridPane();
         chatBox.getStyleClass().add("chatbox");
-        RowConstraints regRow = new RowConstraints();
         chatBox.addColumn(1, messageField  );
         chatBox.addColumn(2, sentbutton);
         chatBox.setHgap(10);
+        RowConstraints regRow = new RowConstraints();
         regRow.setVgrow(Priority.ALWAYS);
-        //chatBox.getRowConstraints().add(regRow);
         view.getRowConstraints().add(regRow);
 
         messageField.setPrefWidth(600);
