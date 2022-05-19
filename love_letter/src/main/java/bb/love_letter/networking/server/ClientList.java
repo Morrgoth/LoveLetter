@@ -62,7 +62,6 @@ public class ClientList {
      * @throws IOException
      */
     public boolean removeClient(User user) throws IOException {
-        // TODO: test this when ServerEvents are displayed again
         if (containsClient(user)) {
             Socket socket = getClientSocket(user);
             socket.close();
