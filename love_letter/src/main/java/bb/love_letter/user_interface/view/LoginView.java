@@ -13,6 +13,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
@@ -77,6 +79,18 @@ public class LoginView {
                 int port = Integer.parseInt(portField.getText());
                 String username = usernameField.getText();
                 controller.requestLogin(ip, port, username);
+            }
+        });
+
+        usernameField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.ENTER) {
+                    String ip = ipField.getText();
+                    int port = Integer.parseInt(portField.getText());
+                    String username = usernameField.getText();
+                    controller.requestLogin(ip, port, username);
+                }
             }
         });
     }
