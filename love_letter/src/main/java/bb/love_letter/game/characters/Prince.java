@@ -37,13 +37,13 @@ public class Prince extends Cards{
         GameApplication.history.add(targetPlayer.getCard1());
         targetPlayer.discarded.add(targetPlayer.getCard1());
         targetPlayer.setCard1(deck.getDeck().get(0));
-        GameEvent princeEvent = new GameEvent(PRINCEACTION);
+        GameEvent princeEvent = new GameEvent(PLAYER_EFFECT);
         if(targetPlayer.checkIfPrincess(targetPlayer.getCard1())) {
             targetPlayer.setInGame(false);
             GameEvent eliminated = new GameEvent(PLAYERELIMINATED);
             return eliminated;
         }else if(targetPlayer.checkIfPrincess(targetPlayer.getCard1())){
-                GameEvent princessEvent = new GameEvent(PRINCESSACTION);
+                GameEvent princessEvent = new GameEvent(PLAYER_EFFECT);
                 return princessEvent;
             }
 
