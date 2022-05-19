@@ -33,7 +33,7 @@ public class King extends Cards {
         Cards temp = targetPlayer.getCard1();
         targetPlayer.setCard1(sourcePlayer.getCard1());
         sourcePlayer.setCard1(temp);
-        GameEvent swapCard = new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, sourcePlayer.getName() +
+        GameEvent swapCard = new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
                 " and "+ targetPlayer.getName() + " secretly changed their hands.");
         return swapCard;
     }
