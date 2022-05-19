@@ -451,19 +451,19 @@ public class Game {
         }
         return false;
     }
-    public void addCard(Cards card) {
-        if (card1 == null) {
-            setCard1(card);
+    public void addCard(Cards card, Player player) {
+        if (player.getCard1() == null) {
+            player.setCard1(card);
         } else {
-            setCard2(card);
+            player.setCard2(card);
         }
     }
 
-    public void discard(int cardIndex) {
+    public void discard(int cardIndex, Player player) {
         if (cardIndex == 1) {
-            setCard1(null);
+            player.setCard1(null);
         } else {
-            setCard2(null);
+            player.setCard2(null);
         }
     }
 }
