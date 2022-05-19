@@ -31,29 +31,6 @@ public class Guard  extends Cards {
         return cardPoints;
     }
 
-    //need hint for sourcePlayer to input an int corresponding to a cardValue
-    public String guessCard(String cardName){
-        String chosenCard = null;
-
-        if ( cardPoints > 1 && cardPoints < 9){
-            switch (cardName) {
-                //case "Guard" -> chosenCard = "Guard";
-                case "Priest" -> chosenCard = "Priest";
-                case "Baron" -> chosenCard = "Baron";
-                case "Handmaid" -> chosenCard = "Handmaid";
-                case "Prince" -> chosenCard = "Prince";
-                case "King" -> chosenCard = "King";
-                case "Countess" -> chosenCard = "Countess";
-                case "Princess" -> chosenCard = "Princess";
-            }
-
-        }
-        else {
-            System.out.println ("This card doesn't exist. Try again.");
-        }
-        return  chosenCard;
-
-    }
 
     public GameEvent useGuard(Player sourcePlayer,Player chosenPlayer, String chosenCard){
         //how to set player1? and how to set it automatically during the game?
@@ -61,12 +38,12 @@ public class Guard  extends Cards {
             if (chosenPlayer.getCard1().getCardName().equalsIgnoreCase(chosenCard)) {
                 Game.playersInRound.remove(chosenPlayer);
                 chosenPlayer.setInGame(false);
-                return new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, sourcePlayer.getName() + " plays Guard on " + chosenPlayer.getName()  + " and guesses " + chosenCard +" correctly.\n" + chosenPlayer.getName() + " is out!");
+                return new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, sourcePlayer.getName() + " discarded GUARD on " + chosenPlayer.getName()  + " and guesses " + chosenCard +" correctly.\n" + chosenPlayer.getName() + " is out!");
             } else {
-                return new GameEvent(GameEvent.GameEventType.INVALIDCHOICE, chosenPlayer.getName() + " you guessed wrong!", sourcePlayer);
+                return new GameEvent(GameEvent.GameEventType.PLAYER_EFFECT, chosenPlayer.getName() + " you guessed wrong!", sourcePlayer);
             }
         } else {
-                return new GameEvent(GameEvent.GameEventType.INVALIDCHOICE, "You can't guess Guard!", sourcePlayer);
+                return new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "You can't guess Guard!", sourcePlayer);
         }
 
     }
