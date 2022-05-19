@@ -389,4 +389,81 @@ public class Game {
             playersInRound.remove(0);
         }
     }
+
+
+    //player's action - draw the top most  card from deck
+    public void drawCard(Player player) {
+
+        player.setCard2(deck.getDeck().get(0));;
+        deck.getDeck().remove(0);
+    }
+
+    public int discardedPoints(ArrayList<Cards> discarded) {
+        int sum = 0;
+        for (Cards card : discarded) {
+            sum += card.getCardPoints();
+        }
+        return sum;
+    }
+
+    public void discardCard(int cardNumber, Player player) {
+        switch (cardNumber) {
+            case 1:
+                Game.history.add(player.getCard1());
+                player.discarded.add(player.getCard1());
+                player.setCard1(player.getCard2());
+                player.setCard2(null);
+                break;
+
+            case 2:
+                Game.history.add(player.getCard2());
+                player.discarded.add(player.getCard2());
+                player.setCard2(null);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    //discard a Card during each round
+    private void clearDiscardedList (ArrayList < Cards > discarded) {
+        //delete all elements in List when a round end
+        for (int i = 0; i < discarded.size(); i++) {
+            discarded.remove(0);
+        }
+    }
+    public boolean checkIfCountess(Cards card1, Cards card2) {
+
+        //check for COUNTESS
+        if (card1.getCardName().equals("COUNTESS") && (card2.getCardName().equals("PRINCE") || card2.getCardName().equals("KING"))) {
+            return true;
+        }else if (card2.getCardName().equals("COUNTESS") && (card1.getCardName().equals("PRINCE") || card1.getCardName().equals("KING"))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean checkIfPrincess(Cards card) {
+        if (card.getCardName().equals("PRINCESS")) {
+            return true;
+        }
+        return false;
+    }
+    public void addCard(Cards card) {
+        if (card1 == null) {
+            setCard1(card);
+        } else {
+            setCard2(card);
+        }
+    }
+
+    public void discard(int cardIndex) {
+        if (cardIndex == 1) {
+            setCard1(null);
+        } else {
+            setCard2(null);
+        }
+    }
 }
