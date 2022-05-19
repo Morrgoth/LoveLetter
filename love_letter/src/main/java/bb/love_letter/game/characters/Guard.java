@@ -30,28 +30,6 @@ public class Guard  extends Cards {
         return cardPoints;
     }
 
-    //need hint for sourcePlayer to input an int corresponding to a cardValue
-    public String guessCard(int cardPoints){
-        String chosenCard = null;
-
-        if ( cardPoints > 1 && cardPoints < 9){
-            switch (cardPoints) {
-                //case 1 -> chosenCard = "Guard";
-                case 2 -> chosenCard = "Priest";
-                case 3 -> chosenCard = "Baron";
-                case 4 -> chosenCard = "Handmaid";
-                case 5 -> chosenCard = "Prince";
-                case 6 -> chosenCard = "King";
-                case 7 -> chosenCard = "Countess";
-                case 8 -> chosenCard = "Princess";
-            }
-
-        }
-        else {
-            System.out.println ("This card doesn't exist. Try again.");
-        }
-        return  chosenCard;
-    }
 
     public GameEvent useGuard(Player sourcePlayer, Player chosenPlayer, String chosenCard){
         return null;
