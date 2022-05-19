@@ -390,6 +390,20 @@ public class Game {
         }
     }
 
+    public boolean checkIfCountess(Cards card1, Cards card2) {
+
+        //check for COUNTESS
+        if (card1.getCardName().equals("COUNTESS") && (card2.getCardName().equals("PRINCE") || card2.getCardName().equals("KING"))) {
+            return true;
+        }else if (card2.getCardName().equals("COUNTESS") && (card1.getCardName().equals("PRINCE") || card1.getCardName().equals("KING"))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    //Players' actions during game
 
     //player's action - draw the top most  card from deck
     public void drawCard(Player player) {
@@ -433,17 +447,7 @@ public class Game {
             discarded.remove(0);
         }
     }
-    public boolean checkIfCountess(Cards card1, Cards card2) {
 
-        //check for COUNTESS
-        if (card1.getCardName().equals("COUNTESS") && (card2.getCardName().equals("PRINCE") || card2.getCardName().equals("KING"))) {
-            return true;
-        }else if (card2.getCardName().equals("COUNTESS") && (card1.getCardName().equals("PRINCE") || card1.getCardName().equals("KING"))) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     public boolean checkIfPrincess(Cards card) {
         if (card.getCardName().equals("PRINCESS")) {
@@ -451,19 +455,19 @@ public class Game {
         }
         return false;
     }
-    public void addCard(Cards card) {
-        if (card1 == null) {
-            setCard1(card);
+    public void addCard(Cards card, Player player) {
+        if (player.getCard1() == null) {
+            player.setCard1(card);
         } else {
-            setCard2(card);
+            player.setCard2(card);
         }
     }
 
-    public void discard(int cardIndex) {
+    public void discard(int cardIndex, Player player) {
         if (cardIndex == 1) {
-            setCard1(null);
+            player.setCard1(null);
         } else {
-            setCard2(null);
+            player.setCard2(null);
         }
     }
 }
