@@ -6,10 +6,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static bb.love_letter.game.GameApplication.history;
+import static bb.love_letter.game.Game.history;
 import static bb.love_letter.game.GameEvent.GameEventType.*;
-
-
 
 /**
  * class Player extends class User. Contains all attributes and actions that a player can make during the game
@@ -89,12 +87,12 @@ public class Player extends User {
 
         //check for COUNTESS
         if (card1.getCardName().equals("COUNTESS") && (card2.getCardName().equals("PRINCE") || card2.getCardName().equals("KING"))) {
-            GameApplication.history.add(card1);
+            Game.history.add(card1);
             discarded.add(card1);
             setCard1(null);
             return true;
         } else if (card2.getCardName().equals("COUNTESS") && (card1.getCardName().equals("PRINCE") || card1.getCardName().equals("KING"))) {
-            GameApplication.history.add(card2);
+            Game.history.add(card2);
             discarded.add(card2);
             setCard2(null);
             return true;
@@ -117,56 +115,21 @@ public class Player extends User {
         GameEvent gameEvent = new GameEvent(null, null);
         switch (cardNumber) {
             case 1:
-                GameApplication.history.add(card1);
+                Game.history.add(card1);
                 discarded.add(card1);
                 setCard1(card2);
                 setCard2(null);
-                gameEvent.setMessage("You chose Card 1");
-                gameEvent.setType(DISCARDSUCCESSFULL);
-
-                break;
-
+                return new GameEvent(GameEvent.GameEventType.DISCARDSUCCESSFULL,"You chose Card 1");
             case 2:
-                GameApplication.history.add(card2);
+                Game.history.add(card2);
                 discarded.add(card2);
                 setCard2(null);
-                gameEvent.setMessage("You chose Card 2");
-                gameEvent.setType(DISCARDSUCCESSFULL);
-                break;
+                return new GameEvent(GameEvent.GameEventType.DISCARDSUCCESSFULL,"You chose Card 2");
             default:
-                gameEvent.setMessage("Please enter a valid number");
-                gameEvent.setType(NOSUCHCARDINHAND);
+                return new GameEvent(GameEvent.GameEventType.NOSUCHCARDINHAND,"Please enter a valid number");
         }
-        return gameEvent;
+
     }
-
-
-    //Chose a player for cardActions
-    public GameEvent choosePlayerMessage(int playerNumber) {
-        GameEvent chosenPlayerSuccess = new GameEvent(null, null);
-        GameEvent noChoice = new GameEvent(null, null);
-        if (chosenPlayer(playerNumber) != null) {
-            chosenPlayerSuccess.setMessage("You chose: " + chosenPlayer(playerNumber).getName());
-            //chosenPlayerSuccess.setGameEventType(GameEvent.GameEventType.PLAYERCHOSEN);
-            return chosenPlayerSuccess;
-        } else {
-            noChoice.setMessage("You can't choose that player. Choose a new one.");
-            //noChoice.changeState(true, INVALIDCHOICE);
-            return noChoice;
-        }
-    }
-
-
-    public Player chosenPlayer(int playerNumber) {
-        for (Player player : GameApplication.choosablePlayers) {
-            if (playerNumber == GameApplication.choosablePlayers.indexOf(player)) {
-                Player chosenPlayer = player;
-                return chosenPlayer;
-            }
-        }
-        return null;
-    }
-
 
     private void clearDiscardedList (ArrayList < Cards > discarded) {
         //delete all elements in List when a round end

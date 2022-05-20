@@ -63,7 +63,7 @@ public class GameEvent {
         POSTSCORE,
         POSTHISTORY,
         POSTCARDS,
-        POSTMETHODS
+        NOSUCHCARDINHAND, POSTMETHODS
     }
 
     public GameEventType getGameEventType() {
