@@ -1,5 +1,7 @@
 package bb.love_letter.networking.server;
 
+import bb.love_letter.game.Game;
+import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.User;
 import bb.love_letter.networking.data.Envelope;
 import bb.love_letter.networking.data.LoginRequest;
@@ -18,6 +20,7 @@ import java.util.Arrays;
 public class Server {
     private final int PORT = 6868;
     public ClientList clientList = new ClientList();
+    private Game game = new Game();
     public static void main(String[] args){
         Server server = new Server();
         server.registerUsers();
@@ -102,6 +105,13 @@ public class Server {
         }  else if (command.getCommandType()== Command.CommandType.EMPTY_COMMAND) {
             Envelope messageEnvelope = new Envelope(command.getChatMessage(), Envelope.EnvelopeType.CHAT_MESSAGE);
             broadcast(messageEnvelope, null, null);
+        } else if (command.getCommandType()== Command.CommandType.GAME_COMMAND) {
+            if (command.getGameCommandType()== Command.GameCommandType.HELP){
+                GameEvent gameEvent = game.infoPost("#help");
+                ServerEvent serverEvent = new ServerEvent(gameEvent);
+                Envelope envelope = serverEvent.toEnvelope();
+                broadcast(envelope, null,null);
+            }
         }
     }
 
