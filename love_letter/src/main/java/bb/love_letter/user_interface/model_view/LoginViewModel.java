@@ -1,6 +1,7 @@
 package bb.love_letter.user_interface.model_view;
 
 import bb.love_letter.networking.data.ServerEvent;
+import bb.love_letter.user_interface.Client;
 import bb.love_letter.user_interface.model.LoginModel;
 import bb.love_letter.user_interface.view.LoginView;
 import javafx.beans.property.*;
@@ -14,8 +15,10 @@ public class LoginViewModel {
 
     private LoginModel model;
     private LoginView view;
+    private Client client;
 
-    public LoginViewModel(LoginModel loginModel, LoginView loginView) {
+    public LoginViewModel(Client client, LoginModel loginModel, LoginView loginView) {
+        this.client=client;
         model = loginModel;
         view = loginView;
     }
@@ -49,6 +52,13 @@ public class LoginViewModel {
                 }
             }
         });
+    }
+
+    public void requestLogin(String ip, int port, String username) {
+        model.setIp(ip);
+        model.setPort(port);
+        model.setUsername(username);
+        client.login(ip, port, username);
     }
 
 }

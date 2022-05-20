@@ -20,7 +20,7 @@ import javafx.scene.layout.GridPane;
 public class LoginView {
     private  GridPane view;
     public LoginModel model;
-    public  LoginController controller;
+    //public  LoginController controller;
     private  TextField ipField;
     private  TextField portField;
     private  TextField usernameField;
