@@ -13,6 +13,7 @@ public class Game {
     private ArrayList<Player> playersInGame;
     public static ArrayList<Player> playersInRound;
     private int currentPlayer;
+    private PlayerQueue playerQueue;
     private ArrayList<Player> roundWinner;
     private ArrayList <Player> gameWinner;
     private boolean isGameStarted;
@@ -25,7 +26,6 @@ public class Game {
     //list of players in the round that are not immune and can be choosen for a cardEffect
     public static ArrayList<Player> playerOption = new ArrayList<>();
     //list of current players still in the round
-    static ArrayList<Player> playersInGame = new ArrayList<>();
 
     public static HashMap<String, Integer> playerScores = new HashMap<String, Integer>();
 
@@ -36,30 +36,18 @@ public class Game {
         isGameStarted = true;
     }
 
-    private void withdrawFirstCards(Deck deck){
-        GameEvent stateFirstCards = new GameEvent(GameEvent.GameEventType.PLAYERIMMUNE);
-        //When there are 2 players, 4 cards out of the deck and last 3 cards from them should be seen by all
-        if(playersInGame.size() == 2){
-            for(int i = 0; i<4; i++){
-                if(i > 0){
-                    stateFirstCards.changeState(GAMEISREADY);
-                }
-                //The removed card is added to the history
-                history.add(deck.getDeck().get(0));
-                deck.getDeck().remove(0);
-            }
-        }//When there are more than 2 players, only 1 card is out, and it shouldn't be seen
-        else if(playersInGame.size() == 3 || playersInGame.size() == 4){
-            history.add(deck.getDeck().get(0));
-            deck.getDeck().remove(0);
-
+    private GameEvent withdrawFirstCards(){
+        Cards removedCard = deck.draw();
+        if (playerQueue.getPlayerCount() == 2) {
+            Cards extraDiscraded1 = deck.draw();
+            Cards extraDiscarded2 = deck.draw();
+            Cards extraDiscarded3 = deck.draw();
+            GameEvent discardNotification = new GameEvent(GameEvent.GameEventType.DISCARD_NOTIFICATION, "The" +
+                    " following cards were removed from the deck: " + extraDiscraded1.getCardName() + ", "
+                    + extraDiscarded2.getCardName() + ", " + extraDiscarded3.getCardName());
+            return discardNotification;
         }
-
-        //Players get the first card in the beginning
-        for(int i = 0; i< playersInGame.size(); i++){
-            playersInGame.get(i).setCard1(deck.getDeck().get(0));
-            deck.getDeck().remove(0);
-        }
+        return null;
     }
     public GameEvent init() {
         if (isGameOver && isGameStarted) {
@@ -104,19 +92,14 @@ public class Game {
             isRoundOver = false;
             deck.reset();
             playerQueue.resetRound();
-            Cards removedCard = deck.draw();
-            if (playerQueue.getPlayerCount() == 2) {
-                Cards extraDiscraded1 = deck.draw();
-                Cards extraDiscarded2 = deck.draw();
-                Cards extraDiscarded3 = deck.draw();
-                GameEvent discardNotification = new GameEvent(GameEvent.GameEventType.DISCARD_NOTIFICATION, "The" +
-                        " following cards were removed from the deck: " + extraDiscraded1.getCardName() + ", "
-                        + extraDiscarded2.getCardName() + ", " + extraDiscarded3.getCardName());
+            GameEvent discardNotification = withdrawFirstCards();
+            if (discardNotification != null) {
                 gameEvents.add(discardNotification);
             }
             for (Player player: playerQueue.getPlayers()) {
                 player.addCard(deck.draw());
             }
+
             gameEvents.add(new GameEvent(GameEvent.GameEventType.ROUND_STARTED, "A new round has started!"));
         } else {
             gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "The current round hasn't ended yet!"));
@@ -145,26 +128,23 @@ public class Game {
             switch (userCommand) {
                 case "#help":
                     return new GameEvent(GameEvent.GameEventType.POSTHELP, "Print the following commands to receive further information:\n #score: see the current player scores. \n #cards: get information, about the distinct card effects.\n #history: see what cards have been played in this round.");
-                    break;
                 case "#score":
                     return new GameEvent(GameEvent.GameEventType.POSTSCORE, " " + playerScores);
-                    break;
                 case "#cards":
                     return new GameEvent(GameEvent.GameEventType.POSTCARDS,"Guard: " + Guard.getCardAction()+"\n"+ "Priest: " + Priest.getCardAction()+"\n"+ "Baron: " + Baron.getCardAction()+"\n"+ "Handmaid: " +Handmaid.getCardAction()+"\n"+ "Prince: " + Prince.getCardAction()+"\n"+ "King: " +King.getCardAction()+"\n"+ "Countess: " +Countess.getCardAction()+"\n"+"Princess: " + Princess.getCardAction());
-                    break;
                 case "#history":
                     return new GameEvent(GameEvent.GameEventType.POSTHISTORY, " " + history);
-                    break;
             }
         }catch (NullPointerException e)
             {
                 System.out.print("Not a valid command.");
             }
+        return null;
     }
 
     public ArrayList<GameEvent> playCard(User user, GameAction action) {
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
-        if (getCurrentPlayer().equals(user)) {
+        if (playerQueue.getCurrentPlayer().equals(user)) {
             Player player = playersInRound.get(currentPlayer);
             switch(action.getCardIndex()){
                 case 1:
@@ -192,7 +172,7 @@ public class Game {
                     else{
                         Player targetPlayer = null;
                         for(Player target: playersInRound){
-                            if(target.getName().equalsIgnoreCase(action.getTarget()) && !target.getImmune()){
+                            if(target.getName().equalsIgnoreCase(action.getTarget()) && !target.isImmune()){
                                 targetPlayer = target;
                             }
                         }
@@ -277,7 +257,7 @@ public class Game {
                     else{
                         Player targetPlayer = null;
                         for(Player target: playersInRound){
-                            if(target.getName().equalsIgnoreCase(action.getTarget()) && !target.getImmune()){
+                            if(target.getName().equalsIgnoreCase(action.getTarget()) && !target.isImmune()){
                                 targetPlayer = target;
                             }
                         }
@@ -354,13 +334,14 @@ public class Game {
     }
 
     public GameEvent finishTurn() {
+        Player currentPlayer = playerQueue.getCurrentPlayer();
         if (deck.size() == 0 || playersInRound.size() == 1) {
             // ROUND IS OVER
             isRoundOver = true;
             for (Player player : roundWinner) {
                 player.setScore(player.getScore() + 1);
             }
-            if (findGameWinner(gameWinner) != null) {
+            if (findGameWinner() != null) {
                 // GAME OVER: A Player has the required amount of tokens to win
                 isGameOver = true;
                 if(roundWinner.size() == 1 && gameWinner.size() == 1){
@@ -390,9 +371,46 @@ public class Game {
             }
         } else {
             return new GameEvent(GameEvent.GameEventType.ERROR, "The current player ("
-                    + player.getName() + ") hasn't discarded their card, yet!");
+                    + currentPlayer.getName() + ") hasn't discarded their card, yet!");
         }
 
+    }
+
+    private ArrayList<Player>  findRoundWinner(ArrayList <Player> roundWinner) {
+        roundWinner = new ArrayList<>();
+        if (playerQueue.getPlayersInRound().size() == 1) {
+            roundWinner.add(playerQueue.getPlayersInRound().get(0));
+        } else if (deck.size() == 0 && playersInRound.size() >= 2) {
+            if (playersInRound.get(0).getCard1().getCardPoints() > playersInRound.get(1).getCard1().getCardPoints()) {
+                roundWinner.add(playersInRound.get(0));
+            } else if (playersInRound.get(0).getCard1().getCardPoints() < playersInRound.get(1).getCard1().getCardPoints()) {
+                roundWinner.add(playersInRound.get(1));
+            } else {
+                if (discardedPoints(playersInRound.get(0).getDiscarded(), playersInRound.get(0)) > discardedPoints(playersInRound.get(1).getDiscarded(), playersInRound.get(1))) {
+                    roundWinner.add(playersInRound.get(0));
+                } else if (discardedPoints(playersInRound.get(0).getDiscarded(), playersInRound.get(0)) < discardedPoints(playersInRound.get(1).getDiscarded(), playersInRound.get(1))) {
+                    roundWinner.add(playersInRound.get(1));
+                } else {
+                    roundWinner.add(playersInRound.get(0));
+                    roundWinner.add(playersInRound.get(1));
+                }
+            }
+        }
+        return roundWinner;
+    }
+
+
+    public Player findGameWinner() {
+        for (Player player: playerQueue.getPlayers()) {
+            if (playerQueue.getPlayerCount() == 4 && player.getScore() >= 4) {
+                return player;
+            }else if(playerQueue.getPlayerCount() == 3 && player.getScore() >= 5){
+                return player;
+            }else if (playerQueue.getPlayerCount() == 2 && player.getScore() >= 7){
+                return player;
+            }
+        }
+        return null;
     }
 
     /**
@@ -404,15 +422,12 @@ public class Game {
     }
 
 
-        return roundWinner;
-    }
-
 
 
     public static void initializePlayerOption(){
         playerOption = (ArrayList<Player>) playersInRound.clone();
         for(int i = 0; i < playerOption.size(); i++){
-            if(playerOption.get(i).getImmune() == true){
+            if(playerOption.get(i).isImmune() == true){
                 playerOption.remove(i);
             }
         }
@@ -519,4 +534,8 @@ public class Game {
             player.setCard2(null);
         }
     }*/
+
+    public PlayerQueue getPlayerQueue() {
+        return playerQueue;
+    }
 }

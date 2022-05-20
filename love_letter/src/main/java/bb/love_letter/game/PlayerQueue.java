@@ -29,7 +29,7 @@ public class PlayerQueue {
     public int getPlayersInRoundCount() {
         int uneliminatedPlayerCount = 0;
         for (Player player: players) {
-            if (!player.isEliminated()) {
+            if (!player.getInGame()) {
                 uneliminatedPlayerCount += 1;
             }
         }
@@ -40,7 +40,7 @@ public class PlayerQueue {
         for (Player player: players) {
             player.setCard1(null);
             player.setCard2(null);
-            player.setEliminated(false);
+            player.setInGame(false);
         }
     }
 
@@ -58,7 +58,7 @@ public class PlayerQueue {
 
     public void setCurrentPlayerToNext() {
         currentPlayerIndex = (currentPlayerIndex + 1) % getPlayerCount();
-        while (players.get(currentPlayerIndex).isEliminated()) {
+        while (players.get(currentPlayerIndex).getInGame()) {
             currentPlayerIndex = (currentPlayerIndex + 1) % getPlayerCount();
         }
     }
@@ -72,46 +72,11 @@ public class PlayerQueue {
         return null;
     }
 
-    private ArrayList<Player>  findRoundWinner(ArrayList <Player> roundWinner) {
-        roundWinner = new ArrayList<>();
-        if (playersInRound.size() == 1) {
-            roundWinner.add(playersInRound.get(0));
-        } else if (deck.size() == 0 && playersInRound.size() >= 2) {
-            if (playersInRound.get(0).getCard1().getCardPoints() > playersInRound.get(1).getCard1().getCardPoints()) {
-                roundWinner.add(playersInRound.get(0));
-            } else if (playersInRound.get(0).getCard1().getCardPoints() < playersInRound.get(1).getCard1().getCardPoints()) {
-                roundWinner.add(playersInRound.get(1));
-            } else {
-                if (discardedPoints(playersInRound.get(0).getDiscarded(), playersInRound.get(0)) > discardedPoints(playersInRound.get(1).getDiscarded(), playersInRound.get(1))) {
-                    roundWinner.add(playersInRound.get(0));
-                } else if (discardedPoints(playersInRound.get(0).getDiscarded(), playersInRound.get(0)) < discardedPoints(playersInRound.get(1).getDiscarded(), playersInRound.get(1))) {
-                    roundWinner.add(playersInRound.get(1));
-                }
-                else{
-                    roundWinner.add(playersInRound.get(0));
-                    roundWinner.add(playersInRound.get(1));
-                }
-            }
-        }
-
-
-    public Player findGameWinner() {
-        for (Player player: players) {
-            if (getPlayerCount() == 4 && player.getScore() >= 4) {
-                return player;
-            }else if(getPlayerCount() == 3 && player.getScore() >= 5){
-                return player;
-            }else if (getPlayerCount() == 2 && player.getScore() >= 7){
-                return player;
-            }
-        }
-        return null;
-    }
 
     public ArrayList<Player> getPlayersInRound() {
         ArrayList<Player> playersInRound = new ArrayList<>();
         for (Player player: players) {
-            if (!player.isEliminated()) {
+            if (!player.getInGame()) {
                 playersInRound.add(player);
             }
         }

@@ -83,23 +83,21 @@ public class Player extends User {
         this.inGame = inGame;
     }
 
+    public void eliminate() {
+        setInGame(false);
+    }
+
 
     public ArrayList<Cards> getDiscarded() {
         return discarded;
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public void addCard(Cards card) {
+        if (card1 == null) {
+            setCard1(card);
+        } else {
+            setCard2(card);
+        }
+    }
 }

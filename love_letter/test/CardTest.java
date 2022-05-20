@@ -34,7 +34,7 @@ public class CardTest {
         assertEquals(1, gameEvents.size());
         assertSame(GameEvent.GameEventType.VALID_ACTION, gameEvents.get(0).getGameEventType());
         assertEquals("alice discarded the Princess and was eliminated", gameEvents.get(0).getMessage());
-        assertTrue(game.getPlayerQueue().getPlayerByName("alice").isEliminated());
+        assertFalse(game.getPlayerQueue().getPlayerByName("alice").getInGame());
     }
 
     @Test

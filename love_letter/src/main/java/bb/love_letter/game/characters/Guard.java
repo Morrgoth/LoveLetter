@@ -16,7 +16,7 @@ public class Guard  extends Cards {
     private static String cardAction = "Choose a player and a specific card. If you're right and it's his in his hand, this player is terminated for the Round.";
 
     @Override
-    public static String getCardName() {
+    public String getCardName() {
         return name;
     }
 
