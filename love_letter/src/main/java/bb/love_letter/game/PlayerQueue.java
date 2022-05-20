@@ -72,6 +72,15 @@ public class PlayerQueue {
         return null;
     }
 
+    public Player getChoosablePlayerByName(String name) {
+        for (Player player: players) {
+            if (player.getName().equals(name) && !player.isImmune() && player.getInGame()) {
+                return player;
+            }
+        }
+        return null;
+    }
+
 
     public ArrayList<Player> getPlayersInRound() {
         ArrayList<Player> playersInRound = new ArrayList<>();
