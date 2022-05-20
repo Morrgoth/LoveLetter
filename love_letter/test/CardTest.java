@@ -1,7 +1,4 @@
-import bb.love_letter.game.Game;
-import bb.love_letter.game.GameAction;
-import bb.love_letter.game.GameEvent;
-import bb.love_letter.game.User;
+import bb.love_letter.game.*;
 import bb.love_letter.game.characters.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

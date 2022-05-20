@@ -7,13 +7,12 @@ import java.util.HashMap;
 
 import static bb.love_letter.game.GameEvent.GameEventType.CARD_EFFECT;
 import static bb.love_letter.game.GameEvent.GameEventType.GAMEISREADY;
-
 public class Game {
     private Deck deck;
     private ArrayList<Player> playersInGame;
     public static ArrayList<Player> playersInRound;
     private int currentPlayer;
-    private PlayerQueue playerQueue;
+    public static PlayerQueue playerQueue;
     private ArrayList<Player> roundWinner;
     private ArrayList <Player> gameWinner;
     private boolean isGameStarted;
@@ -535,7 +534,7 @@ public class Game {
         }
     }*/
 
-    public PlayerQueue getPlayerQueue() {
+    public static PlayerQueue getPlayerQueue() {
         return playerQueue;
     }
 }

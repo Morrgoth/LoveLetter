@@ -4,6 +4,8 @@ import bb.love_letter.game.Game;
 import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
 
+import static bb.love_letter.game.Game.playerQueue;
+
 /*
     Strength: 3
     AmountInDeck: 2
@@ -45,14 +47,13 @@ public class Baron extends Cards {
 
         if (sourceCardValue > targetCardValue) {
             Game.history.add(targetPlayerCard1);
-            Game.playersInRound.remove(targetPlayer);
+
             targetPlayer.setInGame(false);
             return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
                     " discarded the Baron, and targeted " + targetPlayer.getName() + "; " + targetPlayer.getName() + " was eliminated");
         }
         else if (sourceCardValue < targetCardValue){
             Game.history.add(sourcePlayerCard1);
-            Game.playersInRound.remove(sourcePlayer);
             sourcePlayer.setInGame(false);
             return new GameEvent(GameEvent.GameEventType.CARD_EFFECT, sourcePlayer.getName() +
                     " discarded the Baron, and targeted " + targetPlayer.getName() + "; " + sourcePlayer.getName() + " was eliminated");

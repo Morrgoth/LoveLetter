@@ -35,7 +35,6 @@ public class Guard  extends Cards {
         //how to set player1? and how to set it automatically during the game?
         if(!chosenCard.equalsIgnoreCase("Guard")){
             if (chosenPlayer.getCard1().getCardName().equalsIgnoreCase(chosenCard)) {
-                Game.playersInRound.remove(chosenPlayer);
                 chosenPlayer.setInGame(false);
                 return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
                         " discarded the Guard, and targeted " + chosenPlayer.getName()  + " and guessed " + chosenCard

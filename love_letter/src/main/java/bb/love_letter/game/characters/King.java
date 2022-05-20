@@ -1,5 +1,6 @@
 package bb.love_letter.game.characters;
 
+import bb.love_letter.game.Game;
 import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
 
@@ -33,8 +34,8 @@ public class King extends Cards {
         Cards temp = targetPlayer.getCard1();
         targetPlayer.setCard1(sourcePlayer.getCard1());
         sourcePlayer.setCard1(temp);
-        GameEvent swapCard = new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
+        return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
                 " discarded the King and targeted " + targetPlayer.getName());
-        return swapCard;
+
     }
 }

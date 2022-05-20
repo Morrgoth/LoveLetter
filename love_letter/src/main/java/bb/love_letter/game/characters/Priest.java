@@ -33,8 +33,8 @@ public class Priest extends Cards{
     }
 
     public GameEvent usePriest(Player sourcePlayer, Player targetPlayer){
-        GameEvent showCard = new GameEvent(CARD_EFFECT,  targetPlayer.getName() + " has a " +
+         return new GameEvent(CARD_EFFECT,  targetPlayer.getName() + " has a " +
                 targetPlayer.getCard1().getCardName(), sourcePlayer);
-        return showCard;
+
     }
 }
