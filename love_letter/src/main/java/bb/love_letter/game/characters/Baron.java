@@ -1,7 +1,6 @@
 package bb.love_letter.game.characters;
 
 import bb.love_letter.game.Game;
-import bb.love_letter.game.GameApplication;
 import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
 

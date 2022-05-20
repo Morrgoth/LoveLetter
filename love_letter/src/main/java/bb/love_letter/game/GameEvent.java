@@ -66,9 +66,4 @@ public class GameEvent {
         return message;
     }
 
-    public void changeState (GameEventType newState){
-        GameEventType currentStateType = newState;
-        boolean eventState = true;
-        int counterState = 0;
-    }
 }

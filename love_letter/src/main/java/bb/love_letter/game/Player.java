@@ -24,8 +24,6 @@ public class Player extends User {
 
     private boolean immune = false;
 
-    private boolean eliminated = false;
-
     private int score = 0;
     public ArrayList<Cards> discarded = new ArrayList<>();
 

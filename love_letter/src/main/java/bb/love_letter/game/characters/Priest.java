@@ -6,7 +6,6 @@ package bb.love_letter.game.characters;
     Player may privately see another player's hand.
  */
 
-import bb.love_letter.game.GameApplication;
 import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
 

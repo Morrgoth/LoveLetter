@@ -403,42 +403,11 @@ public class Game {
         return deck;
     }
 
-    private ArrayList<Player>  findRoundWinner(ArrayList <Player> roundWinner) {
-        roundWinner = new ArrayList<>();
-        if (playersInRound.size() == 1) {
-            roundWinner.add(playersInRound.get(0));
-        } else if (deck.size() == 0 && playersInRound.size() >= 2) {
-            if (playersInRound.get(0).getCard1().getCardPoints() > playersInRound.get(1).getCard1().getCardPoints()) {
-                roundWinner.add(playersInRound.get(0));
-            } else if (playersInRound.get(0).getCard1().getCardPoints() < playersInRound.get(1).getCard1().getCardPoints()) {
-                roundWinner.add(playersInRound.get(1));
-            } else {
-                if (discardedPoints(playersInRound.get(0).getDiscarded(), playersInRound.get(0)) > discardedPoints(playersInRound.get(1).getDiscarded(), playersInRound.get(1))) {
-                    roundWinner.add(playersInRound.get(0));
-                } else if (discardedPoints(playersInRound.get(0).getDiscarded(), playersInRound.get(0)) < discardedPoints(playersInRound.get(1).getDiscarded(), playersInRound.get(1))) {
-                    roundWinner.add(playersInRound.get(1));
-                }
-                else{
-                    roundWinner.add(playersInRound.get(0));
-                    roundWinner.add(playersInRound.get(1));
-                    }
-                }
-        }
+
         return roundWinner;
     }
 
-    private ArrayList<Player> findGameWinner (ArrayList <Player> gameWinner) {
-        for (Player player : playersInGame) {
-            if (playersInGame.size() == 4 && player.getScore() >= 4) {
-                gameWinner.add(player);
-            } else if (playersInGame.size() == 3 && player.getScore() >= 5) {
-                gameWinner.add(player);
-            } else if (playersInGame.size() == 2 && player.getScore() >= 7) {
-                gameWinner.add(player);
-            }
-        }
-        return gameWinner;
-    }
+
 
     public static void initializePlayerOption(){
         playerOption = (ArrayList<Player>) playersInRound.clone();

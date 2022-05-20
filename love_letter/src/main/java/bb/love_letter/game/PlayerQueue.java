@@ -21,7 +21,7 @@ public class PlayerQueue {
             return new GameEvent(GameEvent.GameEventType.ERROR, "The Game is already full! You cannot join.");
         }
     }
-/*
+
     public int getPlayerCount() {
         return players.size();
     }
@@ -35,7 +35,7 @@ public class PlayerQueue {
         }
         return uneliminatedPlayerCount;
     }
-*/
+
     public void resetRound() {
         for (Player player: players) {
             player.setCard1(null);
@@ -72,14 +72,28 @@ public class PlayerQueue {
         return null;
     }
 
-    public Player findRoundWinner() {
-        if (getPlayersInRoundCount() == 1) {
-            return getPlayersInRound().get(0);
-        } else {
-            // TODO: Find the winner if the deck is empty and there are at least 2 players still in the round
-            return null;
+    private ArrayList<Player>  findRoundWinner(ArrayList <Player> roundWinner) {
+        roundWinner = new ArrayList<>();
+        if (playersInRound.size() == 1) {
+            roundWinner.add(playersInRound.get(0));
+        } else if (deck.size() == 0 && playersInRound.size() >= 2) {
+            if (playersInRound.get(0).getCard1().getCardPoints() > playersInRound.get(1).getCard1().getCardPoints()) {
+                roundWinner.add(playersInRound.get(0));
+            } else if (playersInRound.get(0).getCard1().getCardPoints() < playersInRound.get(1).getCard1().getCardPoints()) {
+                roundWinner.add(playersInRound.get(1));
+            } else {
+                if (discardedPoints(playersInRound.get(0).getDiscarded(), playersInRound.get(0)) > discardedPoints(playersInRound.get(1).getDiscarded(), playersInRound.get(1))) {
+                    roundWinner.add(playersInRound.get(0));
+                } else if (discardedPoints(playersInRound.get(0).getDiscarded(), playersInRound.get(0)) < discardedPoints(playersInRound.get(1).getDiscarded(), playersInRound.get(1))) {
+                    roundWinner.add(playersInRound.get(1));
+                }
+                else{
+                    roundWinner.add(playersInRound.get(0));
+                    roundWinner.add(playersInRound.get(1));
+                }
+            }
         }
-    }
+
 
     public Player findGameWinner() {
         for (Player player: players) {
