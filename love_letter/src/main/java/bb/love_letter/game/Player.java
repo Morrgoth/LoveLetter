@@ -146,12 +146,12 @@ public class Player extends User {
         GameEvent chosenPlayerSuccess = new GameEvent(null, null);
         GameEvent noChoice = new GameEvent(null, null);
         if (chosenPlayer(playerNumber) != null) {
-            chosenPlayerSuccess.setMessage("You chose: " + chosenPlayer(playerNumber).name);
-            chosenPlayerSuccess.setType(PLAYERCHOSEN);
+            chosenPlayerSuccess.setMessage("You chose: " + chosenPlayer(playerNumber).getName());
+            //chosenPlayerSuccess.setGameEventType(GameEvent.GameEventType.PLAYERCHOSEN);
             return chosenPlayerSuccess;
         } else {
             noChoice.setMessage("You can't choose that player. Choose a new one.");
-            noChoice.changeState(true, INVALIDCHOICE);
+            //noChoice.changeState(true, INVALIDCHOICE);
             return noChoice;
         }
     }

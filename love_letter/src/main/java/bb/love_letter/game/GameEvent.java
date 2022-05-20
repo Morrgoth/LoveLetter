@@ -29,6 +29,14 @@ public class GameEvent {
         this.target = target;
     }
 
+    public void setGameEventType(GameEventType type) {
+        this.gameEventType = type;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public enum GameEventType{
         GAME_INITIALIZED,
         GAME_STARTED,
