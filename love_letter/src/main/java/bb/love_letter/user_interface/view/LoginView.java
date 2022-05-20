@@ -1,21 +1,22 @@
-package bb.love_letter.user_interface;
+package bb.love_letter.user_interface.view;
 
-import bb.love_letter.networking.ClientReaderThreadUI;
-import bb.love_letter.networking.ClientWriterThreadUI;
+import bb.love_letter.user_interface.Client;
+import bb.love_letter.user_interface.controller.LoginController;
+import bb.love_letter.user_interface.model.LoginModel;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
 /**
  *
@@ -40,16 +41,21 @@ public class LoginView {
 
     private void buildUI() {
         view = new GridPane();
+        view.setId("loginView");
         Label title = new Label("Login");
         Separator separator = new Separator();
         ipField = new TextField();
         ipField.setPromptText("IP");
+        ipField.getStyleClass().add("loginField");
         portField = new TextField();
         portField.setPromptText("Port");
+        portField.getStyleClass().add("loginField");
         usernameField = new TextField();
         usernameField.setPromptText("Username");
+        usernameField.getStyleClass().add("loginField");
         errorLabel = new Label();
         button = new Button("Login");
+        button.setId("loginButton");
 
         view.setVgap(16);
         view.setAlignment(Pos.CENTER);
@@ -69,10 +75,34 @@ public class LoginView {
         button.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                String ip = ipField.getText();
-                int port = Integer.parseInt(portField.getText());
-                String username = usernameField.getText();
-                controller.connectToServer(ip, port, username);
+                submitLoginForm();
+            }
+        });
+
+        ipField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.ENTER) {
+                    submitLoginForm();
+                }
+            }
+        });
+
+        portField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.ENTER) {
+                    submitLoginForm();
+                }
+            }
+        });
+
+        usernameField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.ENTER) {
+                    submitLoginForm();
+                }
             }
         });
     }
@@ -86,31 +116,24 @@ public class LoginView {
                 }
             }
         });
-
-        model.successfulLoginProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldVal, Boolean newVal) {
-                if (newVal) {
-                    // Successful login, open new window etc.
-                    System.out.println("Successful Login!");
-                    ChatModel chatModel = new ChatModel();
-                    ChatController chatController = new ChatController(chatModel);
-                    ChatView chatView = new ChatView(chatModel, chatController);
-                    Stage stage = new Stage();
-                    stage.setTitle("Chat");
-                    stage.setScene(new Scene(chatView.asParent(), 700, 500));
-                    stage.show();
-                    view.getScene().getWindow().hide();
-                    ClientReaderThreadUI readerThreadUI = new ClientReaderThreadUI(chatController);
-                    ClientWriterThreadUI writerThreadUI = new ClientWriterThreadUI(chatController);
-                    readerThreadUI.start();
-                    writerThreadUI.start();
-                }
-            }
-        });
     }
 
     public Parent asParent() {
         return view ;
+    }
+
+    private void submitLoginForm() {
+        if (ipField.getText() == null || ipField.getText().trim().isEmpty()) {
+            model.setErrorMessage("Error: Missing IP address!");
+        } else if (portField.getText() == null || portField.getText().trim().isEmpty()) {
+            model.setErrorMessage("Error: Missing port number!");
+        } else if (usernameField.getText() == null || usernameField.getText().trim().isEmpty()) {
+            model.setErrorMessage("Error: Missing username!");
+        } else {
+            String ip = ipField.getText();
+            int port = Integer.parseInt(portField.getText());
+            String username = usernameField.getText();
+            controller.requestLogin(ip, port, username);
+        }
     }
 }

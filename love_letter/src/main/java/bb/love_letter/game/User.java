@@ -7,17 +7,22 @@ import java.io.Serializable;
  * @author Veronika Heckel
  */
 public class User implements Serializable {
-    public String name;
+    private String name;
 
     public User (String name){
         this.name = name;
     }
+    public User (){}
 
     /**
      * @return The username of the User
      */
     public String getName(){
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -37,5 +42,10 @@ public class User implements Serializable {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return getName().hashCode();
     }
 }

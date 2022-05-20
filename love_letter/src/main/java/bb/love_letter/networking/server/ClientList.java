@@ -1,4 +1,4 @@
-package bb.love_letter.networking;
+package bb.love_letter.networking.server;
 import bb.love_letter.game.User;
 
 import java.io.IOException;
@@ -13,6 +13,7 @@ import java.util.Set;
  *
  * @author Veronika Heckel
  * @author Philipp Keyzman
+ * @author Bence Ament
  */
 public class ClientList {
     public HashMap<User, Socket> clientList = new HashMap<User,Socket>();
@@ -26,7 +27,6 @@ public class ClientList {
     public boolean addClient(User user, Socket socket) {
         if (!containsClient(user)) {
             clientList.put(user, socket);
-            System.out.println("You can keep this name.");
             return true;
         } else {
             return false;
@@ -53,12 +53,7 @@ public class ClientList {
      * @return Returns true if a User with the name of the provided user parameter is already in the list, false otherwise
      */
     public boolean containsClient(User user) {
-        for (User u : clientList.keySet()) {
-            if (u.equals(user)) {
-                return true;
-            }
-        }
-        return false;
+        return clientList.containsKey(user);
     }
 
     /**
@@ -68,13 +63,12 @@ public class ClientList {
      */
     public boolean removeClient(User user) throws IOException {
         if (containsClient(user)) {
-            Socket socket = clientList.get(user);
+            Socket socket = getClientSocket(user);
             socket.close();
             clientList.remove(user);
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**

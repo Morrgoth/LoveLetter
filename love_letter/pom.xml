@@ -64,7 +64,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>bb.love_letter/bb.love_letter.user_interface.ClientApplication</mainClass>
+                            <mainClass>bb.love_letter/bb.love_letter.user_interface.Client</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
@@ -76,7 +76,7 @@
                     <execution>
                         <id>server</id>
                         <configuration>
-                            <mainClass>bb.love_letter.networking.Server</mainClass>
+                            <mainClass>bb.love_letter.networking.server.Server</mainClass>
                         </configuration>
                     </execution>
                 </executions>

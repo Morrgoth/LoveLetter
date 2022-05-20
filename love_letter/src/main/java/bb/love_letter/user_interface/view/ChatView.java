@@ -1,11 +1,14 @@
-package bb.love_letter.user_interface;
+package bb.love_letter.user_interface.view;
 
-import bb.love_letter.game.User;
-import bb.love_letter.networking.ChatMessage;
-import bb.love_letter.networking.NetworkConnection;
+import bb.love_letter.user_interface.controller.ChatController;
+import bb.love_letter.user_interface.model.ChatModel;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -19,15 +22,11 @@ import javafx.scene.layout.RowConstraints;
 public class ChatView {
     public ChatModel model;
     public ChatController controller;
-
-
     private GridPane view;
     private TextField messageField;
     private Button sentbutton;
-    private ListView<String> listView;
-
-
-    public ChatView (ChatModel model, ChatController controller) {
+    private ListView<HBox> listView;
+    public ChatView (ChatModel model, ChatController controllert) {
         this.model = model;
         this.controller = controller;
         buildUI();
@@ -39,16 +38,22 @@ public class ChatView {
         view = new GridPane();
         messageField = new TextField();
         messageField.setPromptText("Type your message here...");
+        messageField.setId("messageField");
         sentbutton = new Button("Send");
-        controller.addChatMessage(new ChatMessage(new User("Server"), "Welcome " + NetworkConnection.getInstance().getUser().getName() + "!"));
-        listView = new ListView<>(model.getChatMessageStringObservableList());
-        HBox chatBox = new HBox();
-        HBox.setHgrow(messageField, Priority.ALWAYS);
+        sentbutton.setId("sentButton");
+        listView = new ListView<>(model.getHBoxObservableList());
+        listView.setMouseTransparent(true);
+        listView.setFocusTraversable(false);
+        listView.getStyleClass().add("listView");
+        GridPane chatBox = new GridPane();
+        chatBox.getStyleClass().add("chatbox");
+        chatBox.addColumn(1, messageField  );
+        chatBox.addColumn(2, sentbutton);
+        chatBox.setHgap(10);
         RowConstraints regRow = new RowConstraints();
         regRow.setVgrow(Priority.ALWAYS);
         view.getRowConstraints().add(regRow);
 
-        chatBox.getChildren().addAll(messageField, sentbutton);
         messageField.setPrefWidth(600);
         sentbutton.setPrefWidth(100);
         view.addRow(0,listView);
@@ -66,6 +71,17 @@ public class ChatView {
                 String message = messageField.getText();
                 model.setCurrentMessage(message);
                 messageField.setText("");
+            }
+        });
+
+        messageField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.ENTER) {
+                    String message = messageField.getText();
+                    model.setCurrentMessage(message);
+                    messageField.setText("");
+                }
             }
         });
     }

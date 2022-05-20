@@ -1,11 +1,8 @@
-package bb.love_letter.networking;
+package bb.love_letter.networking.data;
 
-import bb.love_letter.game.User;
+import bb.love_letter.networking.type_adapters.EnvelopeTypeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-
-import java.io.*;
 
 /**
  * Envelope is used for Client-Server communication, by convention whenever we exchange data betweeen Client and Server
@@ -14,17 +11,18 @@ import java.io.*;
  *
  * @author Muqiu Wang
  */
-public class Envelope implements Serializable {
-    public Object payload;
-    public TypeEnum type;
+public class Envelope {
+    private EnvelopeSerializable payload;
+    private EnvelopeType type;
 
     /**
      * TypeEnum is used to store the original type of the payload of the Envelope which is necessary to know in order
      * to unwrap the Envelope and get the payload back.
      */
-    public enum TypeEnum{
-        USEREVENT,
-        CHATMESSAGE
+    public enum EnvelopeType{
+        SERVER_EVENT,
+        CHAT_MESSAGE,
+        LOGIN_REQUEST
     }
 
     /**
@@ -32,7 +30,7 @@ public class Envelope implements Serializable {
      * @param payload The Object to be exchanged between Client and Server.
      * @param type The original type of the payload.
      */
-    public Envelope(Object payload, TypeEnum type){
+    public Envelope(EnvelopeSerializable payload, EnvelopeType type){
         this.payload = payload;
         this.type = type;
     }
@@ -48,7 +46,7 @@ public class Envelope implements Serializable {
     public Object getPayload(){
         return payload;
     }
-    public TypeEnum getType(){
+    public EnvelopeType getType(){
         return type;
     }
 
@@ -56,10 +54,10 @@ public class Envelope implements Serializable {
      * This method is only used for the deserialization.
      * @param payload The Object to be stored in the Envelope.
      */
-    public void setPayload(Object payload) {
+    public void setPayload(EnvelopeSerializable payload) {
         this.payload = payload;
     }
-    public void setType(TypeEnum type) {
+    public void setType(EnvelopeType type) {
         this.type = type;
     }
 
@@ -67,7 +65,7 @@ public class Envelope implements Serializable {
      * @return JSON String to be sent through the network.
      */
     public String toJson() {
-        Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeSerializer()).create();
+        Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeTypeAdapter()).create();
         return gson.toJson(this);
     }
 
@@ -76,21 +74,9 @@ public class Envelope implements Serializable {
      * @param json This is a JSON String received through the network.
      * @return An Envelope that has the same contents as the one which was originally sent through the Network.
      */
-    public static Envelope deserializeEnvelopeFromJson(String json) {
-        Gson gson = new Gson();
-        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
-        Envelope envelope = new Envelope();
-        if (jsonObject.get("type").getAsString().equals("USEREVENT")) {
-            UserEvent userEvent = gson.fromJson(jsonObject.get("payload").getAsString(), UserEvent.class);
-            envelope.setType(Envelope.TypeEnum.USEREVENT);
-            envelope.setPayload(userEvent);
-        } else if (jsonObject.get("type").getAsString().equals("CHATMESSAGE")){
-            ChatMessage chatMessage = gson.fromJson(jsonObject.get("payload").getAsString(), ChatMessage.class);
-            User user = gson.fromJson(jsonObject.get("user").getAsString(), User.class);
-            chatMessage.setSender(user);
-            envelope.setType(Envelope.TypeEnum.CHATMESSAGE);
-            envelope.setPayload(chatMessage);
-        }
+    public static Envelope fromJson(String json) {
+        Gson gson = new GsonBuilder().registerTypeAdapter(Envelope.class, new EnvelopeTypeAdapter()).create();
+        Envelope envelope = gson.fromJson(json, Envelope.class);
         return envelope;
     }
 

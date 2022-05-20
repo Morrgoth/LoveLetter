@@ -1,0 +1,109 @@
+.ChatWindow{
+    -fx-background-color: #FFFFFF;
+    -fx-effect: dropshadow(three-pass-box, rgba(121, 197, 239, 0.38), 0, 4, 5, 2);
+    -fx-border-radius: 25px;
+}
+/*blue bubblefield*/
+.messageBubble{
+
+    -fx-text-fill: #303030;
+    -fx-padding: 7 7 7 7;
+    -fx-background-radius: 6 6 6 6;
+    -fx-max-width: 500px;
+}
+
+.sent {-fx-background-color: #0085FF;}
+.received {-fx-background-color: #D7D7D7;}
+/*username on top of bubble*/
+.userName{
+    -fx-font-family: 'Roboto';
+    -fy-font-style: normal;
+    -fx-font-weight: 300;
+    -fx-font-size: 10px;
+    -fx-text-fill: #707070;
+}
+
+/*received messages*/
+
+.userNameR{
+    -fx-font-family: 'Roboto';
+    -fy-font-style: normal;
+    -fx-font-weight: 300;
+    -fx-font-size: 20px;
+    -fx-text-fill: #707070;
+}
+/*type Message Bubble*/
+#messageField{
+
+    -fx-background-color: rgba(149, 195, 236, 0.87);
+    -fx-text-box-border: red ;
+    -fx-focus-color: green ;
+    /*-fx-border-radius: 25px;*/
+    -fx-padding: 7 7 7 7;
+    -fx-background-radius: 6 6 6 6;
+    -fx-prompt-text-fill: #707070;
+
+    /*font*/
+
+    -fx-font-family: 'Roboto';
+    -fx-font-style: normal;
+    /*-fx-font-weight: 300;*/
+    -fx-font-size: 15px;
+    -fx-color: #707070;
+}
+.chatbox{
+    -fx-border-color: white;
+    -fx-background-color: white;
+}
+
+.listView{
+    -fx-border-color: white;
+}
+
+.list-view .list-cell:odd{
+    -fx-background-color: white;
+}
+.list-view .list-cell:even{
+    -fx-background-color: white;
+}
+
+#messageField:focused {
+    -fx-color: #707070;
+    -fx-prompt-text-fill: #707070;
+
+}
+
+
+#sentButton{
+    /*bubble*/
+
+    -fx-background-color: rgba(149, 195, 236, 0.87);
+    /*-fx-border-color: #0085FF ;*/
+    -fx-padding: 7 7 7 7;
+    -fx-background-radius: 6 6 6 6;
+
+    /*sent text*/
+
+    -fx-font-family: 'Roboto';
+    -fx-font-style: normal;
+    /*-fx-font-weight: 300;*/
+    -fx-font-size: 15px;
+    -fx-color: #707070;
+
+}
+
+.loginField {
+    -fx-background-color: rgba(239, 246, 252, 0.87);
+    -fx-background-radius: 6 6 6 6;
+}
+
+#loginView{
+    -fx-background-color: white;
+}
+
+#loginButton{
+    -fx-background-color: #0085FF;
+    -fx-background-radius: 6 6 6 6;
+
+}
+
