@@ -1,14 +1,11 @@
 package bb.love_letter.user_interface.model_view;
 
-import bb.love_letter.networking.data.ServerEvent;
 import bb.love_letter.user_interface.Client;
 import bb.love_letter.user_interface.model.LoginModel;
 import bb.love_letter.user_interface.view.LoginView;
-import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 
 public class LoginViewModel {
@@ -21,6 +18,7 @@ public class LoginViewModel {
         this.client=client;
         model = loginModel;
         view = loginView;
+        start();
     }
 
     public void start() {
@@ -38,7 +36,7 @@ public class LoginViewModel {
                 model.setIp(ip);
                 model.setPort(port);
                 model.setUsername(username);
-                view.getController().requestLogin(ip, port, username);
+                requestLogin(ip, port, username);
             }
         });
     }

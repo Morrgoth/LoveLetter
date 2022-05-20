@@ -30,9 +30,7 @@ public class LoginView {
     public  TextField getUsernameField() {
         return usernameField;
     }
-    public  LoginController getController(){
-        return controller;
-    }
+
 
     public  TextField getIpField(){
         return ipField;
