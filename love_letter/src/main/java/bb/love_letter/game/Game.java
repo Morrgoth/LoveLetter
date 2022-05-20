@@ -145,12 +145,16 @@ public class Game {
             switch (userCommand) {
                 case "#help":
                     return new GameEvent(GameEvent.GameEventType.POSTHELP, "Print the following commands to receive further information:\n #score: see the current player scores. \n #cards: get information, about the distinct card effects.\n #history: see what cards have been played in this round.");
+                    break;
                 case "#score":
                     return new GameEvent(GameEvent.GameEventType.POSTSCORE, " " + playerScores);
+                    break;
                 case "#cards":
                     return new GameEvent(GameEvent.GameEventType.POSTCARDS,"Guard: " + Guard.getCardAction()\n "Priest: " + Priest.getCardAction()\n "Baron: " + Baron.getCardAction()\n "Handmaid: " +Handmaid.getCardAction()\n"Prince: " + Prince.getCardAction()\n "King: " +King.getCardAction()\n "Countess: " +Countess.getCardAction()\n"Prince: " + Cards.getCardAction());
+                    break;
                 case "#history":
                     return new GameEvent(GameEvent.GameEventType.POSTHISTORY, " " + history);
+                    break;
             }
         }catch (NullPointerException e)
             {
