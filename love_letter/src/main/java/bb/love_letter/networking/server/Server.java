@@ -133,13 +133,19 @@ public class Server {
                 broadcast(serverEvent.toEnvelope(), null,null);
             } else if (command.getGameCommandType()== Command.GameCommandType.START) {
                 GameEvent startGameEvent = game.startGame();
-                ServerEvent serverEvent = new ServerEvent(startGameEvent);
-                broadcast(serverEvent.toEnvelope(), null,null);
+                broadcast(new ServerEvent(startGameEvent).toEnvelope(), null,null);
                 if (startGameEvent.getGameEventType()== GameEvent.GameEventType.GAME_STARTED){
                     ArrayList<GameEvent> startRoundEvents = game.startRound();
                     for (GameEvent startRoundEvent:startRoundEvents){
-                        ServerEvent startServerEvent = new ServerEvent(startRoundEvent);
-                        broadcast(startServerEvent.toEnvelope(), null,null);
+                        broadcast(new ServerEvent(startRoundEvent).toEnvelope(), null,null);
+                        if (startRoundEvent.getGameEventType() == GameEvent.GameEventType.ROUND_STARTED) {
+                            ArrayList<GameEvent> turnStartEvents = game.startTurn();
+                            System.out.println(turnStartEvents.size());
+                            for (GameEvent turnStartEvent: turnStartEvents) {
+                                broadcast(new ServerEvent(turnStartEvent).toEnvelope(), null, null);
+                            }
+                        }
+
                     }
                 }
             } else if (command.getGameCommandType()== Command.GameCommandType.DISCARD) {
@@ -158,9 +164,9 @@ public class Server {
     private void broadcast(Envelope envelope, User[] whitelist, User[] blacklist) throws IOException {
         if (envelope.getType()== Envelope.EnvelopeType.SERVER_EVENT){
             ServerEvent serverEvent = (ServerEvent)envelope.getPayload();
-            if (serverEvent.getTarget() != null&&whitelist==null){
+            if (serverEvent.getTarget() != null && whitelist == null){
+                System.out.println("what");
                 whitelist = new User[]{ serverEvent.getTarget()};
-
             }
         }
 
