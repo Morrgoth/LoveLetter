@@ -3,6 +3,7 @@ import bb.love_letter.game.characters.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -262,7 +263,19 @@ public class CardTest {
         assertEquals(1, gameEvents.size());
         GameEvent gameEvent = gameEvents.get(0);
         assertSame(GameEvent.GameEventType.INVALID_ACTION, gameEvent.getGameEventType());
-        assertEquals("Please enter a target player.", gameEvent.getMessage());
+        assertEquals("Please enter a (valid) target player.", gameEvent.getMessage());
+        assertEquals("alice", gameEvent.getTarget().getName());
+    }
+
+    @Test
+    public void testNoValidTarget(){
+        game.getPlayerQueue().getPlayerByName("alice").setCard1(new King());
+        GameAction gameAction = new GameAction(1, "david");
+        ArrayList<GameEvent> gameEvents = game.playCard(new User("alice"), gameAction);
+        assertEquals(1, gameEvents.size());
+        GameEvent gameEvent = gameEvents.get(0);
+        assertSame(GameEvent.GameEventType.INVALID_ACTION, gameEvent.getGameEventType());
+        assertEquals("Please enter a (valid) target player.", gameEvent.getMessage());
         assertEquals("alice", gameEvent.getTarget().getName());
     }
 }
