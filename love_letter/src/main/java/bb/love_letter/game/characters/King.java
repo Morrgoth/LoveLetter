@@ -1,5 +1,7 @@
 package bb.love_letter.game.characters;
 
+import bb.love_letter.game.Game;
+import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
 
 /*
@@ -9,17 +11,17 @@ import bb.love_letter.game.Player;
  */
 public class King extends Cards {
 
-    private String name = "KING";
+    private String name = "King";
     private final int cardPoints = 6;
-    private String cardAction = "Trade hands with another player.";
+    private static String cardAction = "Trade hands with another player.";
 
     @Override
     public String getCardName() {
         return name;
     }
 
-    @Override
-    public String getCardAction() {
+
+    public static String getCardAction() {
         return cardAction;
     }
 
@@ -32,10 +34,8 @@ public class King extends Cards {
         Cards temp = targetPlayer.getCard1();
         targetPlayer.setCard1(sourcePlayer.getCard1());
         sourcePlayer.setCard1(temp);
-        GameEvent swapCard = new GameEvent(sourcePlayer.getName() + " swapped the card with " + targetPlayer.getName(), GameEvent.GameEventType.KINGACTION);
-        return swapCard;
-        //player1 chooses player2
-        // change hands;;
-    }
+        return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
+                " discarded the King and targeted " + targetPlayer.getName());
 
+    }
 }

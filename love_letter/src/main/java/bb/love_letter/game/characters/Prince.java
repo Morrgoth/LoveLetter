@@ -1,16 +1,17 @@
 package bb.love_letter.game.characters;
 
-/*
-    Strength: 5
-    AmountInDeck: 2
-    Player may choose any player
-    (including themselves) to discard their hand and draw a new one.
- */
+import bb.love_letter.game.*;
+
+import java.util.ArrayList;
+
+import static bb.love_letter.game.GameEvent.GameEventType.*;
+
+
 public class Prince extends Cards{
 
-    private final String name = "PRINCE";
+    private final String name = "Prince";
     private final int cardPoints = 5;
-    private final String cardAction = "Choose a player. They discard their hand and draw a new card.";
+    private static final String cardAction = "Choose a player. They discard their hand and draw a new card.";
 
 
     @Override
@@ -18,8 +19,8 @@ public class Prince extends Cards{
         return name;
     }
 
-    @Override
-    public String getCardAction() {
+
+    public static String getCardAction() {
         return cardAction;
     }
 
@@ -28,11 +29,6 @@ public class Prince extends Cards{
         return cardPoints;
     }
 
-    public void usePrince(){ /* BARON does nothing on pickUp */
-
-        //player1 chooses player2
-        // swap player2 hand to player1 only;
-        //if PRINCESS --> player2 terminate round;
-    }
-
 }
+
+

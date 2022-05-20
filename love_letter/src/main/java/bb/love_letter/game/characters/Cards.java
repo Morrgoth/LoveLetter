@@ -8,7 +8,7 @@ public abstract class Cards {
 
     private String cardName;
     private int cardPoints;
-    private String cardAction;
+    private static String cardAction;
 
 //    public static HashMap<Cards, Integer> overviewCards = new HashMap<Cards, Integer>();
 
@@ -16,15 +16,18 @@ public abstract class Cards {
         return cardName;
     }
 
+    public static String getCardAction() {
+        return cardAction;
+    }
+
     public int getCardPoints(){
         return cardPoints;
     }
+}
 
     //needed only to show the info text
-    public String getCardAction() { return cardAction; }
 
-    public void checkInDeck(){
 
-    }
 
-}
+
+

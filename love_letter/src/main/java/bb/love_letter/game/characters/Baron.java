@@ -1,8 +1,10 @@
 package bb.love_letter.game.characters;
 
-import bb.love_letter.game.GameApplication;
+import bb.love_letter.game.Game;
+import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
-import static bb.love_letter.game.GameApplication.history;
+
+
 
 /*
     Strength: 3
@@ -13,15 +15,14 @@ import static bb.love_letter.game.GameApplication.history;
 public class Baron extends Cards {
     private final String name = "Baron";
     private final int cardPoints = 3;
-    private final String cardAction = "Compare Hands privately.Card with lower value is eliminated";
+    private static final String cardAction = "Compare Hands privately.Card with lower value is eliminated";
 
     @Override
     public String getCardName() {
         return name;
     }
 
-    @Override
-    public String getCardAction() {
+    public static String getCardAction() {
         return cardAction;
     }
 
@@ -35,8 +36,9 @@ public class Baron extends Cards {
     // sourceCard + targetCard arrayList <Card> history add.
     // playersInRound delete user
 
-    public void useBaron(Player sourcePlayer, Player targetPlayer) {
+    public GameEvent useBaron(Player sourcePlayer, Player targetPlayer) {
         /* compare hands with another player, lower number is out */
+
         Cards sourcePlayerCard1 = sourcePlayer.getCard1();
         Cards targetPlayerCard1 = targetPlayer.getCard1();
 
@@ -44,21 +46,19 @@ public class Baron extends Cards {
         int targetCardValue = targetPlayerCard1.getCardPoints();
 
         if (sourceCardValue > targetCardValue) {
-            GameApplication.history.add(targetPlayerCard1);
-            GameApplication.playersInRound.remove(targetPlayer);
+            Game.history.add(targetPlayerCard1);
+
             targetPlayer.setInGame(false);
+            return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
+                    " discarded the Baron, and targeted " + targetPlayer.getName() + "; " + targetPlayer.getName() + " was eliminated");
         }
         else if (sourceCardValue < targetCardValue){
-            GameApplication.history.add(sourcePlayerCard1);
-            GameApplication.playersInRound.remove(sourcePlayer);
+            Game.history.add(sourcePlayerCard1);
             sourcePlayer.setInGame(false);
+            return new GameEvent(GameEvent.GameEventType.CARD_EFFECT, sourcePlayer.getName() +
+                    " discarded the Baron, and targeted " + targetPlayer.getName() + "; " + sourcePlayer.getName() + " was eliminated");
+        }else{
+            return new GameEvent(GameEvent.GameEventType.CARD_EFFECT, "Nothing happened.");
         }
-        else {
-            // ignore effect play on; cards to history
-            GameApplication.history.add(sourcePlayerCard1);
-            GameApplication.history.add(targetPlayerCard1);
-            //finish turn;
-        }
-
     }
 }

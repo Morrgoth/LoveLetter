@@ -3,16 +3,14 @@ package bb.love_letter.game.characters;
 /*
     Strength: 8
     AmountInDeck: 1
-    If the player plays or discrds this card for any reason, they are eliminated from the round.
+    If the player plays or discards this card for any reason, they are eliminated from the round.
  */
-
-import bb.love_letter.game.GameApplication;
 
 public class Princess extends Cards{
 
-    private final String name = "PRINCESS";
+    private final String name = "Princess";
     private final int cardPoints = 8;
-    private final String cardAction = "Lose if discarded.";
+    private static final String cardAction = "Lose if discarded.";
 
 
     @Override
@@ -20,8 +18,8 @@ public class Princess extends Cards{
         return name;
     }
 
-    @Override
-    public String getCardAction() {
+
+    public static String getCardAction() {
         return cardAction;
     }
 
@@ -29,7 +27,5 @@ public class Princess extends Cards{
     public int getCardPoints() {
         return cardPoints;
     }
-
-    //checked by usePrince(); method by discardingCard(ifPrincess()) -check;
 
 }

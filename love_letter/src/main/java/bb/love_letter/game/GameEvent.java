@@ -1,46 +1,69 @@
 package bb.love_letter.game;
 
-import javafx.event.Event;
-
 public class GameEvent {
-    String message;
-    GameEventType type;
+    private GameEventType gameEventType;
+    private String message;
+    private User target = null;
+    public boolean eventState = false;
 
-    public boolean eventState;
-    public enum GameEventType{
-        GAMEISREADY,
-        DISCARDSUCCESSFULL,
-        NOSUCHCARDINHAND,
-        PLAYERELIMINATED,
-        PLAYERIMMUNE,
-        PLAYERCHOSEN,
-        INVALIDCHOICE,
-        PRIESTACTION,
-        KINGACTION,
-        GAMEFINISHED
-
+    public GameEvent (GameEventType gameEventType){
+        this.gameEventType = gameEventType;
     }
 
-    public GameEvent (String message, GameEventType type){
+    public GameEvent (GameEventType gameEventType, String message){
+        this.gameEventType = gameEventType;
         this.message = message;
-        this.type = type;
+    }
+
+    public GameEvent (GameEventType gameEventType, String message, User target){
+        this.gameEventType = gameEventType;
+        this.message = message;
+        this.target = target;
+    }
+
+    public User getTarget() {
+        return target;
+    }
+
+    public void setTarget(User target) {
+        this.target = target;
+    }
+
+    public enum GameEventType{
+        GAME_INITIALIZED,
+        GAME_STARTED,
+        GAME_ENDED,
+        PLAYER_ADDED,
+        ROUND_STARTED,
+        ROUND_ENDED,
+        DISCARD_NOTIFICATION,
+        TURN_STARTED,
+        CARD_ADDED,
+        VALID_ACTION,
+        INVALID_ACTION,
+        CARD_EFFECT,
+        TURN_ENDED,
+        ERROR,
+        GAMEISREADY,
+        GAMEISNOTREADY,
+        DISCARDSUCCESSFULL,
+        PLAYERELIMINATED,
+        PLAYERIMMUNE,
+        INVALIDCHOICE,
+        GAMEFINISHED,
+        POSTHELP,
+        POSTSCORE,
+        POSTHISTORY,
+        POSTCARDS,
+        POSTMETHODS
+    }
+
+    public GameEventType getGameEventType() {
+        return gameEventType;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public void setType(GameEventType type) {
-        this.type = type;
-    }
-
-    public void changeState (boolean eventState, GameEventType newState){
-        GameEventType currentStateType = newState;
-        this.eventState = true;
-        int counterState = 0;
-    }
 }
