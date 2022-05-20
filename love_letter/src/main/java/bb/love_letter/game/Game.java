@@ -19,7 +19,7 @@ public class Game {
 
     //list of all cards played in the round
     public static ArrayList<Cards> history;
-    //list of players in the round that are not immune and can be choosen for a cardEffect
+    //list of players in the round that are not immune and can be chosen for a cardEffect
     public static ArrayList<Player> playerOption = new ArrayList<>();
     //list of current players still in the round
 
@@ -30,16 +30,17 @@ public class Game {
         playerQueue = new PlayerQueue();
         isGameOver = true;
         isGameStarted = true;
+        history = new ArrayList<>();
     }
 
     private GameEvent withdrawFirstCards(){
         Cards removedCard = deck.draw();
         if (playerQueue.getPlayerCount() == 2) {
-            Cards extraDiscraded1 = deck.draw();
+            Cards extraDiscarded1 = deck.draw();
             Cards extraDiscarded2 = deck.draw();
             Cards extraDiscarded3 = deck.draw();
             GameEvent discardNotification = new GameEvent(GameEvent.GameEventType.DISCARD_NOTIFICATION, "The" +
-                    " following cards were removed from the deck: " + extraDiscraded1.getCardName() + ", "
+                    " following cards were removed from the deck: " + extraDiscarded1.getCardName() + ", "
                     + extraDiscarded2.getCardName() + ", " + extraDiscarded3.getCardName());
             return discardNotification;
         }
@@ -53,6 +54,7 @@ public class Game {
             isGameStarted = false;
             isRoundOver = true;
             isTurnOver = true;
+            history.clear();
             return new GameEvent(GameEvent.GameEventType.GAME_INITIALIZED,"Print #help to see more information."); // TODO: print the available commands
         } else {
             return new GameEvent(GameEvent.GameEventType.ERROR, "A Game is already active, wait for it to finish!");
@@ -144,7 +146,7 @@ public class Game {
 
     public ArrayList<GameEvent> playCard(User user, GameAction action) {
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
-        if (playerQueue.getCurrentPlayer().equals(user)) {
+        if (playerQueue.getCurrentPlayer().getName().equals(user.getName())) {
             Player player = playerQueue.getCurrentPlayer();
             switch(action.getCardIndex()){
                 case 1:
@@ -170,7 +172,7 @@ public class Game {
                         }
                     }//Exclude the effect of COUNTESS and PRINCESS
                     else{
-                        Player targetPlayer = null;
+                        Player targetPlayer = playerQueue.getPlayerByName(action.getTarget());
                         for(Player target: playerQueue.getPlayersInRound()){
                             if(target.getName().equalsIgnoreCase(action.getTarget()) && !target.isImmune()){
                                 targetPlayer = target;
@@ -179,7 +181,7 @@ public class Game {
                         if(card1 instanceof Baron){
                             if(targetPlayer == null){
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
-                                        "Please choose a (valid) target player.", player));
+                                        targetPlayer.getName() + " is immune, you cannot target them.", player));
                             }else{
                                 discardCard(1, player);
                                 gameEvents.add(((Baron) card1).useBaron(player, targetPlayer));
@@ -187,7 +189,7 @@ public class Game {
                         }else if(card1 instanceof Guard){
                             if(targetPlayer == null){
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
-                                        "Please choose a (valid) target player.", player));
+                                        targetPlayer.getName() + " is immune, you cannot target them.", player));
                             }else{
                                 discardCard(1, player);
                                 gameEvents.add(((Guard) card1).useGuard(player, targetPlayer, action.getGuess()));
@@ -198,7 +200,7 @@ public class Game {
                         }else if(card1 instanceof King){
                             if(targetPlayer == null){
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
-                                        "Please choose a (valid) target player.", player));
+                                        targetPlayer.getName() + " is immune, you cannot target them.", player));
                             }else{
                                 discardCard(1, player);
                                 gameEvents.add(((King) card1).useKing(player, targetPlayer));
@@ -210,22 +212,22 @@ public class Game {
                         }else if(card1 instanceof Prince){
                             if(targetPlayer == null){
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
-                                        "Please choose a (valid) target player.", player));
+                                        targetPlayer.getName() + " is immune, you cannot target them.", player));
                             }else{
                                 discardCard(1, player);
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
                                         " discarded the Prince and targeted " + targetPlayer.getName()));
-                                gameEvents.add(usePrince(player, targetPlayer, deck));
+                                gameEvents.add(usePrince(player, targetPlayer));
                             }
 
                         }else if(card1 instanceof Priest){
                             if(targetPlayer == null){
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
-                                        "Please choose a (valid) target player.", player));
+                                        targetPlayer.getName() + " is immune, you cannot target them.", player));
                             }else{
                                 discardCard(1, player);
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
-                                        " discarded the Priest, and targeted " + targetPlayer.getName()));
+                                        " discarded the Priest and targeted " + targetPlayer.getName()));
                                 gameEvents.add(((Priest) card1).usePriest(player, targetPlayer));
                             }
                         }
@@ -233,7 +235,7 @@ public class Game {
                     break;
 
                 case 2:
-                    Cards card2 = player.getCard1();
+                    Cards card2 = player.getCard2();
                     //Check if the card is PRINCESS
                     if(checkIfPrincess(card2)){
                         discardCard(2, player);
@@ -264,7 +266,7 @@ public class Game {
                         if(card2 instanceof Baron){
                             if(targetPlayer == null){
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
-                                        "Please choose a (valid) target player.", player));
+                                        targetPlayer.getName() + " is immune, you cannot target them.", player));
                             }else{
                                 discardCard(2, player);
                                 gameEvents.add(((Baron) card2).useBaron(player, targetPlayer));
@@ -272,7 +274,7 @@ public class Game {
                         }else if(card2 instanceof Guard){
                             if(targetPlayer == null){
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
-                                        "Please choose a (valid) target player.", player));
+                                        targetPlayer.getName() + " is immune, you cannot target them.", player));
                             }else{
                                 discardCard(2, player);
                                 gameEvents.add(((Guard) card2).useGuard(player, targetPlayer, action.getGuess()));
@@ -300,7 +302,7 @@ public class Game {
                                 discardCard(2, player);
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
                                         " discarded the Prince and targeted " + targetPlayer.getName()));
-                                gameEvents.add(usePrince(player, targetPlayer, deck));
+                                gameEvents.add(usePrince(player, targetPlayer));
                             }
 
                         }else if(card2 instanceof Priest){
@@ -437,12 +439,12 @@ public class Game {
         }
     }
 
-    public GameEvent usePrince(Player sourcePlayer, Player targetPlayer, Deck deck){
-        discardCard(1, targetPlayer);
+    public GameEvent usePrince(Player sourcePlayer, Player targetPlayer){
         if(checkIfPrincess(targetPlayer.getCard1())){
             targetPlayer.setInGame(false);
             return new GameEvent(CARD_EFFECT, targetPlayer.getName() + " has a Princess and was eliminated");
         }else{
+            discardCard(1, targetPlayer);
             addCard(deck.draw(), targetPlayer);
             return new GameEvent(CARD_EFFECT, "You got a " + deck.draw().getCardName() + " from deck.", targetPlayer);
         }

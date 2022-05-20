@@ -47,12 +47,11 @@ public class Baron extends Cards {
 
         if (sourceCardValue > targetCardValue) {
             Game.history.add(targetPlayerCard1);
-
             targetPlayer.setInGame(false);
             return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
                     " discarded the Baron, and targeted " + targetPlayer.getName() + "; " + targetPlayer.getName() + " was eliminated");
         }
-        else if (sourceCardValue < targetCardValue){
+        else if(sourceCardValue < targetCardValue){
             Game.history.add(sourcePlayerCard1);
             sourcePlayer.setInGame(false);
             return new GameEvent(GameEvent.GameEventType.CARD_EFFECT, sourcePlayer.getName() +
