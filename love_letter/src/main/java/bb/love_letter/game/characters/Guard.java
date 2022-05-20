@@ -44,7 +44,7 @@ public class Guard  extends Cards {
                             " discarded the Guard, and targeted " + chosenPlayer.getName() + " and guessed " + chosenCard
                             + "; " + chosenPlayer.getName() + " was not eliminated");
                 }
-            }return new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "This player is immune!", sourcePlayer);
+            }return new GameEvent(GameEvent.GameEventType.INVALID_ACTION, chosenPlayer.getName() + " is immune, you cannot target them.", sourcePlayer);
         } else {
             return new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "You can't guess Guard!", sourcePlayer);
         }

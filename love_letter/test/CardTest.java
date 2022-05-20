@@ -82,7 +82,7 @@ public class CardTest {
         assertEquals("bob", gameEvents.get(2).getTarget().getName());
         assertEquals("alice discarded the King and targeted bob", gameEvents.get(0).getMessage());
         assertEquals("You switched hands with bob, you got a Countess", gameEvents.get(1).getMessage());
-        assertEquals("You switched hands with alice, you got a Priest", gameEvents.get(1).getMessage());
+        assertEquals("You switched hands with alice, you got a Priest", gameEvents.get(2).getMessage());
         assertEquals("Countess", game.getPlayerQueue().getPlayerByName("alice").getCard1().getCardName());
         assertEquals("Priest", game.getPlayerQueue().getPlayerByName("bob").getCard1().getCardName());
     }

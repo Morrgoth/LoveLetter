@@ -285,7 +285,7 @@ public class Game {
                         }else if(card2 instanceof King){
                             if(targetPlayer == null){
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
-                                        "Please choose a (valid) target player.", player));
+                                        targetPlayer.getName() + " is immune, you cannot target them.", player));
                             }else{
                                 discardCard(2, player);
                                 gameEvents.add(((King) card2).useKing(player, targetPlayer));
@@ -297,7 +297,7 @@ public class Game {
                         }else if(card2 instanceof Prince){
                             if(targetPlayer == null){
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
-                                        "Please choose a (valid) target player.", player));
+                                        targetPlayer.getName() + " is immune, you cannot target them.", player));
                             }else{
                                 discardCard(2, player);
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
@@ -308,7 +308,7 @@ public class Game {
                         }else if(card2 instanceof Priest){
                             if(targetPlayer == null){
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.INVALID_ACTION,
-                                        "Please choose a (valid) target player.", player));
+                                        targetPlayer.getName() + " is immune, you cannot target them.", player));
                             }else{
                                 discardCard(2, player);
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
