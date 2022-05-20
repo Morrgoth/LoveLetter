@@ -146,7 +146,7 @@ public class Player extends User {
         GameEvent chosenPlayerSuccess = new GameEvent(null, null);
         GameEvent noChoice = new GameEvent(null, null);
         if (chosenPlayer(playerNumber) != null) {
-            chosenPlayerSuccess.setMessage("You chose: " + chosenPlayer(playerNumber).name);
+            chosenPlayerSuccess.setMessage("You chose: " + chosenPlayer(playerNumber).getName());
             chosenPlayerSuccess.setType(PLAYERCHOSEN);
             return chosenPlayerSuccess;
         } else {
