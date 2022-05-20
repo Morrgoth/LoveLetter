@@ -10,12 +10,8 @@ import static bb.love_letter.game.GameEvent.GameEventType.GAMEISREADY;
 
 public class Game {
     private Deck deck;
-    private ArrayList<Player> playersInGame;
-    public static ArrayList<Player> playersInRound;
     private int currentPlayer;
     private PlayerQueue playerQueue;
-    private ArrayList<Player> roundWinner;
-    private ArrayList <Player> gameWinner;
     private boolean isGameStarted;
     private boolean isGameOver;
     private boolean isRoundOver;
@@ -109,9 +105,9 @@ public class Game {
 
     public ArrayList<GameEvent> startTurn() {
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
-        Player player = playersInRound.get(currentPlayer);
+        Player player = playerQueue.getCurrentPlayer();
         Cards card = deck.draw();
-        Game.initializePlayerOption();
+        //Game.initializePlayerOption();
         addCard(card, player);
         player.setImmune(false);
         gameEvents.add(new GameEvent(GameEvent.GameEventType.TURN_STARTED, "The turn of " + player.getName()
@@ -145,7 +141,7 @@ public class Game {
     public ArrayList<GameEvent> playCard(User user, GameAction action) {
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
         if (playerQueue.getCurrentPlayer().equals(user)) {
-            Player player = playersInRound.get(currentPlayer);
+            Player player = playerQueue.getCurrentPlayer();
             switch(action.getCardIndex()){
                 case 1:
                     Cards card1 = player.getCard1();
@@ -171,7 +167,7 @@ public class Game {
                     }//Exclude the effect of COUNTESS and PRINCESS
                     else{
                         Player targetPlayer = null;
-                        for(Player target: playersInRound){
+                        for(Player target: playerQueue.getPlayersInRound()){
                             if(target.getName().equalsIgnoreCase(action.getTarget()) && !target.isImmune()){
                                 targetPlayer = target;
                             }
@@ -256,7 +252,7 @@ public class Game {
                     }//Exclude the effect of COUNTESS and PRINCESS
                     else{
                         Player targetPlayer = null;
-                        for(Player target: playersInRound){
+                        for(Player target: playerQueue.getPlayersInRound()){
                             if(target.getName().equalsIgnoreCase(action.getTarget()) && !target.isImmune()){
                                 targetPlayer = target;
                             }
@@ -334,53 +330,46 @@ public class Game {
     }
 
     public GameEvent finishTurn() {
-        Player currentPlayer = playerQueue.getCurrentPlayer();
-        if (deck.size() == 0 || playersInRound.size() == 1) {
-            // ROUND IS OVER
-            isRoundOver = true;
-            for (Player player : roundWinner) {
-                player.setScore(player.getScore() + 1);
-            }
-            if (findGameWinner() != null) {
-                // GAME OVER: A Player has the required amount of tokens to win
-                isGameOver = true;
-                if(roundWinner.size() == 1 && gameWinner.size() == 1){
-                    String message = "This round has ended. The winner is " + roundWinner.get(0).getName() + "!\n"
-                            + "This game has ended. The winner is " + gameWinner.get(0).getName() + "! Congratulations!";
+        Player player = playerQueue.getCurrentPlayer();
+        if (isTurnOver) {
+            if (deck.size() == 0 || playerQueue.getPlayersInRoundCount() == 1) {
+                // ROUND IS OVER
+                isRoundOver = true;
+                ArrayList<Player> roundWinners = findRoundWinner();
+                for (Player winner: roundWinners) {
+                    winner.setScore(winner.getScore() + 1);
+                }
+                if (findGameWinner() != null) {
+                    // GAME OVER: A Player has at least 4 tokens
+                    ArrayList<Player> gameWinners = findGameWinner();
+                    isGameOver = true;
+                    String message = "This round has ended. The winner is " + roundWinners.get(0).getName() + "!\n"
+                            + "This game has ended. The winner is " + gameWinners.get(0).getName() + "! Congratulations!";
                     return new GameEvent(GameEvent.GameEventType.GAME_ENDED, message);
-                }else if(roundWinner.size() > 1 && gameWinner.size() == 1){
-                    String message = "This round has ended. The winner is " + roundWinner.get(0).getName() + " and " + roundWinner.get(1).getName() +"!\n"
-                            + "This game has ended. The winner is " + gameWinner.get(0).getName() + "! Congratulations!";
-                    return new GameEvent(GameEvent.GameEventType.GAME_ENDED, message);
-                }else{
-                    String message = "This round has ended. The winner is " + roundWinner.get(0).getName() + " and " + roundWinner.get(1).getName() +"!\n"
-                            + "This game has ended. The winners are " + gameWinner.get(0).getName() + " and " + gameWinner.get(1).getName() + "! Congratulations!";
-                    return new GameEvent(GameEvent.GameEventType.GAME_ENDED, message);
+                } else {
+                    // Next round can begin
+                    return new GameEvent(GameEvent.GameEventType.ROUND_ENDED, "This round has ended. The winner is " +
+                            roundWinners.get(0).getName() + "!");
                 }
             } else {
-                // Next round can begin
-                if(roundWinner.size() == 1){
-                    return new GameEvent(GameEvent.GameEventType.ROUND_ENDED, "This round has ended. The winner is " +
-                            roundWinner.get(0).getName() + "!");
-                }else{
-                    return new GameEvent(GameEvent.GameEventType.ROUND_ENDED, "This round has ended. The winners are " +
-                        roundWinner.get(0).getName() + " and " + roundWinner.get(1).getName() + "!");
-
-                }
-
+                // ROUND IS NOT YET OVER
+                playerQueue.setCurrentPlayerToNext();
+                return new GameEvent(GameEvent.GameEventType.TURN_ENDED, "The turn of " +
+                        player.getName() + " ended!");
             }
         } else {
             return new GameEvent(GameEvent.GameEventType.ERROR, "The current player ("
-                    + currentPlayer.getName() + ") hasn't discarded their card, yet!");
-        }
+                    + player.getName() + ") hasn't discarded their card, yet!");
 
+        }
     }
 
-    private ArrayList<Player>  findRoundWinner(ArrayList <Player> roundWinner) {
-        roundWinner = new ArrayList<>();
+    private ArrayList<Player>  findRoundWinner() {
+        ArrayList <Player> roundWinner = new ArrayList<>();
+        ArrayList<Player> playersInRound = playerQueue.getPlayersInRound();
         if (playerQueue.getPlayersInRound().size() == 1) {
             roundWinner.add(playerQueue.getPlayersInRound().get(0));
-        } else if (deck.size() == 0 && playersInRound.size() >= 2) {
+        } else if (deck.size() == 0 && playerQueue.getPlayersInRoundCount() >= 2) {
             if (playersInRound.get(0).getCard1().getCardPoints() > playersInRound.get(1).getCard1().getCardPoints()) {
                 roundWinner.add(playersInRound.get(0));
             } else if (playersInRound.get(0).getCard1().getCardPoints() < playersInRound.get(1).getCard1().getCardPoints()) {
@@ -400,17 +389,18 @@ public class Game {
     }
 
 
-    public Player findGameWinner() {
-        for (Player player: playerQueue.getPlayers()) {
+    private ArrayList<Player> findGameWinner () {
+        ArrayList<Player> gameWinners = new ArrayList<>();
+        for (Player player : playerQueue.getPlayers()) {
             if (playerQueue.getPlayerCount() == 4 && player.getScore() >= 4) {
-                return player;
-            }else if(playerQueue.getPlayerCount() == 3 && player.getScore() >= 5){
-                return player;
-            }else if (playerQueue.getPlayerCount() == 2 && player.getScore() >= 7){
-                return player;
+                gameWinners.add(player);
+            } else if (playerQueue.getPlayerCount() == 3 && player.getScore() >= 5) {
+                gameWinners.add(player);
+            } else if (playerQueue.getPlayerCount() == 2 && player.getScore() >= 7) {
+                gameWinners.add(player);
             }
         }
-        return null;
+        return gameWinners;
     }
 
     /**
@@ -421,18 +411,7 @@ public class Game {
         return deck;
     }
 
-
-
-
-    public static void initializePlayerOption(){
-        playerOption = (ArrayList<Player>) playersInRound.clone();
-        for(int i = 0; i < playerOption.size(); i++){
-            if(playerOption.get(i).isImmune() == true){
-                playerOption.remove(i);
-            }
-        }
-    }
-
+    
     public void buildTurnQueue (ArrayList<Player> playersInRound) {
         if (playersInRound.get(0).getInGame()){
             Player currentPlayer = playersInRound.get(0);
