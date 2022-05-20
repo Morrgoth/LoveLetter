@@ -26,13 +26,15 @@ public class LoginViewModel {
     }
 
     private void setupListeners() {
-        LoginView.getButton().setOnMouseClicked(new EventHandler<MouseEvent>() {
+        view.getButton().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 String ip = view.getIpField().getText();
                 int port = Integer.parseInt(view.getPortField().getText());
                 String username = view.getUsernameField().getText();
                 model.setIp(ip);
+                model.setPort(port);
+                model.setUsername(username);
                 view.getController().requestLogin(ip, port, username);
             }
         });

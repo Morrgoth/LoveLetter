@@ -18,32 +18,32 @@ import javafx.scene.layout.GridPane;
  * @author Bence Ament
  */
 public class LoginView {
-    private static GridPane view;
+    private  GridPane view;
     public LoginModel model;
-    public static LoginController controller;
-    private static TextField ipField;
-    private static TextField portField;
-    private static TextField usernameField;
+    public  LoginController controller;
+    private  TextField ipField;
+    private  TextField portField;
+    private  TextField usernameField;
     private Label errorLabel;
-    private static Button button;
+    private  Button button;
 
-    public static TextField getUsernameField() {
+    public  TextField getUsernameField() {
         return usernameField;
     }
-    public static LoginController getController(){
+    public  LoginController getController(){
         return controller;
     }
 
-    public static TextField getIpField(){
+    public  TextField getIpField(){
         return ipField;
     }
-    public static TextField getPortField(){
+    public  TextField getPortField(){
         return portField;
     }
     public Label getErrorLabel(){
         return errorLabel;
     }
-    public static Button getButton(){
+    public  Button getButton(){
         return button;
     }
     public LoginView(LoginModel model) {
