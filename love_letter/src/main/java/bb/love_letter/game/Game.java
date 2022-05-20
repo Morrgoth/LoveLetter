@@ -105,16 +105,20 @@ public class Game {
 
     public ArrayList<GameEvent> startTurn() {
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
-        Player player = playerQueue.getCurrentPlayer();
-        Cards card = deck.draw();
-        //Game.initializePlayerOption();
-        addCard(card, player);
-        player.setImmune(false);
-        gameEvents.add(new GameEvent(GameEvent.GameEventType.TURN_STARTED, "The turn of " + player.getName()
-                + " started!"));
-        gameEvents.add(new GameEvent(GameEvent.GameEventType.CARD_ADDED, "You drew a " + card.getCardName() +
-                ".\n The effect of the card is: " + card.getCardAction() + "\n Your current hand is: \n" +
-                player.printHand() + ".\n The effect of the card is: " + player.getCard1().getCardAction(), player));
+        if (isTurnOver) {
+            Player player = playerQueue.getCurrentPlayer();
+            isTurnOver = false;
+            Cards card = deck.draw();
+            addCard(card, player);
+            player.setImmune(false);
+            gameEvents.add(new GameEvent(GameEvent.GameEventType.TURN_STARTED, "The turn of " + player.getName()
+                    + " has started!"));
+            gameEvents.add(new GameEvent(GameEvent.GameEventType.CARD_ADDED, "You drew a " + card.getCardName() +
+                    ".\n The effect of the card is: " + card.getCardAction() + "\n Your current hand is: \n" +
+                    player.printHand() + ".\n The effect of the card is: " + player.getCard1().getCardAction(), player));
+        } else {
+            gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "The current turn is not yet over!"));
+        }
         return gameEvents;
     }
 
@@ -339,7 +343,7 @@ public class Game {
                 for (Player winner: roundWinners) {
                     winner.setScore(winner.getScore() + 1);
                 }
-                if (findGameWinner() != null) {
+                if (findGameWinner().size() > 0) {
                     // GAME OVER: A Player has at least 4 tokens
                     ArrayList<Player> gameWinners = findGameWinner();
                     isGameOver = true;
@@ -412,16 +416,7 @@ public class Game {
     }
 
     
-    public void buildTurnQueue (ArrayList<Player> playersInRound) {
-        if (playersInRound.get(0).getInGame()){
-            Player currentPlayer = playersInRound.get(0);
-            playersInRound.remove(0);
-            playersInRound.add(currentPlayer);
-        }
-        else{
-            playersInRound.remove(0);
-        }
-    }
+
 
     public boolean checkIfPrincess(Cards card) {
         if (card.getCardName().equals("PRINCESS")) {
