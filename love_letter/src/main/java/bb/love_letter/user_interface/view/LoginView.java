@@ -37,6 +37,10 @@ public class LoginView {
         observeModelandUpdate();
     }
 
+    public Label getErrorLabel(){
+        return errorLabel;
+    }
+
     private void buildUI() {
         view = new GridPane();
         Label title = new Label("Login");
@@ -76,16 +80,6 @@ public class LoginView {
         });
     }
 
-    private void observeModelandUpdate() {
-        model.errorMessageProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldVal, String newVal) {
-                if (!newVal.equals(oldVal) && !newVal.equals("")) {
-                    errorLabel.setText(newVal);
-                }
-            }
-        });
-    }
 
     public Parent asParent() {
         return view ;
