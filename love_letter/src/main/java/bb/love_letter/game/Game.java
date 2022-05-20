@@ -150,7 +150,7 @@ public class Game {
                     return new GameEvent(GameEvent.GameEventType.POSTSCORE, " " + playerScores);
                     break;
                 case "#cards":
-                    return new GameEvent(GameEvent.GameEventType.POSTCARDS,"Guard: " + Guard.getCardAction()\n "Priest: " + Priest.getCardAction()\n "Baron: " + Baron.getCardAction()\n "Handmaid: " +Handmaid.getCardAction()\n"Prince: " + Prince.getCardAction()\n "King: " +King.getCardAction()\n "Countess: " +Countess.getCardAction()\n"Prince: " + Cards.getCardAction());
+                    return new GameEvent(GameEvent.GameEventType.POSTCARDS,"Guard: " + Guard.getCardAction()+"\n"+ "Priest: " + Priest.getCardAction()+"\n"+ "Baron: " + Baron.getCardAction()+"\n"+ "Handmaid: " +Handmaid.getCardAction()+"\n"+ "Prince: " + Prince.getCardAction()+"\n"+ "King: " +King.getCardAction()+"\n"+ "Countess: " +Countess.getCardAction()+"\n"+"Princess: " + Princess.getCardAction());
                     break;
                 case "#history":
                     return new GameEvent(GameEvent.GameEventType.POSTHISTORY, " " + history);
