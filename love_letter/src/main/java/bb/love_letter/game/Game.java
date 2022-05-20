@@ -123,23 +123,20 @@ public class Game {
     }
 
     //später nach Server schieben damit es direkt die userCommand aus dem chat holen kann
-    public final GameEvent infoPost (String userCommand){
-        try {
-            switch (userCommand) {
-                case "#help":
-                    return new GameEvent(GameEvent.GameEventType.POSTHELP, "Print the following commands to receive further information:\n #score: see the current player scores. \n #cards: get information, about the distinct card effects.\n #history: see what cards have been played in this round.");
-                case "#score":
-                    return new GameEvent(GameEvent.GameEventType.POSTSCORE, " " + playerScores);
-                case "#cards":
-                    return new GameEvent(GameEvent.GameEventType.POSTCARDS,"Guard: " + Guard.getCardAction()+"\n"+ "Priest: " + Priest.getCardAction()+"\n"+ "Baron: " + Baron.getCardAction()+"\n"+ "Handmaid: " +Handmaid.getCardAction()+"\n"+ "Prince: " + Prince.getCardAction()+"\n"+ "King: " +King.getCardAction()+"\n"+ "Countess: " +Countess.getCardAction()+"\n"+"Princess: " + Princess.getCardAction());
-                case "#history":
-                    return new GameEvent(GameEvent.GameEventType.POSTHISTORY, " " + history);
-            }
-        }catch (NullPointerException e)
-            {
-                System.out.print("Not a valid command.");
-            }
-        return null;
+    public GameEvent getHelp (User user){
+        return new GameEvent(GameEvent.GameEventType.INFO, "Game started! Print the following commands to receive further information:\n #score: see the current player scores. \n #cards: get information, about the distinct card effects.\n #history: see what cards have been played in this round.",user);
+    }
+
+    public GameEvent getScore (User user){
+        return new GameEvent(GameEvent.GameEventType.INFO, " " + playerScores);
+    }
+
+    public GameEvent getCards (User user){
+        return new GameEvent(GameEvent.GameEventType.INFO,"Guard: " + Guard.getCardAction()+"\n"+ "Priest: " + Priest.getCardAction()+"\n"+ "Baron: " + Baron.getCardAction()+"\n"+ "Handmaid: " +Handmaid.getCardAction()+"\n"+ "Prince: " + Prince.getCardAction()+"\n"+ "King: " +King.getCardAction()+"\n"+ "Countess: " +Countess.getCardAction()+"\n"+"Princess: " + Princess.getCardAction());
+    }
+
+    public GameEvent getHistory (User user){
+        return new GameEvent(GameEvent.GameEventType.INFO, " " + history);
     }
 
     public ArrayList<GameEvent> playCard(User user, GameAction action) {

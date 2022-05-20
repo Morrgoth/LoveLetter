@@ -59,11 +59,8 @@ public class GameEvent {
         PLAYERIMMUNE,
         INVALIDCHOICE,
         GAMEFINISHED,
-        POSTHELP,
-        POSTSCORE,
-        POSTHISTORY,
-        POSTCARDS,
-        NOSUCHCARDINHAND, POSTMETHODS
+        INFO,
+        NO_SUCH_CARD_IN_HAND, POST_METHODS
     }
 
     public GameEventType getGameEventType() {

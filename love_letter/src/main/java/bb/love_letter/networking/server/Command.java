@@ -44,6 +44,7 @@ public class Command {
     public Command (ChatMessage chatMessage){
         this.chatMessage = chatMessage;
         this.commandType = interpret(chatMessage);
+        this.user = chatMessage.getSender();
     }
 
     public CommandType getCommandType() {
@@ -67,7 +68,6 @@ public class Command {
     private CommandType interpret(ChatMessage chatMessage){
         String content = chatMessage.getMessage();
         if (content.equals("bye")){
-            this.user = chatMessage.getSender();
             return CommandType.LOGOUT_COMMAND;
         }
         else if (content.charAt(0) == '@'){
@@ -76,7 +76,6 @@ public class Command {
             String target = parts [0];
             String message = parts[1];
             this.targetUser = new User(target);
-            this.user = chatMessage.getSender();
             privateMessage = new ChatMessage(chatMessage.getSender(), message, true);
             return CommandType.PRIVATE_MESSAGE_COMMAND;
 

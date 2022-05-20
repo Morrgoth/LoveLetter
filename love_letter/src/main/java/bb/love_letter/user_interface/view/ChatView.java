@@ -42,8 +42,6 @@ public class ChatView {
         sentbutton = new Button("Send");
         sentbutton.setId("sentButton");
         listView = new ListView<>(model.getHBoxObservableList());
-        listView.setMouseTransparent(true);
-        listView.setFocusTraversable(false);
         listView.getStyleClass().add("listView");
         GridPane chatBox = new GridPane();
         chatBox.getStyleClass().add("chatbox");
