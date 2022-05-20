@@ -29,7 +29,7 @@ public class PlayerQueue {
     public int getPlayersInRoundCount() {
         int uneliminatedPlayerCount = 0;
         for (Player player: players) {
-            if (!player.getInGame()) {
+            if (player.getInGame()) {
                 uneliminatedPlayerCount += 1;
             }
         }
@@ -40,7 +40,7 @@ public class PlayerQueue {
         for (Player player: players) {
             player.setCard1(null);
             player.setCard2(null);
-            player.setInGame(false);
+            player.setInGame(true);
         }
     }
 
@@ -58,7 +58,7 @@ public class PlayerQueue {
 
     public void setCurrentPlayerToNext() {
         currentPlayerIndex = (currentPlayerIndex + 1) % getPlayerCount();
-        while (players.get(currentPlayerIndex).getInGame()) {
+        while (!players.get(currentPlayerIndex).getInGame()) {
             currentPlayerIndex = (currentPlayerIndex + 1) % getPlayerCount();
         }
     }
@@ -76,7 +76,7 @@ public class PlayerQueue {
     public ArrayList<Player> getPlayersInRound() {
         ArrayList<Player> playersInRound = new ArrayList<>();
         for (Player player: players) {
-            if (!player.getInGame()) {
+            if (player.getInGame()) {
                 playersInRound.add(player);
             }
         }
