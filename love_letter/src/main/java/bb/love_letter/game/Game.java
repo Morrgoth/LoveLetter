@@ -179,7 +179,7 @@ public class Game {
             else if(card instanceof Handmaid){
                 discardCard(action.getCardIndex(), player);
                 gameEvents.add(((Handmaid) card).useHandmaid(player));
-            }//Exclude the effect of COUNTESS and PRINCESS
+            }//Exclude the effect of COUNTESS, PRINCESS and HANDMAID
             else{
                 Player targetPlayer = playerQueue.getPlayerByName(action.getTarget());
                 if(targetPlayer != null){
