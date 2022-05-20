@@ -27,7 +27,7 @@ public class ChatViewTest extends Application {
 
         ChatModel chatModel = new ChatModel();
         ChatController chatController = new ChatController(chatModel, null);
-        ChatView chatView = new ChatView(chatModel, chatController);
+        ChatView chatView = new ChatView(chatModel);
         chatModel.addVBox(new ChatMessageDisplayItem(new ChatMessage(new User("Server"), "lksfnslk sdf")).getHBox());
         chatModel.addVBox(new ChatMessageDisplayItem(new ChatMessage(new User("User1"), "lksfnslk sdf")).getHBox());
 

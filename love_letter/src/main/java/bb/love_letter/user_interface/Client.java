@@ -11,6 +11,7 @@ import bb.love_letter.user_interface.controller.ChatController;
 import bb.love_letter.user_interface.controller.LoginController;
 import bb.love_letter.user_interface.model.ChatModel;
 import bb.love_letter.user_interface.model.LoginModel;
+import bb.love_letter.user_interface.model_view.ChatViewModel;
 import bb.love_letter.user_interface.model_view.LoginViewModel;
 import bb.love_letter.user_interface.view.ChatView;
 import bb.love_letter.user_interface.view.LoginView;
@@ -35,7 +36,7 @@ public class Client extends Application {
     private Scene currentScene;
     private LoginModel loginModel;
 
-    private ChatController chatController;
+    private ChatModel chatModel;
     @Override
     public void start(Stage stage) throws IOException {
         openLoginWindow(stage);
@@ -64,9 +65,9 @@ public class Client extends Application {
                     loginModel.setLoginConfirmation(loginResponseEvent);
                     loginModel.setErrorMessage("");
                     openChatWindow(new Stage());
-                    chatController.addDisplayItem(loginModel.getLoginConfirmation());
-                    ClientReaderThread readerThread = new ClientReaderThread(chatController);
-                    ClientWriterThread writerThread = new ClientWriterThread(chatController);
+                    chatModel.addDisplayItem(loginModel.getLoginConfirmation());
+                    ClientReaderThread readerThread = new ClientReaderThread(chatModel);
+                    ClientWriterThread writerThread = new ClientWriterThread(chatModel);
                     readerThread.start();
                     writerThread.start();
                 } else if (loginResponseEvent.getServerEventType() == ServerEvent.ServerEventType.NAME_ALREADY_TAKEN) {
@@ -104,9 +105,9 @@ public class Client extends Application {
     }
 
     private void openChatWindow(Stage stage) {
-        ChatModel chatModel = new ChatModel();
-        chatController = new ChatController(chatModel, this);
-        ChatView chatView = new ChatView(chatModel, chatController);
+        chatModel = new ChatModel();
+        ChatView chatView = new ChatView(chatModel);
+        ChatViewModel chatViewModel = new ChatViewModel(this, chatModel, chatView);
         stage.setTitle("Chat");
         currentScene.getWindow().hide();
         currentScene = new Scene(chatView.asParent(), 700, 500);
