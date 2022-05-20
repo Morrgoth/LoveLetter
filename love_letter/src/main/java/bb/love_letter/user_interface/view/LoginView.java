@@ -75,10 +75,25 @@ public class LoginView {
         button.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                String ip = ipField.getText();
-                int port = Integer.parseInt(portField.getText());
-                String username = usernameField.getText();
-                controller.requestLogin(ip, port, username);
+                submitLoginForm();
+            }
+        });
+
+        ipField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.ENTER) {
+                    submitLoginForm();
+                }
+            }
+        });
+
+        portField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.ENTER) {
+                    submitLoginForm();
+                }
             }
         });
 
@@ -86,10 +101,7 @@ public class LoginView {
             @Override
             public void handle(KeyEvent keyEvent) {
                 if (keyEvent.getCode() == KeyCode.ENTER) {
-                    String ip = ipField.getText();
-                    int port = Integer.parseInt(portField.getText());
-                    String username = usernameField.getText();
-                    controller.requestLogin(ip, port, username);
+                    submitLoginForm();
                 }
             }
         });
@@ -108,5 +120,20 @@ public class LoginView {
 
     public Parent asParent() {
         return view ;
+    }
+
+    private void submitLoginForm() {
+        if (ipField.getText() == null || ipField.getText().trim().isEmpty()) {
+            model.setErrorMessage("Error: Missing IP address!");
+        } else if (portField.getText() == null || portField.getText().trim().isEmpty()) {
+            model.setErrorMessage("Error: Missing port number!");
+        } else if (usernameField.getText() == null || usernameField.getText().trim().isEmpty()) {
+            model.setErrorMessage("Error: Missing username!");
+        } else {
+            String ip = ipField.getText();
+            int port = Integer.parseInt(portField.getText());
+            String username = usernameField.getText();
+            controller.requestLogin(ip, port, username);
+        }
     }
 }
