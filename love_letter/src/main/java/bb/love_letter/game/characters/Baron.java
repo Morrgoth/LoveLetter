@@ -4,7 +4,7 @@ import bb.love_letter.game.Game;
 import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
 
-import static bb.love_letter.game.Game.playerQueue;
+
 
 /*
     Strength: 3
