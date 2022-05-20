@@ -31,22 +31,24 @@ public class Guard  extends Cards {
     }
 
 
-    public GameEvent useGuard(Player sourcePlayer,Player chosenPlayer, String chosenCard){
-        //how to set player1? and how to set it automatically during the game?
-        if(!chosenCard.equalsIgnoreCase("Guard")){
-            if (chosenPlayer.getCard1().getCardName().equalsIgnoreCase(chosenCard)) {
-                chosenPlayer.setInGame(false);
-                return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
-                        " discarded the Guard, and targeted " + chosenPlayer.getName()  + " and guessed " + chosenCard
-                        + "; " + chosenPlayer.getName() + " was eliminated");
-            } else {
-                return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
-                        "discarded the Guard, and targeted " + chosenPlayer.getName() + " and guessed " + chosenCard
-                        + "; " + chosenPlayer.getName() + " was not eliminated");
-            }
+    public GameEvent useGuard(Player sourcePlayer,Player chosenPlayer, String chosenCard) {
+        if (!chosenCard.equalsIgnoreCase("Guard")) {
+            if (!chosenPlayer.isImmune()) {
+                if (chosenPlayer.getCard1().getCardName().equalsIgnoreCase(chosenCard)) {
+                    chosenPlayer.setInGame(false);
+                    return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
+                            " discarded the Guard, and targeted " + chosenPlayer.getName() + " and guessed " + chosenCard
+                            + "; " + chosenPlayer.getName() + " was eliminated");
+                } else {
+                    return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
+                            "discarded the Guard, and targeted " + chosenPlayer.getName() + " and guessed " + chosenCard
+                            + "; " + chosenPlayer.getName() + " was not eliminated");
+                }
+            }return new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "This player is immune!", sourcePlayer);
         } else {
-                return new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "You can't guess Guard!", sourcePlayer);
+            return new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "You can't guess Guard!", sourcePlayer);
         }
+
     }
 }
 
