@@ -33,6 +33,7 @@ public class Client extends Application {
 
     private Scene currentScene;
     private LoginController loginController;
+
     private ChatController chatController;
     @Override
     public void start(Stage stage) throws IOException {
@@ -89,7 +90,7 @@ public class Client extends Application {
     private void openLoginWindow(Stage stage) {
         LoginModel loginModel = new LoginModel();
         loginController = new LoginController(loginModel, this);
-        LoginView loginView = new LoginView(loginModel, loginController);
+        LoginView loginView = new LoginView(loginModel);
         if (currentScene != null) {
             currentScene.getWindow().hide();
 

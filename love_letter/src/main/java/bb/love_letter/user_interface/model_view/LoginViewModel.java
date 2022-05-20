@@ -6,7 +6,9 @@ import bb.love_letter.user_interface.view.LoginView;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 
 public class LoginViewModel {
 
@@ -18,13 +20,30 @@ public class LoginViewModel {
         view = loginView;
     }
 
-    private void observeModelandUpdate() {
+    public void start() {
+        setupListeners();
+        observeModelandUpdate();
+    }
 
-        model.errorMessageProperty().addListener(new ChangeListener<String>() {//**************
+    private void setupListeners() {
+        LoginView.getButton().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                String ip = view.getIpField().getText();
+                int port = Integer.parseInt(view.getPortField().getText());
+                String username = view.getUsernameField().getText();
+                model.setIp(ip);
+                view.getController().requestLogin(ip, port, username);
+            }
+        });
+    }
+
+    private void observeModelandUpdate() {
+        model.errorMessageProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldVal, String newVal) {
                 if (!newVal.equals(oldVal) && !newVal.equals("")) {
-                    view.getErrorLabel().setText(newVal);//****************
+                    view.getErrorLabel().setText(newVal);
                 }
             }
         });

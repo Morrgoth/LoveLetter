@@ -9,10 +9,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
@@ -21,25 +18,39 @@ import javafx.scene.layout.GridPane;
  * @author Bence Ament
  */
 public class LoginView {
-    private GridPane view;
+    private static GridPane view;
     public LoginModel model;
-    public LoginController controller;
-    private TextField ipField;
-    private TextField portField;
-    private TextField usernameField;
+    public static LoginController controller;
+    private static TextField ipField;
+    private static TextField portField;
+    private static TextField usernameField;
     private Label errorLabel;
-    private Button button;
-    public LoginView(LoginModel model, LoginController controller) {
-        this.model = model;
-        this.controller = controller;
-        buildUI();
-        setupListeners();
-        observeModelandUpdate();
+    private static Button button;
+
+    public static TextField getUsernameField() {
+        return usernameField;
+    }
+    public static LoginController getController(){
+        return controller;
     }
 
+    public static TextField getIpField(){
+        return ipField;
+    }
+    public static TextField getPortField(){
+        return portField;
+    }
     public Label getErrorLabel(){
         return errorLabel;
     }
+    public static Button getButton(){
+        return button;
+    }
+    public LoginView(LoginModel model) {
+        this.model = model;
+        buildUI();
+    }
+
 
     private void buildUI() {
         view = new GridPane();
@@ -68,17 +79,7 @@ public class LoginView {
         view.addRow(6, errorLabel);
     }
 
-    private void setupListeners() {
-        button.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                String ip = ipField.getText();
-                int port = Integer.parseInt(portField.getText());
-                String username = usernameField.getText();
-                controller.requestLogin(ip, port, username);
-            }
-        });
-    }
+
 
 
     public Parent asParent() {
