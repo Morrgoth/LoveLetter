@@ -207,9 +207,11 @@ public class Game {
                             if(card instanceof Baron){
                                 discardCard(action.getCardIndex(), player);
                                 gameEvents.add(((Baron) card).useBaron(player, targetPlayer));
+                                endTurn();
                             }else if(card instanceof Guard){
                                 discardCard(action.getCardIndex(), player);
                                 gameEvents.add(((Guard) card).useGuard(player, targetPlayer, action.getGuess()));
+                                endTurn();
                             }else if(card instanceof King){
                                 discardCard(action.getCardIndex(), player);
                                 gameEvents.add(((King) card).useKing(player, targetPlayer));
@@ -219,6 +221,7 @@ public class Game {
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.CARD_EFFECT,
                                         "You switched hands with " +
                                                 player.getName() + ", you got a " + targetPlayer.getCard1().getCardName(), targetPlayer));
+                                endTurn();
                             }else if(card instanceof Prince){
                                 discardCard(action.getCardIndex(), player);
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
@@ -227,14 +230,14 @@ public class Game {
                                 for(int i = 0; i<princeEvent.size(); i++){
                                     gameEvents.add(princeEvent.get(i));
                                 }
-
+                                endTurn();
                             }else if(card instanceof Priest){
                                 discardCard(action.getCardIndex(), player);
                                 gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
                                         " discarded the Priest and targeted " + targetPlayer.getName()));
                                 gameEvents.add(((Priest) card).usePriest(player, targetPlayer));
+                                endTurn();
                             }
-                            endTurn();
                         }else if(targetPlayer.isImmune()){
                             gameEvents.add(new GameEvent(INVALID_ACTION, targetPlayer.getName() +
                                     " is immune, you cannot target them.", player));
