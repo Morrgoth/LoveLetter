@@ -113,7 +113,7 @@ public class Command {
             else if (command.equals("history")){
                 this.gameCommandType = GameCommandType.HISTORY;
             }
-            else if (command.equals("hands")) {
+            else if (command.equals("hand")) {
                 this.gameCommandType = GameCommandType.HAND;
             }
             return CommandType.GAME_COMMAND;
