@@ -142,14 +142,15 @@ public class Game {
     }
 
     public GameEvent getCards (User user){
-        return new GameEvent(GameEvent.GameEventType.INFO,"Guard: " + Guard.getCardAction() +
-                "\n" + "Priest: " + Priest.getCardAction() +
-                "\n" + "Baron: " + Baron.getCardAction() +
-                "\n"+ "Handmaid: " +Handmaid.getCardAction() +
-                "\n" + "Prince: " + Prince.getCardAction() +
-                "\n" + "King: " +King.getCardAction() +
-                "\n" + "Countess: " + Countess.getCardAction() +
-                "\n"+"Princess: " + Princess.getCardAction(), user);
+        return new GameEvent(GameEvent.GameEventType.INFO, "Here you can see the type of the card, the value and the cardaction: " + "\n" +
+                "Guard (1): " + Guard.getCardAction() +
+                "\n" + "Priest (2): " + Priest.getCardAction() +
+                "\n" + "Baron (3): " + Baron.getCardAction() +
+                "\n"+ "Handmaid (4): " +Handmaid.getCardAction() +
+                "\n" + "Prince (5): " + Prince.getCardAction() +
+                "\n" + "King (6): " +King.getCardAction() +
+                "\n" + "Countess (7): " + Countess.getCardAction() +
+                "\n"+"Princess (8): " + Princess.getCardAction(), user);
     }
 
     public GameEvent getHistory (User user){
