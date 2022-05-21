@@ -3,6 +3,7 @@ import bb.love_letter.game.characters.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -64,7 +65,7 @@ public class CardTest {
         ArrayList<GameEvent> gameEvents = game.playCard(new User("alice"), gameAction);
         assertEquals(1, gameEvents.size());
         assertSame(GameEvent.GameEventType.VALID_ACTION, gameEvents.get(0).getGameEventType());
-        assertEquals("alice discarded the Priest and targeted bob", gameEvents.get(0).getMessage());
+        assertEquals("alice discarded the Countess", gameEvents.get(0).getMessage());
     }
 
     @Test
@@ -82,7 +83,7 @@ public class CardTest {
         assertEquals("bob", gameEvents.get(2).getTarget().getName());
         assertEquals("alice discarded the King and targeted bob", gameEvents.get(0).getMessage());
         assertEquals("You switched hands with bob, you got a Countess", gameEvents.get(1).getMessage());
-        assertEquals("You switched hands with alice, you got a Priest", gameEvents.get(1).getMessage());
+        assertEquals("You switched hands with alice, you got a Priest", gameEvents.get(2).getMessage());
         assertEquals("Countess", game.getPlayerQueue().getPlayerByName("alice").getCard1().getCardName());
         assertEquals("Priest", game.getPlayerQueue().getPlayerByName("bob").getCard1().getCardName());
     }
@@ -96,7 +97,7 @@ public class CardTest {
         assertEquals(1, gameEvents.size());
         GameEvent gameEvent = gameEvents.get(0);
         assertSame(GameEvent.GameEventType.INVALID_ACTION, gameEvent.getGameEventType());
-        assertEquals("Bob is immune, you cannot target them", gameEvent.getMessage());
+        assertEquals("bob is immune, you cannot target them.", gameEvent.getMessage());
         assertEquals("alice", gameEvent.getTarget().getName());
     }
 
@@ -114,6 +115,19 @@ public class CardTest {
     }
 
     @Test
+    public void testPrince_discardPrincess(){
+        game.getPlayerQueue().getPlayerByName("alice").setCard1(new Prince());
+        game.getPlayerQueue().getPlayerByName("bob").setCard1(new Princess());
+        GameAction gameAction = new GameAction(1, "bob");
+        ArrayList<GameEvent> gameEvents = game.playCard(new User("alice"), gameAction);
+        assertEquals(2, gameEvents.size());
+        assertSame(GameEvent.GameEventType.VALID_ACTION, gameEvents.get(0).getGameEventType());
+        assertSame(GameEvent.GameEventType.CARD_EFFECT, gameEvents.get(1).getGameEventType());
+        assertEquals("alice discarded the Prince and targeted bob", gameEvents.get(0).getMessage());
+        assertEquals("bob has a Princess and was eliminated", gameEvents.get(1).getMessage());
+    }
+
+    @Test
     public void testPrince_immune() {
         game.getPlayerQueue().getPlayerByName("alice").setCard1(new Prince());
         game.getPlayerQueue().getPlayerByName("bob").setImmune(true);
@@ -122,7 +136,7 @@ public class CardTest {
         assertEquals(1, gameEvents.size());
         GameEvent gameEvent = gameEvents.get(0);
         assertSame(GameEvent.GameEventType.INVALID_ACTION, gameEvent.getGameEventType());
-        assertEquals("Bob is immune, you cannot target them", gameEvent.getMessage());
+        assertEquals("bob is immune, you cannot target them.", gameEvent.getMessage());
         assertEquals("alice", gameEvent.getTarget().getName());
     }
 
@@ -173,19 +187,19 @@ public class CardTest {
         assertEquals(1, gameEvents.size());
         GameEvent gameEvent = gameEvents.get(0);
         assertSame(GameEvent.GameEventType.INVALID_ACTION, gameEvent.getGameEventType());
-        assertEquals("Bob is immune, you cannot target them", gameEvent.getMessage());
+        assertEquals("bob is immune, you cannot target them.", gameEvent.getMessage());
         assertEquals("alice", gameEvent.getTarget().getName());
     }
 
     @Test
     public void testPriest() {
-        game.getPlayerQueue().getPlayerByName("alice").setCard1(new Prince());
+        game.getPlayerQueue().getPlayerByName("alice").setCard1(new Priest());
         game.getPlayerQueue().getPlayerByName("bob").setCard1(new Countess());
         GameAction gameAction = new GameAction(1, "bob");
         ArrayList<GameEvent> gameEvents = game.playCard(new User("alice"), gameAction);
         assertEquals(2, gameEvents.size());
         assertSame(GameEvent.GameEventType.VALID_ACTION, gameEvents.get(0).getGameEventType());
-        assertEquals("alice discarded the Priest, and targeted bob", gameEvents.get(0).getMessage());
+        assertEquals("alice discarded the Priest and targeted bob", gameEvents.get(0).getMessage());
         assertSame(GameEvent.GameEventType.CARD_EFFECT, gameEvents.get(1).getGameEventType());
         assertEquals("bob has a Countess", gameEvents.get(1).getMessage());
         assertEquals("alice", gameEvents.get(1).getTarget().getName());
@@ -200,7 +214,7 @@ public class CardTest {
         assertEquals(1, gameEvents.size());
         GameEvent gameEvent = gameEvents.get(0);
         assertSame(GameEvent.GameEventType.INVALID_ACTION, gameEvent.getGameEventType());
-        assertEquals("Bob is immune, you cannot target them", gameEvent.getMessage());
+        assertEquals("bob is immune, you cannot target them.", gameEvent.getMessage());
         assertEquals("alice", gameEvent.getTarget().getName());
     }
 
@@ -237,7 +251,31 @@ public class CardTest {
         assertEquals(1, gameEvents.size());
         GameEvent gameEvent = gameEvents.get(0);
         assertSame(GameEvent.GameEventType.INVALID_ACTION, gameEvent.getGameEventType());
-        assertEquals("Bob is immune, you cannot target them", gameEvent.getMessage());
+        assertEquals("bob is immune, you cannot target them.", gameEvent.getMessage());
+        assertEquals("alice", gameEvent.getTarget().getName());
+    }
+
+    @Test
+    public void testNoTarget(){
+        game.getPlayerQueue().getPlayerByName("alice").setCard1(new Baron());
+        GameAction gameAction = new GameAction(1);
+        ArrayList<GameEvent> gameEvents = game.playCard(new User("alice"), gameAction);
+        assertEquals(1, gameEvents.size());
+        GameEvent gameEvent = gameEvents.get(0);
+        assertSame(GameEvent.GameEventType.INVALID_ACTION, gameEvent.getGameEventType());
+        assertEquals("Please enter a (valid) target player.", gameEvent.getMessage());
+        assertEquals("alice", gameEvent.getTarget().getName());
+    }
+
+    @Test
+    public void testNoValidTarget(){
+        game.getPlayerQueue().getPlayerByName("alice").setCard1(new King());
+        GameAction gameAction = new GameAction(1, "david");
+        ArrayList<GameEvent> gameEvents = game.playCard(new User("alice"), gameAction);
+        assertEquals(1, gameEvents.size());
+        GameEvent gameEvent = gameEvents.get(0);
+        assertSame(GameEvent.GameEventType.INVALID_ACTION, gameEvent.getGameEventType());
+        assertEquals("Please enter a (valid) target player.", gameEvent.getMessage());
         assertEquals("alice", gameEvent.getTarget().getName());
     }
 }

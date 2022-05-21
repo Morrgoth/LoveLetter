@@ -63,9 +63,6 @@ public class Player extends User {
         }
     }
 
-    public boolean getImmune() {
-        return getImmune();
-    }
 
     public void setImmune(boolean immune) {
         this.immune = immune;
