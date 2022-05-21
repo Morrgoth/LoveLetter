@@ -32,7 +32,7 @@ public class Guard  extends Cards {
 
 
     public GameEvent useGuard(Player sourcePlayer,Player chosenPlayer, String chosenCard) {
-        if (chosenCard == null) {
+        if (chosenCard != null) {
             if (!chosenCard.equalsIgnoreCase("Guard")) {
                 if (chosenPlayer.getCard1().getCardName().equalsIgnoreCase(chosenCard)) {
                     chosenPlayer.setInGame(false);
