@@ -160,7 +160,13 @@ public class Game {
     }
 
     public GameEvent getHistory (User user){
-        return new GameEvent(GameEvent.GameEventType.INFO, " " + history, user);
+        StringBuilder message = new StringBuilder();
+        for (int i = 0; i < history.size(); i++) {
+            message.append(i).append(": ")
+                    .append(history.get(i).getCardName())
+                    .append("\n");
+        }
+        return new GameEvent(GameEvent.GameEventType.INFO, message.toString(), user);
     }
 
     public ArrayList<GameEvent> playCard(User user, GameAction action) {
