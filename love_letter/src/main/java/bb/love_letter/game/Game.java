@@ -14,11 +14,7 @@ public class Game {
     private boolean isGameOver;
     private boolean isRoundOver;
     private boolean isTurnOver;
-
     public static ArrayList<Cards> history;
-
-    public static HashMap<String, Integer> playerScores = new HashMap<String, Integer>();
-
     public Game() {
         deck = new Deck();
         playerQueue = new PlayerQueue();
@@ -142,7 +138,7 @@ public class Game {
     }
 
     public GameEvent getScore (User user){
-        return new GameEvent(GameEvent.GameEventType.INFO, " " + playerScores, user);
+        return new GameEvent(GameEvent.GameEventType.INFO, " " + playerQueue.printScores(), user);
     }
 
     public GameEvent getCards (User user){
