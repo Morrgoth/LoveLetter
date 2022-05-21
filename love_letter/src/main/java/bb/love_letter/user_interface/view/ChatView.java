@@ -21,14 +21,12 @@ import javafx.scene.layout.RowConstraints;
  */
 public class ChatView {
     public ChatModel model;
-    public ChatController controller;
     private GridPane view;
     private TextField messageField;
     private Button sentbutton;
     private ListView<HBox> listView;
-    public ChatView (ChatModel model, ChatController controllert) {
+    public ChatView (ChatModel model) {
         this.model = model;
-        this.controller = controller;
         buildUI();
         setUpListeners();
         //observeModelandUpdate();

@@ -11,6 +11,8 @@ import bb.love_letter.user_interface.controller.ChatController;
 import bb.love_letter.user_interface.controller.LoginController;
 import bb.love_letter.user_interface.model.ChatModel;
 import bb.love_letter.user_interface.model.LoginModel;
+import bb.love_letter.user_interface.model_view.ChatViewModel;
+import bb.love_letter.user_interface.model_view.LoginViewModel;
 import bb.love_letter.user_interface.view.ChatView;
 import bb.love_letter.user_interface.view.LoginView;
 import javafx.application.Application;
@@ -32,8 +34,9 @@ import java.net.UnknownHostException;
 public class Client extends Application {
 
     private Scene currentScene;
-    private LoginController loginController;
-    private ChatController chatController;
+    private LoginModel loginModel;
+
+    private ChatModel chatModel;
     @Override
     public void start(Stage stage) throws IOException {
         openLoginWindow(stage);
@@ -59,26 +62,26 @@ public class Client extends Application {
                 if (loginResponseEvent.getServerEventType() == ServerEvent.ServerEventType.LOGIN_CONFIRMATION) {
                     System.out.println("Successful Login!");
                     NetworkConnection.getInstance().init(client, dataInputStream, dataOutputStream, user);
-                    loginController.model.setLoginConfirmation(loginResponseEvent);
-                    loginController.model.setErrorMessage("");
+                    loginModel.setLoginConfirmation(loginResponseEvent);
+                    loginModel.setErrorMessage("");
                     openChatWindow(new Stage());
-                    chatController.addDisplayItem(loginController.getModel().getLoginConfirmation());
-                    ClientReaderThread readerThread = new ClientReaderThread(chatController);
-                    ClientWriterThread writerThread = new ClientWriterThread(chatController);
+                    chatModel.addDisplayItem(loginModel.getLoginConfirmation());
+                    ClientReaderThread readerThread = new ClientReaderThread(chatModel);
+                    ClientWriterThread writerThread = new ClientWriterThread(chatModel);
                     readerThread.start();
                     writerThread.start();
                 } else if (loginResponseEvent.getServerEventType() == ServerEvent.ServerEventType.NAME_ALREADY_TAKEN) {
-                    loginController.model.setErrorMessage("Error: The username " + user.getName() + " is already taken!");
+                    loginModel.setErrorMessage("Error: The username " + user.getName() + " is already taken!");
                 } else if (loginResponseEvent.getServerEventType() == ServerEvent.ServerEventType.LOGIN_ERROR) {
-                    loginController.model.setErrorMessage("Error: A login error occurred, please try again.");
+                    loginModel.setErrorMessage("Error: A login error occurred, please try again.");
                 }
             } else {
-                loginController.model.setErrorMessage("Error: Could Not Connect To Server!");
+                loginModel.setErrorMessage("Error: Could Not Connect To Server!");
             }
         } catch (UnknownHostException ex) {
-            loginController.model.setErrorMessage("Server was not found! (Check ip and port)");
+            loginModel.setErrorMessage("Server was not found! (Check ip and port)");
         } catch (IOException ex) {
-            loginController.model.setErrorMessage("An I/O exception occurred! (Check ip and port)");
+            loginModel.setErrorMessage("An I/O exception occurred! (Check ip and port)");
         }
     }
     public void logout() {
@@ -87,9 +90,9 @@ public class Client extends Application {
     }
 
     private void openLoginWindow(Stage stage) {
-        LoginModel loginModel = new LoginModel();
-        loginController = new LoginController(loginModel, this);
-        LoginView loginView = new LoginView(loginModel, loginController);
+        loginModel = new LoginModel();
+        LoginView loginView = new LoginView(loginModel);
+        LoginViewModel loginViewModel=new LoginViewModel(this,loginModel,loginView);
         if (currentScene != null) {
             currentScene.getWindow().hide();
 
@@ -102,9 +105,9 @@ public class Client extends Application {
     }
 
     private void openChatWindow(Stage stage) {
-        ChatModel chatModel = new ChatModel();
-        chatController = new ChatController(chatModel, this);
-        ChatView chatView = new ChatView(chatModel, chatController);
+        chatModel = new ChatModel();
+        ChatView chatView = new ChatView(chatModel);
+        ChatViewModel chatViewModel = new ChatViewModel(this, chatModel, chatView);
         stage.setTitle("Chat");
         currentScene.getWindow().hide();
         currentScene = new Scene(chatView.asParent(), 700, 500);
