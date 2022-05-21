@@ -112,15 +112,15 @@ public class Server {
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
                 broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.SCORE){
-                GameEvent gameEvent = game.getHelp(command.getUser());
+                GameEvent gameEvent = game.getScore(command.getUser());
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
                 broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.CARDS_INFO){
-                GameEvent gameEvent = game.getHelp(command.getUser());
+                GameEvent gameEvent = game.getCards(command.getUser());
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
                 broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.HISTORY) {
-                GameEvent gameEvent = game.getHelp(command.getUser());
+                GameEvent gameEvent = game.getHistory(command.getUser());
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
                 broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.CREATE) {
