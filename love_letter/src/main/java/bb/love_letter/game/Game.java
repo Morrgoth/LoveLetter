@@ -33,6 +33,9 @@ public class Game {
             Cards extraDiscarded1 = deck.draw();
             Cards extraDiscarded2 = deck.draw();
             Cards extraDiscarded3 = deck.draw();
+            history.add(extraDiscarded1);
+            history.add(extraDiscarded2);
+            history.add(extraDiscarded3);
             GameEvent discardNotification = new GameEvent(GameEvent.GameEventType.DISCARD_NOTIFICATION, "The" +
                     " following cards were removed from the deck: " + extraDiscarded1.getCardName() + ", "
                     + extraDiscarded2.getCardName() + ", " + extraDiscarded3.getCardName());
