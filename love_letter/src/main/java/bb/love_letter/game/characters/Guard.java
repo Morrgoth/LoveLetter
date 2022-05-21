@@ -32,20 +32,23 @@ public class Guard  extends Cards {
 
 
     public GameEvent useGuard(Player sourcePlayer,Player chosenPlayer, String chosenCard) {
-        System.out.println("useGuard");
-        if (!chosenCard.equalsIgnoreCase("Guard")) {
-            if (chosenPlayer.getCard1().getCardName().equalsIgnoreCase(chosenCard)) {
-                chosenPlayer.setInGame(false);
-                return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
-                        " discarded the Guard, and targeted " + chosenPlayer.getName() + " and guessed " + chosenCard
-                        + "; " + chosenPlayer.getName() + " was eliminated");
+        if (chosenPlayer == null) {
+            if (!chosenCard.equalsIgnoreCase("Guard")) {
+                if (chosenPlayer.getCard1().getCardName().equalsIgnoreCase(chosenCard)) {
+                    chosenPlayer.setInGame(false);
+                    return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
+                            " discarded the Guard, and targeted " + chosenPlayer.getName() + " and guessed " + chosenCard
+                            + "; " + chosenPlayer.getName() + " was eliminated");
+                } else {
+                    return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
+                            " discarded the Guard, and targeted " + chosenPlayer.getName() + " and guessed " + chosenCard
+                            + "; " + chosenPlayer.getName() + " was not eliminated");
+                }
             } else {
-                return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
-                        " discarded the Guard, and targeted " + chosenPlayer.getName() + " and guessed " + chosenCard
-                        + "; " + chosenPlayer.getName() + " was not eliminated");
+                return new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "You can't guess Guard!", sourcePlayer);
             }
         } else {
-            return new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "You can't guess Guard!", sourcePlayer);
+            return new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "Please provide a guess for Guard!", sourcePlayer);
         }
     }
 }
