@@ -62,7 +62,9 @@ public class GameTest {
     @Test
     public void testStartGame_1Player() {
         game.addPlayer(new User("alice"));
-        GameEvent gameEvent = game.startGame();
+        ArrayList<GameEvent> gameEvents = game.startGame();
+        assertEquals(1, gameEvents.size());
+        GameEvent gameEvent = gameEvents.get(0);
         assertSame(GameEvent.GameEventType.ERROR, gameEvent.getGameEventType());
         assertEquals("At least 2 Players must be in the lobby for the game to start!", gameEvent.getMessage());
     }
@@ -71,9 +73,9 @@ public class GameTest {
     public void testStartGame_2Players() {
         game.addPlayer(new User("alice"));
         game.addPlayer(new User("bob"));
-        GameEvent gameEvent = game.startGame();
-        assertSame(GameEvent.GameEventType.GAME_STARTED, gameEvent.getGameEventType());
-        assertEquals("A new game has started!", gameEvent.getMessage());
+        ArrayList<GameEvent> gameEvents = game.startGame();
+        assertSame(GameEvent.GameEventType.GAME_STARTED, gameEvents.get(0).getGameEventType());
+        assertEquals("A new game has started!", gameEvents.get(0).getMessage());
     }
 
     @Test
@@ -81,7 +83,9 @@ public class GameTest {
         game.addPlayer(new User("alice"));
         game.addPlayer(new User("bob"));
         game.startGame();
-        GameEvent gameEvent = game.startGame();
+        ArrayList<GameEvent> gameEvents = game.startGame();
+        assertEquals(1, gameEvents.size());
+        GameEvent gameEvent = gameEvents.get(0);
         assertSame(GameEvent.GameEventType.ERROR, gameEvent.getGameEventType());
         assertEquals("A Game has already started, wait for it to end!", gameEvent.getMessage());
     }
@@ -140,7 +144,7 @@ public class GameTest {
         game.startGame();
         game.startRound();
         ArrayList<GameEvent> gameEvents = game.startTurn();
-        assertEquals(2, gameEvents.size());
+        assertEquals(4, gameEvents.size());
         assertNotNull(game.getPlayerQueue().getPlayersInRound().get(0).getCard1());
         assertNotNull(game.getPlayerQueue().getPlayersInRound().get(0).getCard2());
         assertFalse(game.getPlayerQueue().getPlayersInRound().get(0).isImmune());

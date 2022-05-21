@@ -12,7 +12,9 @@ import bb.love_letter.networking.data.ChatMessage;
 public class Command {
 
 
-
+    public GameAction getGameAction() {
+        return gameAction;
+    }
 
     public enum CommandType{
         LOGOUT_COMMAND,

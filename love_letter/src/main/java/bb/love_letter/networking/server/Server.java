@@ -138,24 +138,25 @@ public class Server {
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
                 broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.START) {
-                GameEvent startGameEvent = game.startGame();
-                broadcast(new ServerEvent(startGameEvent).toEnvelope(), asUserArray(startGameEvent.getTarget()),null);
-                if (startGameEvent.getGameEventType()== GameEvent.GameEventType.GAME_STARTED){
-                    ArrayList<GameEvent> startRoundEvents = game.startRound();
-                    for (GameEvent startRoundEvent:startRoundEvents){
-                        broadcast(new ServerEvent(startRoundEvent).toEnvelope(), asUserArray(startRoundEvent.getTarget()),null);
-                        if (startRoundEvent.getGameEventType() == GameEvent.GameEventType.ROUND_STARTED) {
-                            ArrayList<GameEvent> turnStartEvents = game.startTurn();
-                            System.out.println(turnStartEvents.size());
-                            for (GameEvent turnStartEvent: turnStartEvents) {
-                                broadcast(new ServerEvent(turnStartEvent).toEnvelope(), asUserArray(turnStartEvent.getTarget()), null);
-                            }
-                        }
-
-                    }
+                ArrayList<GameEvent> startGameEvents = game.startGame();
+                for (GameEvent startGameEvent: startGameEvents) {
+                    broadcast(new ServerEvent(startGameEvent).toEnvelope(), asUserArray(startGameEvent.getTarget()),null);
                 }
             } else if (command.getGameCommandType()== Command.GameCommandType.DISCARD) {
-                //GameEvent gameEvent = game.
+                ArrayList<GameEvent> gameEvents = game.playCard(command.getUser(), command.getGameAction());
+                for (GameEvent gameEvent: gameEvents) {
+                    broadcast(new ServerEvent(gameEvent).toEnvelope(), asUserArray(gameEvent.getTarget()),null);
+                    if (gameEvent.getGameEventType() == GameEvent.GameEventType.VALID_ACTION) {
+                        GameEvent finishTurn = game.finishTurn();
+                        if (finishTurn.getGameEventType() == GameEvent.GameEventType.TURN_ENDED) {
+
+                        } else if (finishTurn.getGameEventType() == GameEvent.GameEventType.ROUND_ENDED) {
+
+                        } else if (finishTurn.getGameEventType() == GameEvent.GameEventType.GAME_ENDED) {
+
+                        }
+                    }
+                }
             }
         }
     }

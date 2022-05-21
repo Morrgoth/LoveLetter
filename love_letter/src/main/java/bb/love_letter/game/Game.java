@@ -74,18 +74,21 @@ public class Game {
         }
     }
 
-    public GameEvent startGame() {
+    public ArrayList<GameEvent> startGame() {
+        ArrayList<GameEvent> gameEvents = new ArrayList<>();
         if (!isGameStarted) {
             if (playerQueue.getPlayerCount() >= 2) {
                 isGameStarted = true;
-                return new GameEvent(GameEvent.GameEventType.GAME_STARTED, "A new game has started!");
+                gameEvents.add(new GameEvent(GameEvent.GameEventType.GAME_STARTED, "A new game has started!"));
+                gameEvents.addAll(startRound());
             } else {
-                return new GameEvent(GameEvent.GameEventType.ERROR, "At least 2 Players must be in the lobby " +
-                        "for the game to start!");
+                gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "At least 2 Players must be in the lobby " +
+                        "for the game to start!"));
             }
         } else {
-            return new GameEvent(GameEvent.GameEventType.ERROR, "A Game has already started, wait for it to end!");
+            gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "A Game has already started, wait for it to end!"));
         }
+        return gameEvents;
     }
 
     public ArrayList<GameEvent> startRound() {
@@ -101,8 +104,8 @@ public class Game {
             for (Player player: playerQueue.getPlayers()) {
                 player.addCard(deck.draw());
             }
-
             gameEvents.add(new GameEvent(GameEvent.GameEventType.ROUND_STARTED, "A new round has started!"));
+            gameEvents.addAll(startTurn());
         } else {
             gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "The current round hasn't ended yet!"));
         }
@@ -171,6 +174,7 @@ public class Game {
                 gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
                         " discarded the Princess and was eliminated"));
                 player.setInGame(false);
+                endTurn();
             }//Check if the player has COUNTESS and PRINCE or KING at the same time
             else if(checkIfCountess(player.getCard1(), player.getCard2())){
                 if(player.getCard1() instanceof Countess){
@@ -180,14 +184,17 @@ public class Game {
                 }
                 gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName()
                         + " discarded the Countess"));
+                endTurn();
             }//Discard Countess without King or Prince in hand
             else if(card instanceof Countess){
                 discardCard(action.getCardIndex(), player);
                 gameEvents.add(new GameEvent(VALID_ACTION, player.getName() + " discarded the Countess"));
+                endTurn();
             }
             else if(card instanceof Handmaid){
                 discardCard(action.getCardIndex(), player);
                 gameEvents.add(((Handmaid) card).useHandmaid(player));
+                endTurn();
             }//Exclude the effect of COUNTESS, PRINCESS and HANDMAID
             else{
                 Player targetPlayer = playerQueue.getPlayerByName(action.getTarget());
@@ -223,6 +230,7 @@ public class Game {
                                     " discarded the Priest and targeted " + targetPlayer.getName()));
                             gameEvents.add(((Priest) card).usePriest(player, targetPlayer));
                         }
+                        endTurn();
                     }else if(targetPlayer.isImmune()){
                         gameEvents.add(new GameEvent(INVALID_ACTION, targetPlayer.getName() +
                                 " is immune, you cannot target them.", player));
