@@ -266,7 +266,7 @@ public class Game {
 
         } else {
             gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "It is not your turn. It is the turn of " +
-                    playerQueue.getCurrentPlayer() + "!", user));
+                    playerQueue.getCurrentPlayer().getName() + "!", user));
         }
         return gameEvents;
     }
