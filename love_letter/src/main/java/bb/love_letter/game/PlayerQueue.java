@@ -103,4 +103,15 @@ public class PlayerQueue {
         return players.removeIf(player -> player.getName().equals(user.getName()));
     }
 
+    public String printScores() {
+        StringBuilder scores = new StringBuilder();
+        for (Player player: players) {
+            scores.append(player.getName())
+                    .append(": ")
+                    .append(player.getScore())
+                    .append("\n");
+        }
+        return scores.toString();
+    }
+
 }

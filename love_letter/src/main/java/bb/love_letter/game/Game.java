@@ -14,11 +14,7 @@ public class Game {
     private boolean isGameOver;
     private boolean isRoundOver;
     private boolean isTurnOver;
-
     public static ArrayList<Cards> history;
-
-    public static HashMap<String, Integer> playerScores = new HashMap<String, Integer>();
-
     public Game() {
         deck = new Deck();
         playerQueue = new PlayerQueue();
@@ -142,18 +138,19 @@ public class Game {
     }
 
     public GameEvent getScore (User user){
-        return new GameEvent(GameEvent.GameEventType.INFO, " " + playerScores, user);
+        return new GameEvent(GameEvent.GameEventType.INFO, " " + playerQueue.printScores(), user);
     }
 
     public GameEvent getCards (User user){
-        return new GameEvent(GameEvent.GameEventType.INFO,"Guard: " + Guard.getCardAction() +
-                "\n" + "Priest: " + Priest.getCardAction() +
-                "\n" + "Baron: " + Baron.getCardAction() +
-                "\n"+ "Handmaid: " +Handmaid.getCardAction() +
-                "\n" + "Prince: " + Prince.getCardAction() +
-                "\n" + "King: " +King.getCardAction() +
-                "\n" + "Countess: " + Countess.getCardAction() +
-                "\n"+"Princess: " + Princess.getCardAction(), user);
+        return new GameEvent(GameEvent.GameEventType.INFO, "Here you can see the type of the card, the value and the cardaction: " + "\n" +
+                "Guard (1): " + Guard.getCardAction() +
+                "\n" + "Priest (2): " + Priest.getCardAction() +
+                "\n" + "Baron (3): " + Baron.getCardAction() +
+                "\n"+ "Handmaid (4): " +Handmaid.getCardAction() +
+                "\n" + "Prince (5): " + Prince.getCardAction() +
+                "\n" + "King (6): " +King.getCardAction() +
+                "\n" + "Countess (7): " + Countess.getCardAction() +
+                "\n"+"Princess (8): " + Princess.getCardAction(), user);
     }
 
     public GameEvent getHand (User user){
@@ -168,6 +165,10 @@ public class Game {
     public ArrayList<GameEvent> playCard(User user, GameAction action) {
         System.out.println(action.getCardIndex() + " " + action.getTarget() + " " + action.getGuess());
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
+        if (!playerQueue.getPlayerByName(user.getName()).getInGame()) {
+            gameEvents.add(new GameEvent(INVALID_ACTION, "You are eliminated, wait for the next round to start!", user));
+            return gameEvents;
+        }
         if (playerQueue.getCurrentPlayer().getName().equals(user.getName())) {
             Player player = playerQueue.getCurrentPlayer();
             Cards card = null;
@@ -271,7 +272,7 @@ public class Game {
 
         } else {
             gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "It is not your turn. It is the turn of " +
-                    playerQueue.getCurrentPlayer() + "!", user));
+                    playerQueue.getCurrentPlayer().getName() + "!", user));
         }
         return gameEvents;
     }
