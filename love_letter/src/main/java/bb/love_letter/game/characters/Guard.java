@@ -34,21 +34,45 @@ public class Guard  extends Cards {
     public GameEvent useGuard(Player sourcePlayer,Player chosenPlayer, String chosenCard) {
         if (chosenCard != null) {
             if (!chosenCard.equalsIgnoreCase("Guard")) {
-                if (chosenPlayer.getCard1().getCardName().equalsIgnoreCase(chosenCard)) {
-                    chosenPlayer.setInGame(false);
-                    return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
-                            " discarded the Guard, and targeted " + chosenPlayer.getName() + " and guessed " + chosenCard
-                            + "; " + chosenPlayer.getName() + " was eliminated");
+                if (isValidGuess(chosenCard)) {
+                    if (chosenPlayer.getCard1().getCardName().equalsIgnoreCase(chosenCard)) {
+                        chosenPlayer.setInGame(false);
+                        return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
+                                " discarded the Guard, and targeted " + chosenPlayer.getName() + " and guessed " + chosenCard
+                                + "; " + chosenPlayer.getName() + " was eliminated");
+                    } else {
+                        return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
+                                " discarded the Guard, and targeted " + chosenPlayer.getName() + " and guessed " + chosenCard
+                                + "; " + chosenPlayer.getName() + " was not eliminated");
+                    }
                 } else {
-                    return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
-                            " discarded the Guard, and targeted " + chosenPlayer.getName() + " and guessed " + chosenCard
-                            + "; " + chosenPlayer.getName() + " was not eliminated");
+                    return new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "There is no card called: " + chosenCard, sourcePlayer);
                 }
             } else {
                 return new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "You can't guess Guard!", sourcePlayer);
             }
         } else {
             return new GameEvent(GameEvent.GameEventType.INVALID_ACTION, "Please provide a guess for Guard!", sourcePlayer);
+        }
+    }
+
+    private boolean isValidGuess(String guess) {
+        if (guess.equalsIgnoreCase("Priest")) {
+            return true;
+        } else if (guess.equalsIgnoreCase("Baron")) {
+            return true;
+        } else if (guess.equalsIgnoreCase("Handmaid")) {
+            return true;
+        } else if (guess.equalsIgnoreCase("Prince")) {
+            return true;
+        } else if (guess.equalsIgnoreCase("King")) {
+            return true;
+        } else if (guess.equalsIgnoreCase("Countess")) {
+            return true;
+        }  else if (guess.equalsIgnoreCase("Princess")) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
