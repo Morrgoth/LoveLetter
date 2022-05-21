@@ -13,6 +13,7 @@ import java.io.Serializable;
  * It can be thought of the Messages created and sent by the Server.
  *
  * @author Tolga Engin
+ * @author Zeynab Baiani
  */
 public class ServerEvent implements EnvelopeSerializable {
 
@@ -44,9 +45,6 @@ public class ServerEvent implements EnvelopeSerializable {
     public enum ServerEventType {
         LOGIN_ERROR,
         NAME_ALREADY_TAKEN,
-        PLAYER_LOGGED_OUT,
-        ILLEGAL_MOVE,
-        GAME_ERROR,
         LOGIN_CONFIRMATION,
         NEW_PLAYER_NOTIFICATION,
         LOGOUT_CONFIRMATION,
@@ -79,8 +77,6 @@ public class ServerEvent implements EnvelopeSerializable {
         Envelope envelope = new Envelope(this, Envelope.EnvelopeType.SERVER_EVENT);
         return envelope;
     }
-
-
 
     public User getTarget() {
         return target;

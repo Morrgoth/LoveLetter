@@ -8,6 +8,10 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
+/**
+ *
+ * @author Zeynab Baiani
+ */
 public class ChatMessageDisplayItem {
     private HBox hBox;
 
@@ -17,6 +21,12 @@ public class ChatMessageDisplayItem {
     public ChatMessageDisplayItem(ServerEvent serverEvent){
         hBox = buildDisplay(serverEvent);
     }
+
+    /**
+     * Converts ChatMessages to UI elements which can be displayed in the ListView
+     * @param chatMessage
+     * @return
+     */
      private HBox buildDisplay (ChatMessage chatMessage){
         VBox vBox1 = new VBox();
         HBox hBox1 = new HBox();
@@ -42,6 +52,12 @@ public class ChatMessageDisplayItem {
         }
         return hBox1;
      }
+
+    /**
+     * Converts ChatMessages to UI elements which can be displayed in the ListView
+     * @param serverEvent
+     * @return
+     */
     private HBox buildDisplay (ServerEvent serverEvent){
         ChatMessage chatMessage = new ChatMessage(new User("Server"), serverEvent.getMessage());
         HBox hBox1 = new HBox();
@@ -61,7 +77,4 @@ public class ChatMessageDisplayItem {
     public HBox getHBox(){
         return hBox;
     }
-
-
-
 }

@@ -6,19 +6,20 @@ import java.util.Collections;
 
 /**
  * This class is used for initializing and shuffling the deck.
+ *
+ * @author Veronika Heckel
+ * @author Philipp Keyzman
+ * @author Muqiu Wang
  */
 public class Deck{
     ArrayList<Cards> deck = new ArrayList<>();
-
     public Deck() {
         initializeDeck();
         shuffleDeck();
     }
-
     public ArrayList<Cards> getDeck(){
         return deck;
     }
-
     public void initializeDeck(){
         for(int i = 0; i<5; i++){
             deck.add(new Guard());
@@ -44,19 +45,19 @@ public class Deck{
         deck.add(new King());
         deck.add(new Countess());
     }
-
     public void shuffleDeck(){
         Collections.shuffle(deck);
     }
-
     public Cards draw() {
         return deck.remove(0);
     }
-
     public int size() {
         return deck.size();
     }
 
+    /**
+     * Initializes the Deck for a new Round.
+     */
     public void reset() {
         deck.clear();
         initializeDeck();

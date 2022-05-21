@@ -15,6 +15,7 @@ import javafx.scene.layout.HBox;
 
 /**
  *
+ * @author Bence Ament
  * @author Zeynab Baiani
  */
 public class ChatModel {
@@ -53,6 +54,10 @@ public class ChatModel {
         currentMessage.set("");
     }
 
+    /**
+     * Unwraps envelopes and adds them to the ListView so they can be displayed, it also handles logging out of users
+     * @param envelope Envelope received from a Client
+     */
     public void processMessage(Envelope envelope) {
         if (envelope.getType() == Envelope.EnvelopeType.CHAT_MESSAGE) {
             ChatMessage chatMessage = (ChatMessage) envelope.getPayload();

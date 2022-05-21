@@ -6,6 +6,7 @@ import bb.love_letter.networking.data.ChatMessage;
 
 
 /**
+ * This class parses the commands given by the Users in the Chat GUI.
  *
  * @author Zeynab Baiani
  */
@@ -69,6 +70,11 @@ public class Command {
     }
     public GameCommandType getGameCommandType(){return gameCommandType;}
 
+    /**
+     * Parses the contents of the ChatMessage and sets the values of relevant fields
+     * @param chatMessage The ChatMessage sent by a User
+     * @return The Type of the command sent by the User
+     */
     private CommandType interpret(ChatMessage chatMessage){
         String content = chatMessage.getMessage();
         if (content.equals("bye")){
@@ -122,6 +128,10 @@ public class Command {
 
     }
 
+    /**
+     * Parses the commands which start with #
+     * @param parts Game action as String array
+     */
     private void parseGameAction (String[] parts){
         if (checkCommandSyntax(parts)){
 
@@ -139,6 +149,11 @@ public class Command {
 
     }
 
+    /**
+     * Checks if the first parameter of a #discard command is parsable as an Integer
+     * @param parts
+     * @return
+     */
     private  boolean checkCommandSyntax (String[] parts){
         if (parts[1].matches("\\d+")){
             return true;

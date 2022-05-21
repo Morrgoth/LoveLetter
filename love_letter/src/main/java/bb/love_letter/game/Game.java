@@ -7,6 +7,15 @@ import java.util.HashMap;
 
 import static bb.love_letter.game.GameEvent.GameEventType.*;
 
+/**
+ * The Game class provides an API to the Server for starting, and controlling the Game and also handles possible errors
+ * and invalid commands given by the Users.
+ *
+ * @author Veronika Heckel
+ * @author Philipp Keyzman
+ * @author Muqiu Wang
+ * @author Bence Ament
+ */
 public class Game {
     private Deck deck;
     private final PlayerQueue playerQueue;
@@ -23,6 +32,11 @@ public class Game {
         history = new ArrayList<>();
     }
 
+    /**
+     * Removes the first card from the deck, if there are only two Players it also removes three additional cards and
+     * notifies the Players what they were
+     * @return Notification to be forwarded to the Server
+     */
     private GameEvent withdrawFirstCards(){
         Cards removedCard = deck.draw();
         if (playerQueue.getPlayerCount() == 2) {
@@ -39,6 +53,11 @@ public class Game {
         }
         return null;
     }
+
+    /**
+     * Initializes the lobby so Users can join and handles possible errors
+     * @return Notification to be forwarded to the Server
+     */
     public GameEvent init() {
         System.out.println(isGameOver);
         System.out.println(isGameStarted);
@@ -56,7 +75,10 @@ public class Game {
             return new GameEvent(GameEvent.GameEventType.ERROR, "A Game is already active, wait for it to finish!");
         }
     }
-
+    /**
+     * Adds the User as a Player to the PlayerQueue and handles possible errors
+     * @return Notification to be forwarded to the Server
+     */
     public GameEvent addPlayer(User user) {
         if (isGameOver) {
             return new GameEvent(GameEvent.GameEventType.ERROR, "The Game has not yet been created! You can " +
@@ -68,7 +90,10 @@ public class Game {
             return playerQueue.addPlayer(user);
         }
     }
-
+    /**
+     * Initializes the Game, after calling this no one else can join the game until it is over, and handles possible errors
+     * @return Notifications to be forwarded to the Server
+     */
     public ArrayList<GameEvent> startGame() {
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
         if (!isGameStarted) {
@@ -85,7 +110,10 @@ public class Game {
         }
         return gameEvents;
     }
-
+    /**
+     * Initializes the next Round and starts the turn of the first Player, and handles possible errors
+     * @return Notifications to be forwarded to the Server
+     */
     public ArrayList<GameEvent> startRound() {
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
         if (isRoundOver) {
@@ -107,13 +135,17 @@ public class Game {
         return gameEvents;
     }
 
+    /**
+     * Initializes the turn of the next Player
+     * @return Notifications to be forwarded to the Server
+     */
     public ArrayList<GameEvent> startTurn() {
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
         if (isTurnOver) {
             Player player = playerQueue.getCurrentPlayer();
             isTurnOver = false;
             Cards card = deck.draw();
-            addCard(card, player);
+            player.addCard(card);
             player.setImmune(false);
             gameEvents.add(new GameEvent(GameEvent.GameEventType.TURN_STARTED, "The turn of " + player.getName()
                     + " has started!"));
@@ -124,8 +156,10 @@ public class Game {
         }
         return gameEvents;
     }
-
-    //später nach Server schieben damit es direkt die userCommand aus dem chat holen kann
+    /**
+     * @param user The user who requested the help message
+     * @return The Notification to be forwarded to the User who requested the info
+     */
     public GameEvent getHelp (User user){
         return new GameEvent(GameEvent.GameEventType.INFO, "The following commands are available:\n" +
                 "#create: initializes the so Players can join. \n" +
@@ -137,11 +171,17 @@ public class Game {
                 "#hand: check the card(s) you currently have in your hand. \n" +
                 "#history: see what cards have been played in this round.", user);
     }
-
+    /**
+     * @param user The user who requested the current scores
+     * @return The Notification to be forwarded to the User who requested the info
+     */
     public GameEvent getScore (User user){
         return new GameEvent(GameEvent.GameEventType.INFO, playerQueue.printScores(), user);
     }
-
+    /**
+     * @param user The user who requested the information regarding the cards
+     * @return The Notification to be forwarded to the User who requested the info
+     */
     public GameEvent getCards (User user){
         return new GameEvent(GameEvent.GameEventType.INFO, "Here you can see the type of the card, the value and the cardaction: " + "\n" +
                 "Guard (1): " + Guard.getCardAction() +
@@ -153,12 +193,19 @@ public class Game {
                 "\n" + "Countess (7): " + Countess.getCardAction() +
                 "\n"+"Princess (8): " + Princess.getCardAction(), user);
     }
-
+    /**
+     * @param user The user who requested their hand
+     * @return The Notification to be forwarded to the User who requested their hand
+     */
     public GameEvent getHand (User user){
         String message = "Here is your current Hand: \n" + playerQueue.getPlayerByName(user.getName()).printHand();
         return new GameEvent(INFO, message, user);
     }
 
+    /**
+     * @param user The user who requested the history
+     * @return The Notification to be forwarded to the User who requested the history
+     */
     public GameEvent getHistory (User user){
         StringBuilder message = new StringBuilder();
         for (int i = 0; i < history.size(); i++) {
@@ -169,6 +216,12 @@ public class Game {
         return new GameEvent(GameEvent.GameEventType.INFO, message.toString(), user);
     }
 
+    /**
+     * Handles the discarding of cards, applying of effects and handles possible errors.
+     * @param user The Player who gave the #discard command
+     * @param action The Action to be executed
+     * @return The Notification to be forwarded to the Server
+     */
     public ArrayList<GameEvent> playCard(User user, GameAction action) {
         System.out.println(action.getCardIndex() + " " + action.getTarget() + " " + action.getGuess());
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
@@ -291,6 +344,10 @@ public class Game {
         isTurnOver = true;
     }
 
+    /**
+     * It finishes the current turn and starts the next turn or round, or announces the end of the game and the winner(s)
+     * @return Notification to be forwarded to the server
+     */
     public GameEvent finishTurn() {
         Player player = playerQueue.getCurrentPlayer();
         if (isTurnOver) {
@@ -326,6 +383,9 @@ public class Game {
         }
     }
 
+    /**
+     * @return The winner(s) of the round or empty list
+     */
     private ArrayList<Player> findRoundWinner() {
         ArrayList <Player> roundWinner = new ArrayList<>();
         ArrayList<Player> playersInRound = playerQueue.getPlayersInRound();
@@ -356,7 +416,9 @@ public class Game {
         return roundWinner;
     }
 
-
+    /**
+     * @return The winner(s) of the Game or empty list
+     */
     private ArrayList<Player> findGameWinner () {
         ArrayList<Player> gameWinners = new ArrayList<>();
         for (Player player : playerQueue.getPlayers()) {
@@ -379,7 +441,6 @@ public class Game {
         return deck;
     }
 
-
     public boolean checkIfPrincess(Cards card) {
         if (card instanceof Princess) {
             return true;
@@ -387,9 +448,13 @@ public class Game {
         return false;
     }
 
+    /**
+     * Checks if Prince/King and Countess are at a Player's hand at the same time.
+     * @param card1
+     * @param card2
+     * @return
+     */
     public boolean checkIfCountess(Cards card1, Cards card2) {
-
-        //check for COUNTESS
         if (card1 instanceof Countess && (card2 instanceof Prince || card2 instanceof King)) {
             return true;
         }else if (card2 instanceof Countess && (card1 instanceof Prince || card1 instanceof King)) {
@@ -399,6 +464,12 @@ public class Game {
         }
     }
 
+    /**
+     * Apply the effects of the Prince card. The targeted player must discard their current card and
+     * @param sourcePlayer The current Player who discarded Prince
+     * @param targetPlayer The Player targeted by the current Player.
+     * @return
+     */
     public ArrayList<GameEvent> usePrince(Player sourcePlayer, Player targetPlayer){
         ArrayList<GameEvent> princeEvent = new ArrayList<>();
         if(checkIfPrincess(targetPlayer.getCard1())){
@@ -409,13 +480,19 @@ public class Game {
                     targetPlayer.getCard1().getCardName() + " with Prince-effect and drew a new card from deck"));
             discardCard(1, targetPlayer);
             Cards newCard = deck.draw();
-            addCard(newCard, targetPlayer);
+            targetPlayer.addCard(newCard);
             princeEvent.add(new GameEvent(CARD_EFFECT, "You got a " + newCard.getCardName() +
                     " from deck.", targetPlayer));
         }
         return princeEvent;
     }
 
+    /**
+     * It is used to find the Round Winner in the non-trivial case (empty deck, multiple players still in Round)
+     * @param discarded
+     * @param player
+     * @return
+     */
     public int discardedPoints(ArrayList<Cards> discarded, Player player) {
         int sum = 0;
         for (Cards card : player.getDiscarded()) {
@@ -424,6 +501,11 @@ public class Game {
         return sum;
     }
 
+    /**
+     * Discards the selected card and leaves the remaining card in the 1st card slot.
+     * @param cardNumber 1 or 2, the card to be discarded
+     * @param player
+     */
     public void discardCard(int cardNumber, Player player) {
         switch (cardNumber) {
             case 1:
@@ -444,15 +526,11 @@ public class Game {
         }
     }
 
-
-    public void addCard(Cards card, Player player) {
-        if (player.getCard1() == null) {
-            player.setCard1(card);
-        } else {
-            player.setCard2(card);
-        }
-    }
-
+    /**
+     * Used for handling users leaving the chatroom while a Game is in progress.
+     * @param user The user who left the chatroom while they were still a Player in the Game.
+     * @return
+     */
     public GameEvent removeLoggedOutUser(User user) {
         if (playerQueue.getPlayerByName(user.getName()) != null) {
             if (playerQueue.getPlayerCount() == 2) {

@@ -14,6 +14,10 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 
+/**
+ *
+ * @author Zeynab Baiani
+ */
 public class ChatMessageTypeAdapter extends TypeAdapter<ChatMessage> {
     @Override
     public void write(JsonWriter jsonWriter, ChatMessage chatMessage) throws IOException {

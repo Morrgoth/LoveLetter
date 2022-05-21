@@ -10,8 +10,11 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 
+/**
+ *
+ * @author Tolga Engin
+ */
 public class UserTypeAdapter extends TypeAdapter<User> {
-
 
     @Override
     public void write(JsonWriter jsonWriter, User user) throws IOException {

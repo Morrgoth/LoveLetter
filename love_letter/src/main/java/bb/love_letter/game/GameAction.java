@@ -1,11 +1,14 @@
 package bb.love_letter.game;
 
+/**
+ * The Game receives the #discard commands of Players parsed as GameAction objects.
+ *
+ * @author Bence Ament
+ */
 public class GameAction {
-
     private int cardIndex;
     private String target;
     private String guess;
-
     public GameAction(int cardIndex) {
         this.cardIndex = cardIndex;
     }

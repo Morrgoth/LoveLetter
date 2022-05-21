@@ -11,6 +11,10 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 
+/**
+ *
+ * @author Tolga Engin
+ */
 public class LoginRequestTypeAdapter extends TypeAdapter<LoginRequest>{
     @Override
     public void write(JsonWriter jsonWriter, LoginRequest loginRequest) throws IOException {

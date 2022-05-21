@@ -17,6 +17,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 
+/**
+ *
+ * @author Bence Ament
+ * @author Zeynab Baiani
+ * @author Tolga Engin
+ */
 public class ChatViewModel{
 
     private ChatModel model;
@@ -33,6 +39,9 @@ public class ChatViewModel{
         observeModelandUpdate();
     }
 
+    /**
+     * Listens for user input through the GUI.
+     */
     private void setUpListeners() {
 
         view.getListView().getItems().addListener(new ListChangeListener<HBox>() {
@@ -62,6 +71,9 @@ public class ChatViewModel{
         });
     }
 
+    /**
+     * Listens for changes in the ChatModel and updates the GUI accordingly
+     */
     private void observeModelandUpdate() {
         model.isLoggedOutProperty().addListener(new ChangeListener<Boolean>() {
             @Override

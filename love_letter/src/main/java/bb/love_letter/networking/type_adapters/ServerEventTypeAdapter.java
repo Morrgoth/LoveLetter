@@ -9,9 +9,11 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 
+/**
+ *
+ * @author Tolga Engin
+ */
 public class ServerEventTypeAdapter extends TypeAdapter<ServerEvent> {
-
-
     @Override
     public void write(JsonWriter jsonWriter, ServerEvent serverEvent) throws IOException {
         jsonWriter.beginObject();

@@ -44,6 +44,12 @@ public class Client extends Application {
         launch(args);
     }
 
+    /**
+     * Handles the logging in of users and handles possible login errors
+     * @param ip
+     * @param port
+     * @param username
+     */
     public void login(String ip, int port, String username) {
         try {
             Socket client = new Socket(ip, port);
@@ -82,11 +88,19 @@ public class Client extends Application {
             loginModel.setErrorMessage("An I/O exception occurred! (Check ip and port)");
         }
     }
+
+    /**
+     * Handles logging out of users and prepares the app for a new Login
+     */
     public void logout() {
         NetworkConnection.getInstance().reset();
         openLoginWindow(new Stage());
     }
 
+    /**
+     * Opens a new LoginView and sets up LoginModel and LoginViewModel
+     * @param stage
+     */
     private void openLoginWindow(Stage stage) {
         loginModel = new LoginModel();
         LoginView loginView = new LoginView();
@@ -101,6 +115,10 @@ public class Client extends Application {
         stage.show();
     }
 
+    /**
+     * Opens a new ChatView and sets up ChatModel and ChatViewModel
+     * @param stage
+     */
     private void openChatWindow(Stage stage) {
         chatModel = new ChatModel();
         ChatView chatView = new ChatView();

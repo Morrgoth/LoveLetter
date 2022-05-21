@@ -10,6 +10,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
+/**
+ *
+ * @author Bence Ament
+ * @author Tolga Engin
+ */
 public class LoginViewModel {
 
     private LoginModel model;
@@ -23,7 +28,9 @@ public class LoginViewModel {
         setupListeners();
         observeModelandUpdate();
     }
-
+    /**
+     * Listens for user input through the GUI.
+     */
     private void setupListeners() {
         view.getButton().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -60,7 +67,9 @@ public class LoginViewModel {
         });
     }
 
-
+    /**
+     * Listens for changes in the LoginModel and updates the GUI accordingly
+     */
     private void observeModelandUpdate() {
         model.errorMessageProperty().addListener(new ChangeListener<String>() {
             @Override
