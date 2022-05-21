@@ -146,7 +146,7 @@ public class Game {
     }
 
     public GameEvent getCards (User user){
-        return new GameEvent(GameEvent.GameEventType.INFO, "Here you can see the type of the card, the value and the cardaction:" + "\n" +
+        return new GameEvent(GameEvent.GameEventType.INFO, "Here you can see the type of the card, the value and the cardaction: " + "\n" +
                 "Guard (1): " + Guard.getCardAction() +
                 "\n" + "Priest (2): " + Priest.getCardAction() +
                 "\n" + "Baron (3): " + Baron.getCardAction() +
