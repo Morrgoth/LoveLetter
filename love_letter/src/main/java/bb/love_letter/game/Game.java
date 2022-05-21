@@ -210,8 +210,11 @@ public class Game {
                                 endTurn();
                             }else if(card instanceof Guard){
                                 discardCard(action.getCardIndex(), player);
-                                gameEvents.add(((Guard) card).useGuard(player, targetPlayer, action.getGuess()));
-                                endTurn();
+                                GameEvent gameEvent = ((Guard) card).useGuard(player, targetPlayer, action.getGuess());
+                                gameEvents.add(gameEvent);
+                                if (gameEvent.getGameEventType() == VALID_ACTION) {
+                                    endTurn();
+                                }
                             }else if(card instanceof King){
                                 discardCard(action.getCardIndex(), player);
                                 gameEvents.add(((King) card).useKing(player, targetPlayer));

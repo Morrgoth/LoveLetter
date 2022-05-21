@@ -148,17 +148,20 @@ public class Server {
                     broadcast(new ServerEvent(gameEvent).toEnvelope(), asUserArray(gameEvent.getTarget()),null);
                     if (gameEvent.getGameEventType() == GameEvent.GameEventType.VALID_ACTION) {
                         GameEvent finishTurn = game.finishTurn();
-                        broadcast(new ServerEvent(finishTurn).toEnvelope(), asUserArray(finishTurn.getTarget()),null);
+                        gameEvents.add(finishTurn);
+                        //broadcast(new ServerEvent(finishTurn).toEnvelope(), asUserArray(finishTurn.getTarget()),null);
                         if (finishTurn.getGameEventType() == GameEvent.GameEventType.TURN_ENDED) {
                             ArrayList<GameEvent> gameEvents1 = game.startTurn();
-                            for (GameEvent gameEvent1: gameEvents1) {
-                                broadcast(new ServerEvent(gameEvent1).toEnvelope(), asUserArray(gameEvent1.getTarget()),null);
-                            }
+                            gameEvents.addAll(gameEvents1);
+                            //for (GameEvent gameEvent1: gameEvents1) {
+                                //broadcast(new ServerEvent(gameEvent1).toEnvelope(), asUserArray(gameEvent1.getTarget()),null);
+                            //}
                         } else if (finishTurn.getGameEventType() == GameEvent.GameEventType.ROUND_ENDED) {
                             ArrayList<GameEvent> gameEvents1 = game.startRound();
-                            for (GameEvent gameEvent1: gameEvents1) {
-                                broadcast(new ServerEvent(gameEvent1).toEnvelope(), asUserArray(gameEvent1.getTarget()),null);
-                            }
+                            gameEvents.addAll(gameEvents1);
+                            //for (GameEvent gameEvent1: gameEvents1) {
+                                //broadcast(new ServerEvent(gameEvent1).toEnvelope(), asUserArray(gameEvent1.getTarget()),null);
+                            //}
                         } else if (finishTurn.getGameEventType() == GameEvent.GameEventType.GAME_ENDED) {
                             // GAME OVER
                         }
