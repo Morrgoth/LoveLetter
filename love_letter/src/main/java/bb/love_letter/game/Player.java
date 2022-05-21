@@ -140,7 +140,7 @@ public class Player extends User {
                 setCard2(null);
                 return new GameEvent(GameEvent.GameEventType.DISCARDSUCCESSFULL,"You chose Card 2");
             default:
-                return new GameEvent(GameEvent.GameEventType.NOSUCHCARDINHAND,"Please enter a valid number");
+                return new GameEvent(GameEvent.GameEventType.NO_SUCH_CARD_IN_HAND,"Please enter a valid number");
         }
 
     }

@@ -3,8 +3,8 @@ package bb.love_letter.user_interface.test;
 import bb.love_letter.game.User;
 import bb.love_letter.networking.client.NetworkConnection;
 import bb.love_letter.networking.data.ChatMessage;
-import bb.love_letter.user_interface.controller.ChatController;
 import bb.love_letter.user_interface.model.ChatModel;
+import bb.love_letter.user_interface.model_view.ChatViewModel;
 import bb.love_letter.user_interface.view.ChatMessageDisplayItem;
 import bb.love_letter.user_interface.view.ChatView;
 import javafx.application.Application;
@@ -26,8 +26,8 @@ public class ChatViewTest extends Application {
         NetworkConnection.getInstance().init(null, null, null, new User("Server"));
 
         ChatModel chatModel = new ChatModel();
-        ChatController chatController = new ChatController(chatModel, null);
-        ChatView chatView = new ChatView(chatModel, chatController);
+        ChatView chatView = new ChatView();
+        ChatViewModel chatViewModel = new ChatViewModel(null, chatModel, chatView);
         chatModel.addVBox(new ChatMessageDisplayItem(new ChatMessage(new User("Server"), "lksfnslk sdf")).getHBox());
         chatModel.addVBox(new ChatMessageDisplayItem(new ChatMessage(new User("User1"), "lksfnslk sdf")).getHBox());
 

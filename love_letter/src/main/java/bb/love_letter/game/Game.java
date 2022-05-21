@@ -5,13 +5,11 @@ import bb.love_letter.game.characters.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static bb.love_letter.game.GameEvent.GameEventType.CARD_EFFECT;
-import static bb.love_letter.game.GameEvent.GameEventType.GAMEISREADY;
+import static bb.love_letter.game.GameEvent.GameEventType.*;
 
 public class Game {
     private Deck deck;
-    private int currentPlayer;
-    private PlayerQueue playerQueue;
+    private final PlayerQueue playerQueue;
     private boolean isGameStarted;
     private boolean isGameOver;
     private boolean isRoundOver;
@@ -19,9 +17,6 @@ public class Game {
 
     //list of all cards played in the round
     public static ArrayList<Cards> history;
-    //list of players in the round that are not immune and can be choosen for a cardEffect
-    public static ArrayList<Player> playerOption = new ArrayList<>();
-    //list of current players still in the round
 
     public static HashMap<String, Integer> playerScores = new HashMap<String, Integer>();
 
@@ -46,6 +41,8 @@ public class Game {
         return null;
     }
     public GameEvent init() {
+        System.out.println(isGameOver);
+        System.out.println(isGameStarted);
         if (isGameOver && isGameStarted) {
             deck.reset();
             playerQueue.clear();
@@ -53,16 +50,20 @@ public class Game {
             isGameStarted = false;
             isRoundOver = true;
             isTurnOver = true;
-            return new GameEvent(GameEvent.GameEventType.GAME_INITIALIZED,"Print #help to see more information."); // TODO: print the available commands
+            return new GameEvent(GameEvent.GameEventType.GAME_INITIALIZED,"The Game was successfully initialized. " +
+                    "Use #help to see more information.");
         } else {
             return new GameEvent(GameEvent.GameEventType.ERROR, "A Game is already active, wait for it to finish!");
         }
     }
 
     public GameEvent addPlayer(User user) {
-        if (isGameStarted) {
+        if (isGameOver) {
+            return new GameEvent(GameEvent.GameEventType.ERROR, "The Game has not yet been created! You can " +
+                    "initialize a new game with #create!", user);
+        } else if (isGameStarted) {
             return new GameEvent(GameEvent.GameEventType.ERROR, "The Game has already started! Wait for the next" +
-                    " game to start.");
+                    " game to start.", user);
         } else {
             return playerQueue.addPlayer(user);
         }
@@ -115,7 +116,7 @@ public class Game {
                     + " has started!"));
             gameEvents.add(new GameEvent(GameEvent.GameEventType.CARD_ADDED, "You drew a " + card.getCardName() +
                     ".\n The effect of the card is: " + card.getCardAction() + "\n Your current hand is: \n" +
-                    player.printHand() + ".\n The effect of the card is: " + player.getCard1().getCardAction(), player));
+                    player.printHand() + ".\n The effect of the card is: " + player.getCard1().getCardAction(), ((User) player)));
         } else {
             gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "The current turn is not yet over!"));
         }
@@ -123,23 +124,27 @@ public class Game {
     }
 
     //später nach Server schieben damit es direkt die userCommand aus dem chat holen kann
-    public final GameEvent infoPost (String userCommand){
-        try {
-            switch (userCommand) {
-                case "#help":
-                    return new GameEvent(GameEvent.GameEventType.POSTHELP, "Print the following commands to receive further information:\n #score: see the current player scores. \n #cards: get information, about the distinct card effects.\n #history: see what cards have been played in this round.");
-                case "#score":
-                    return new GameEvent(GameEvent.GameEventType.POSTSCORE, " " + playerScores);
-                case "#cards":
-                    return new GameEvent(GameEvent.GameEventType.POSTCARDS,"Guard: " + Guard.getCardAction()+"\n"+ "Priest: " + Priest.getCardAction()+"\n"+ "Baron: " + Baron.getCardAction()+"\n"+ "Handmaid: " +Handmaid.getCardAction()+"\n"+ "Prince: " + Prince.getCardAction()+"\n"+ "King: " +King.getCardAction()+"\n"+ "Countess: " +Countess.getCardAction()+"\n"+"Princess: " + Princess.getCardAction());
-                case "#history":
-                    return new GameEvent(GameEvent.GameEventType.POSTHISTORY, " " + history);
-            }
-        }catch (NullPointerException e)
-            {
-                System.out.print("Not a valid command.");
-            }
-        return null;
+    public GameEvent getHelp (User user){
+        return new GameEvent(GameEvent.GameEventType.INFO, "The following commands are available:\n " +
+                "#create: initializes the so Players can join. \n" +
+                "#join: join the lobby if the game hasn't started yet. \n" +
+                "#start: start the game if there are at least 2 Players in the lobby. \n" +
+                "#discard <cardIndex> (<target>) (<guess>): discard card 1 or 2, target and guess are needed for some cards (see (#cards)) \n" +
+                "#score: see the current player scores. \n " +
+                "#cards: get information, about the distinct card effects.\n " +
+                "#history: see what cards have been played in this round.", user);
+    }
+
+    public GameEvent getScore (User user){
+        return new GameEvent(GameEvent.GameEventType.INFO, " " + playerScores);
+    }
+
+    public GameEvent getCards (User user){
+        return new GameEvent(GameEvent.GameEventType.INFO,"Guard: " + Guard.getCardAction()+"\n"+ "Priest: " + Priest.getCardAction()+"\n"+ "Baron: " + Baron.getCardAction()+"\n"+ "Handmaid: " +Handmaid.getCardAction()+"\n"+ "Prince: " + Prince.getCardAction()+"\n"+ "King: " +King.getCardAction()+"\n"+ "Countess: " +Countess.getCardAction()+"\n"+"Princess: " + Princess.getCardAction());
+    }
+
+    public GameEvent getHistory (User user){
+        return new GameEvent(GameEvent.GameEventType.INFO, " " + history);
     }
 
     public ArrayList<GameEvent> playCard(User user, GameAction action) {
@@ -415,8 +420,6 @@ public class Game {
         return deck;
     }
 
-    
-
 
     public boolean checkIfPrincess(Cards card) {
         if (card.getCardName().equals("PRINCESS")) {
@@ -448,14 +451,6 @@ public class Game {
         }
     }
 
-
-    //player's action - draw the top most  card from deck
-    public void drawCard(Player player) {
-
-        player.setCard2(deck.getDeck().get(0));;
-        deck.getDeck().remove(0);
-    }
-
     public int discardedPoints(ArrayList<Cards> discarded, Player player) {
         int sum = 0;
         for (Cards card : player.getDiscarded()) {
@@ -484,14 +479,6 @@ public class Game {
         }
     }
 
-    //discard a Card during each round
-    private void clearDiscardedList (ArrayList < Cards > discarded) {
-        //delete all elements in List when a round end
-        for (int i = 0; i < discarded.size(); i++) {
-            discarded.remove(0);
-        }
-    }
-
 
     public void addCard(Cards card, Player player) {
         if (player.getCard1() == null) {
@@ -501,13 +488,21 @@ public class Game {
         }
     }
 
-    /*public void discard(int cardIndex, Player player) {
-        if (cardIndex == 1) {
-            player.setCard1(null);
+    public GameEvent removeLoggedOutUser(User user) {
+        if (playerQueue.getPlayerByName(user.getName()) != null) {
+            if (playerQueue.getPlayerCount() == 2) {
+                isGameOver = true;
+                return new GameEvent(ERROR, user.getName() + " has left. There are not enough Players left, Game Over");
+            }
+            if (playerQueue.getCurrentPlayer().getName().equals(user.getName())) {
+                playerQueue.setCurrentPlayerToNext();
+            }
+            playerQueue.removePlayer(user);
+            return new GameEvent(ERROR, user.getName() + " has left the Game.");
         } else {
-            player.setCard2(null);
+            return null;
         }
-    }*/
+    }
 
     public PlayerQueue getPlayerQueue() {
         return playerQueue;

@@ -1,5 +1,7 @@
 package bb.love_letter.networking.data;
 
+import bb.love_letter.game.GameEvent;
+import bb.love_letter.game.User;
 import bb.love_letter.networking.data.Envelope;
 
 import java.io.Serializable;
@@ -17,11 +19,25 @@ public class ServerEvent implements EnvelopeSerializable {
     private String message;
     private ServerEventType serverEventType;
     public ServerEvent(){}
+    private transient User target= null;
 
     public ServerEvent(String message, ServerEventType serverEventType){
         this.message=message;
         this.serverEventType=serverEventType;
     }
+
+    public ServerEvent (GameEvent gameEvent){
+        setMessage(gameEvent.getMessage());
+        setServerEventType(ServerEventType.GAME_EVENT);
+        setTarget(gameEvent.getTarget());
+    }
+
+    public ServerEvent (String message, ServerEventType serverEventType, User target){
+        this.message = message;
+        this.serverEventType = serverEventType;
+        this.target = target;
+    }
+
     /**
      * It is used to store the type of Event that happened.
      */
@@ -35,6 +51,7 @@ public class ServerEvent implements EnvelopeSerializable {
         NEW_PLAYER_NOTIFICATION,
         LOGOUT_CONFIRMATION,
         PLAYER_LEFT_NOTIFICATION,
+        GAME_EVENT,
     }
 
     /**
@@ -61,6 +78,16 @@ public class ServerEvent implements EnvelopeSerializable {
     public Envelope toEnvelope() {
         Envelope envelope = new Envelope(this, Envelope.EnvelopeType.SERVER_EVENT);
         return envelope;
+    }
+
+
+
+    public User getTarget() {
+        return target;
+    }
+
+    public void setTarget(User target) {
+        this.target = target;
     }
 
 

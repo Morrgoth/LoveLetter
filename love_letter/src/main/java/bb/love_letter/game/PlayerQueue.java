@@ -15,8 +15,12 @@ public class PlayerQueue {
 
     public GameEvent addPlayer(User user) {
         if (getPlayerCount() < PLAYER_LIMIT) {
-            players.add(new Player(user));
-            return new GameEvent(GameEvent.GameEventType.PLAYER_ADDED, user.getName() + " has joined the Game!");
+            if (getPlayerByName(user.getName()) == null) {
+                players.add(new Player(user));
+                return new GameEvent(GameEvent.GameEventType.PLAYER_ADDED, user.getName() + " has joined the Game!");
+            } else {
+                return new GameEvent(GameEvent.GameEventType.ERROR, " You have already joined the Game!", user);
+            }
         } else {
             return new GameEvent(GameEvent.GameEventType.ERROR, "The Game is already full! You cannot join.");
         }
@@ -81,6 +85,13 @@ public class PlayerQueue {
             }
         }
         return playersInRound;
+    }
+
+    /**
+     * Used if the user logs out of the application.
+     */
+    public boolean removePlayer(User user) {
+        return players.removeIf(player -> player.getName().equals(user.getName()));
     }
 
 }
