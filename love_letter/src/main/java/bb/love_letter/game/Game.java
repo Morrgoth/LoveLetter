@@ -155,7 +155,7 @@ public class Game {
     }
 
     public GameEvent getHand (User user){
-        String message = "Here is your current Hand:" + playerQueue.getPlayerByName(user.getName()).printHand();
+        String message = "Here is your current Hand: \n" + playerQueue.getPlayerByName(user.getName()).printHand();
         return new GameEvent(INFO, message, user);
     }
 
