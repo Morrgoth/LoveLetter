@@ -331,19 +331,25 @@ public class Game {
         ArrayList<Player> playersInRound = playerQueue.getPlayersInRound();
         if (playerQueue.getPlayersInRound().size() == 1) {
             roundWinner.add(playerQueue.getPlayersInRound().get(0));
+            playerQueue.setWinnerIndex(playerQueue.getPlayersInRound().get(0));
         } else if (deck.size() == 0 && playerQueue.getPlayersInRoundCount() >= 2) {
             if (playersInRound.get(0).getCard1().getCardPoints() > playersInRound.get(1).getCard1().getCardPoints()) {
                 roundWinner.add(playersInRound.get(0));
+                playerQueue.setWinnerIndex(playerQueue.getPlayersInRound().get(0));
             } else if (playersInRound.get(0).getCard1().getCardPoints() < playersInRound.get(1).getCard1().getCardPoints()) {
                 roundWinner.add(playersInRound.get(1));
+                playerQueue.setWinnerIndex(playerQueue.getPlayersInRound().get(1));
             } else {
                 if (discardedPoints(playersInRound.get(0).getDiscarded(), playersInRound.get(0)) > discardedPoints(playersInRound.get(1).getDiscarded(), playersInRound.get(1))) {
                     roundWinner.add(playersInRound.get(0));
+                    playerQueue.setWinnerIndex(playerQueue.getPlayersInRound().get(0));
                 } else if (discardedPoints(playersInRound.get(0).getDiscarded(), playersInRound.get(0)) < discardedPoints(playersInRound.get(1).getDiscarded(), playersInRound.get(1))) {
                     roundWinner.add(playersInRound.get(1));
+                    playerQueue.setWinnerIndex(playerQueue.getPlayersInRound().get(1));
                 } else {
                     roundWinner.add(playersInRound.get(0));
                     roundWinner.add(playersInRound.get(1));
+                    playerQueue.setWinnerIndex(playerQueue.getPlayersInRound().get(1));
                 }
             }
         }

@@ -114,4 +114,8 @@ public class PlayerQueue {
         return scores.toString();
     }
 
+    public void setWinnerIndex(Player winner) {
+        currentPlayerIndex = players.indexOf(winner);
+    }
+
 }
