@@ -159,6 +159,7 @@ public class Game {
     }
 
     public ArrayList<GameEvent> playCard(User user, GameAction action) {
+        System.out.println(action.getCardIndex() + " " + action.getTarget() + " " + action.getGuess());
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
         if (playerQueue.getCurrentPlayer().getName().equals(user.getName())) {
             Player player = playerQueue.getCurrentPlayer();
