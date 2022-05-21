@@ -69,7 +69,7 @@ public class PlayerQueue {
 
     public Player getPlayerByName(String name) {
         for (Player player: players) {
-            if (player.getName().equals(name)) {
+            if (player.getName().equalsIgnoreCase(name)) {
                 return player;
             }
         }
