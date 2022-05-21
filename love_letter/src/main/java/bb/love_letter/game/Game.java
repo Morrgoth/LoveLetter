@@ -139,7 +139,7 @@ public class Game {
     }
 
     public GameEvent getScore (User user){
-        return new GameEvent(GameEvent.GameEventType.INFO, " " + playerQueue.printScores(), user);
+        return new GameEvent(GameEvent.GameEventType.INFO, playerQueue.printScores(), user);
     }
 
     public GameEvent getCards (User user){
