@@ -385,8 +385,9 @@ public class Game {
             princeEvent.add(new GameEvent(CARD_EFFECT, targetPlayer.getName() + " discarded a " +
                     targetPlayer.getCard1().getCardName() + " with Prince-effect and drew a new card from deck"));
             discardCard(1, targetPlayer);
-            addCard(deck.draw(), targetPlayer);
-            princeEvent.add(new GameEvent(CARD_EFFECT, "You got a " + deck.draw().getCardName() +
+            Cards newCard = deck.draw();
+            addCard(newCard, targetPlayer);
+            princeEvent.add(new GameEvent(CARD_EFFECT, "You got a " + newCard.getCardName() +
                     " from deck.", targetPlayer));
         }
         return princeEvent;
