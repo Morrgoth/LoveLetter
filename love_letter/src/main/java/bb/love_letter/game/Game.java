@@ -15,11 +15,7 @@ public class Game {
     private boolean isRoundOver;
     private boolean isTurnOver;
 
-    //list of all cards played in the round
     public static ArrayList<Cards> history;
-    //list of players in the round that are not immune and can be chosen for a cardEffect
-    public static ArrayList<Player> playerOption = new ArrayList<>();
-    //list of current players still in the round
 
     public static HashMap<String, Integer> playerScores = new HashMap<String, Integer>();
 
@@ -144,15 +140,22 @@ public class Game {
     }
 
     public GameEvent getScore (User user){
-        return new GameEvent(GameEvent.GameEventType.INFO, " " + playerScores);
+        return new GameEvent(GameEvent.GameEventType.INFO, " " + playerScores, user);
     }
 
     public GameEvent getCards (User user){
-        return new GameEvent(GameEvent.GameEventType.INFO,"Guard: " + Guard.getCardAction()+"\n"+ "Priest: " + Priest.getCardAction()+"\n"+ "Baron: " + Baron.getCardAction()+"\n"+ "Handmaid: " +Handmaid.getCardAction()+"\n"+ "Prince: " + Prince.getCardAction()+"\n"+ "King: " +King.getCardAction()+"\n"+ "Countess: " +Countess.getCardAction()+"\n"+"Princess: " + Princess.getCardAction());
+        return new GameEvent(GameEvent.GameEventType.INFO,"Guard: " + Guard.getCardAction() +
+                "\n" + "Priest: " + Priest.getCardAction() +
+                "\n" + "Baron: " + Baron.getCardAction() +
+                "\n"+ "Handmaid: " +Handmaid.getCardAction() +
+                "\n" + "Prince: " + Prince.getCardAction() +
+                "\n" + "King: " +King.getCardAction() +
+                "\n" + "Countess: " + Countess.getCardAction() +
+                "\n"+"Princess: " + Princess.getCardAction(), user);
     }
 
     public GameEvent getHistory (User user){
-        return new GameEvent(GameEvent.GameEventType.INFO, " " + history);
+        return new GameEvent(GameEvent.GameEventType.INFO, " " + history, user);
     }
 
     public ArrayList<GameEvent> playCard(User user, GameAction action) {
