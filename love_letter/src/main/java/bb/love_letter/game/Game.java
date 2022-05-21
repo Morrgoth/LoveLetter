@@ -134,6 +134,7 @@ public class Game {
                 "#discard <cardIndex> (<target>) (<guess>): discard card 1 or 2, target and guess are needed for some cards (see (#cards)) \n" +
                 "#score: see the current player scores. \n " +
                 "#cards: get information, about the distinct card effects.\n " +
+                "#hand: check the card(s) you currently have in your hand. \n" +
                 "#history: see what cards have been played in this round.", user);
     }
 

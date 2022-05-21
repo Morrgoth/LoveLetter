@@ -158,7 +158,14 @@ public class Player extends User {
     }
 
     public String printHand() {
-        return "1: " + card1.getCardName() + "\n2: " + card2.getCardName();
+        StringBuilder message = new StringBuilder();
+        if (card1 != null) {
+            message.append("1: ").append(card1.getCardName()).append("\n");
+        }
+        if (card2 != null) {
+            message.append("2: ").append(card2.getCardName()).append("\n");
+        }
+        return message.toString();
     }
 
     public boolean isImmune() {
