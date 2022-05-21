@@ -32,6 +32,8 @@ public class Command {
         CARDS_INFO,
         HISTORY,
         ERROR,
+        HAND,
+
     }
     private GameAction gameAction = null;
     private ChatMessage chatMessage;
@@ -110,6 +112,9 @@ public class Command {
             }
             else if (command.equals("history")){
                 this.gameCommandType = GameCommandType.HISTORY;
+            }
+            else if (command.equals("hands")) {
+                this.gameCommandType = GameCommandType.HAND;
             }
             return CommandType.GAME_COMMAND;
         }

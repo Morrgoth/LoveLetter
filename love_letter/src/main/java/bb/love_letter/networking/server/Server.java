@@ -125,6 +125,10 @@ public class Server {
                 GameEvent gameEvent = game.getCards(command.getUser());
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
                 broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
+            } else if (command.getGameCommandType()== Command.GameCommandType.HAND){
+                GameEvent gameEvent = game.getHand(command.getUser());
+                ServerEvent serverEvent = new ServerEvent(gameEvent);
+                broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.HISTORY) {
                 GameEvent gameEvent = game.getHistory(command.getUser());
                 ServerEvent serverEvent = new ServerEvent(gameEvent);

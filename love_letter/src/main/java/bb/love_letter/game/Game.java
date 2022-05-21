@@ -156,6 +156,11 @@ public class Game {
                 "\n"+"Princess: " + Princess.getCardAction(), user);
     }
 
+    public GameEvent getHand (User user){
+        String message = "Here is your current Hand:" + playerQueue.getPlayerByName(user.getName()).printHand();
+        return new GameEvent(INFO, message, user);
+    }
+
     public GameEvent getHistory (User user){
         return new GameEvent(GameEvent.GameEventType.INFO, " " + history, user);
     }
