@@ -76,13 +76,13 @@ public class PlayerQueue {
         return null;
     }
 
-    public Player getChoosablePlayerByName(String name) {
+    public boolean existsChoosablePlayer() {
         for (Player player: players) {
-            if (player.getName().equals(name) && !player.isImmune() && player.getInGame()) {
-                return player;
+            if (!player.getName().equals(getCurrentPlayer().getName()) && !player.isImmune() && player.getInGame()) {
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
 
