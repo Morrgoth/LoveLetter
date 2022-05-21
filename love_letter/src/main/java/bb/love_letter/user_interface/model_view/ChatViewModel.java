@@ -9,10 +9,12 @@ import bb.love_letter.user_interface.view.ChatMessageDisplayItem;
 import bb.love_letter.user_interface.view.ChatView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 
 
 public class ChatViewModel{
@@ -32,6 +34,13 @@ public class ChatViewModel{
     }
 
     private void setUpListeners() {
+
+        view.getListView().getItems().addListener(new ListChangeListener<HBox>() {
+            @Override
+            public void onChanged(Change<? extends HBox> change) {
+                view.getListView().scrollTo(view.getListView().getItems().size() - 1);
+            }
+        });
         view.getSentbutton().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
