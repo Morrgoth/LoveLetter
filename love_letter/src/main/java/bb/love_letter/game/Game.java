@@ -254,6 +254,7 @@ public class Game {
                         gameEvents.add(new GameEvent(INVALID_ACTION, "Please enter a (valid) target player.", player));
                     }
                 } else {
+                    discardCard(action.getCardIndex(), player);
                     gameEvents.add(new GameEvent(VALID_ACTION, player.getName() + " discarded the " + card.getCardName() +
                             " without action!"));
                     endTurn();
