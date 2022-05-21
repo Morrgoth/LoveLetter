@@ -100,6 +100,11 @@ public class Server {
             broadcast(logOutConfirmation.toEnvelope(), new User[] {command.getUser()}, null);
             broadcast(userLeftNotification.toEnvelope(), null, new User[] {command.getUser()});
             this.clientList.removeClient(command.getUser());
+            GameEvent logoutEvent = game.removeLoggedOutUser(command.getUser());
+            if(logoutEvent != null) {
+                ServerEvent serverEvent = new ServerEvent(logoutEvent);
+                broadcast(serverEvent.toEnvelope(), asUserArray(logoutEvent.getTarget()),null);
+            }
         } else if (command.getCommandType()== Command.CommandType.PRIVATE_MESSAGE_COMMAND) {
             Envelope privateMessageEnvelope = new Envelope(command.getPrivateMessage(),
                     Envelope.EnvelopeType.CHAT_MESSAGE);

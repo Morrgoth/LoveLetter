@@ -5,8 +5,7 @@ import bb.love_letter.game.characters.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static bb.love_letter.game.GameEvent.GameEventType.CARD_EFFECT;
-import static bb.love_letter.game.GameEvent.GameEventType.GAMEISREADY;
+import static bb.love_letter.game.GameEvent.GameEventType.*;
 
 public class Game {
     private Deck deck;
@@ -42,6 +41,8 @@ public class Game {
         return null;
     }
     public GameEvent init() {
+        System.out.println(isGameOver);
+        System.out.println(isGameStarted);
         if (isGameOver && isGameStarted) {
             deck.reset();
             playerQueue.clear();
@@ -57,9 +58,12 @@ public class Game {
     }
 
     public GameEvent addPlayer(User user) {
-        if (isGameStarted) {
+        if (isGameOver) {
+            return new GameEvent(GameEvent.GameEventType.ERROR, "The Game has not yet been created! You can " +
+                    "initialize a new game with #create!", user);
+        } else if (isGameStarted) {
             return new GameEvent(GameEvent.GameEventType.ERROR, "The Game has already started! Wait for the next" +
-                    " game to start.");
+                    " game to start.", user);
         } else {
             return playerQueue.addPlayer(user);
         }
@@ -416,8 +420,6 @@ public class Game {
         return deck;
     }
 
-    
-
 
     public boolean checkIfPrincess(Cards card) {
         if (card.getCardName().equals("PRINCESS")) {
@@ -449,14 +451,6 @@ public class Game {
         }
     }
 
-
-    //player's action - draw the top most  card from deck
-    public void drawCard(Player player) {
-
-        player.setCard2(deck.getDeck().get(0));;
-        deck.getDeck().remove(0);
-    }
-
     public int discardedPoints(ArrayList<Cards> discarded, Player player) {
         int sum = 0;
         for (Cards card : player.getDiscarded()) {
@@ -485,14 +479,6 @@ public class Game {
         }
     }
 
-    //discard a Card during each round
-    private void clearDiscardedList (ArrayList < Cards > discarded) {
-        //delete all elements in List when a round end
-        for (int i = 0; i < discarded.size(); i++) {
-            discarded.remove(0);
-        }
-    }
-
 
     public void addCard(Cards card, Player player) {
         if (player.getCard1() == null) {
@@ -502,13 +488,21 @@ public class Game {
         }
     }
 
-    /*public void discard(int cardIndex, Player player) {
-        if (cardIndex == 1) {
-            player.setCard1(null);
+    public GameEvent removeLoggedOutUser(User user) {
+        if (playerQueue.getPlayerByName(user.getName()) != null) {
+            if (playerQueue.getPlayerCount() == 2) {
+                isGameOver = true;
+                return new GameEvent(ERROR, user.getName() + " has left. There are not enough Players left, Game Over");
+            }
+            if (playerQueue.getCurrentPlayer().getName().equals(user.getName())) {
+                playerQueue.setCurrentPlayerToNext();
+            }
+            playerQueue.removePlayer(user);
+            return new GameEvent(ERROR, user.getName() + " has left the Game.");
         } else {
-            player.setCard2(null);
+            return null;
         }
-    }*/
+    }
 
     public PlayerQueue getPlayerQueue() {
         return playerQueue;

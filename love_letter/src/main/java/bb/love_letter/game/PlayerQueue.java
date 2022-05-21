@@ -87,4 +87,11 @@ public class PlayerQueue {
         return playersInRound;
     }
 
+    /**
+     * Used if the user logs out of the application.
+     */
+    public boolean removePlayer(User user) {
+        return players.removeIf(player -> player.getName().equals(user.getName()));
+    }
+
 }
