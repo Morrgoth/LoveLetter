@@ -110,39 +110,39 @@ public class Server {
             if (command.getGameCommandType()== Command.GameCommandType.HELP){
                 GameEvent gameEvent = game.getHelp(command.getUser());
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
-                broadcast(serverEvent.toEnvelope(), null,null);
+                broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.SCORE){
                 GameEvent gameEvent = game.getHelp(command.getUser());
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
-                broadcast(serverEvent.toEnvelope(), null,null);
+                broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.CARDS_INFO){
                 GameEvent gameEvent = game.getHelp(command.getUser());
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
-                broadcast(serverEvent.toEnvelope(), null,null);
+                broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.HISTORY) {
                 GameEvent gameEvent = game.getHelp(command.getUser());
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
-                broadcast(serverEvent.toEnvelope(), null,null);
+                broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.CREATE) {
                 GameEvent gameEvent = game.init();
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
-                broadcast(serverEvent.toEnvelope(), null,null);
+                broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.JOIN) {
                 GameEvent gameEvent= game.addPlayer(command.getUser());
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
-                broadcast(serverEvent.toEnvelope(), null,null);
+                broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.START) {
                 GameEvent startGameEvent = game.startGame();
-                broadcast(new ServerEvent(startGameEvent).toEnvelope(), null,null);
+                broadcast(new ServerEvent(startGameEvent).toEnvelope(), asUserArray(startGameEvent.getTarget()),null);
                 if (startGameEvent.getGameEventType()== GameEvent.GameEventType.GAME_STARTED){
                     ArrayList<GameEvent> startRoundEvents = game.startRound();
                     for (GameEvent startRoundEvent:startRoundEvents){
-                        broadcast(new ServerEvent(startRoundEvent).toEnvelope(), null,null);
+                        broadcast(new ServerEvent(startRoundEvent).toEnvelope(), asUserArray(startRoundEvent.getTarget()),null);
                         if (startRoundEvent.getGameEventType() == GameEvent.GameEventType.ROUND_STARTED) {
                             ArrayList<GameEvent> turnStartEvents = game.startTurn();
                             System.out.println(turnStartEvents.size());
                             for (GameEvent turnStartEvent: turnStartEvents) {
-                                broadcast(new ServerEvent(turnStartEvent).toEnvelope(), null, null);
+                                broadcast(new ServerEvent(turnStartEvent).toEnvelope(), asUserArray(turnStartEvent.getTarget()), null);
                             }
                         }
 
@@ -162,17 +162,9 @@ public class Server {
      * @throws IOException
      */
     private void broadcast(Envelope envelope, User[] whitelist, User[] blacklist) throws IOException {
-        if (envelope.getType()== Envelope.EnvelopeType.SERVER_EVENT){
-            ServerEvent serverEvent = (ServerEvent)envelope.getPayload();
-            if (serverEvent.getTarget() != null && whitelist == null){
-                System.out.println("what");
-                whitelist = new User[]{ serverEvent.getTarget()};
-            }
-        }
-
         if (whitelist != null) {
-            for (User recipient: clientList.getUsers()) {
-                if (Arrays.asList(whitelist).contains(recipient)){
+            for (User recipient: whitelist) {
+                if (clientList.getClientSocket(recipient) != null ){
                     DataOutputStream dataOutputStream = new DataOutputStream(clientList.getClientSocket(recipient).getOutputStream());
                     dataOutputStream.writeUTF(envelope.toJson());
                 }
@@ -190,6 +182,14 @@ public class Server {
                 DataOutputStream dataOutputStream = new DataOutputStream(clientList.getClientSocket(recipient).getOutputStream());
                 dataOutputStream.writeUTF(envelope.toJson());
             }
+        }
+    }
+
+    private User[] asUserArray(User user) {
+        if (user != null) {
+            return new User[]{user};
+        } else {
+            return null;
         }
     }
 }

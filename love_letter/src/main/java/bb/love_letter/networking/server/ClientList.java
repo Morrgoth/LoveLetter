@@ -45,7 +45,12 @@ public class ClientList {
      * @return The Socket connection of the User
      */
     public Socket getClientSocket(User user) {
-        return clientList.get(user);
+        for (User u: getUsers()) {
+            if(user.getName().equals(u.getName())) {
+                return clientList.get(u);
+            }
+        }
+        return null;
     }
 
     /**

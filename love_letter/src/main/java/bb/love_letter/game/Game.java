@@ -115,7 +115,7 @@ public class Game {
                     + " has started!"));
             gameEvents.add(new GameEvent(GameEvent.GameEventType.CARD_ADDED, "You drew a " + card.getCardName() +
                     ".\n The effect of the card is: " + card.getCardAction() + "\n Your current hand is: \n" +
-                    player.printHand() + ".\n The effect of the card is: " + player.getCard1().getCardAction(), player));
+                    player.printHand() + ".\n The effect of the card is: " + player.getCard1().getCardAction(), ((User) player)));
         } else {
             gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "The current turn is not yet over!"));
         }
