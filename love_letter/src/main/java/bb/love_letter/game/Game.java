@@ -164,6 +164,10 @@ public class Game {
     public ArrayList<GameEvent> playCard(User user, GameAction action) {
         System.out.println(action.getCardIndex() + " " + action.getTarget() + " " + action.getGuess());
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
+        if (!playerQueue.getPlayerByName(user.getName()).getInGame()) {
+            gameEvents.add(new GameEvent(INVALID_ACTION, "You are eliminated, wait for the next round to start!", user));
+            return gameEvents;
+        }
         if (playerQueue.getCurrentPlayer().getName().equals(user.getName())) {
             Player player = playerQueue.getCurrentPlayer();
             Cards card = null;
@@ -267,7 +271,7 @@ public class Game {
 
         } else {
             gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "It is not your turn. It is the turn of " +
-                    playerQueue.getCurrentPlayer() + "!", user));
+                    playerQueue.getCurrentPlayer().getName() + "!", user));
         }
         return gameEvents;
     }
