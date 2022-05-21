@@ -50,6 +50,7 @@ public class ChatMessageDisplayItem {
         username.getStyleClass().add("userName");
         vBox1.getChildren().add(username);
         Label message = new Label(chatMessage.getMessage());
+        message.setWrapText(true);
         vBox1.getChildren().add(message);
         hBox1.getChildren().add(vBox1);
         message.getStyleClass().add("messageBubble");

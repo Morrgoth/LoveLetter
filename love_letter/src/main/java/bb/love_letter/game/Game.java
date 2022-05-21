@@ -10,8 +10,7 @@ import static bb.love_letter.game.GameEvent.GameEventType.GAMEISREADY;
 
 public class Game {
     private Deck deck;
-    private int currentPlayer;
-    private PlayerQueue playerQueue;
+    private final PlayerQueue playerQueue;
     private boolean isGameStarted;
     private boolean isGameOver;
     private boolean isRoundOver;
@@ -19,9 +18,6 @@ public class Game {
 
     //list of all cards played in the round
     public static ArrayList<Cards> history;
-    //list of players in the round that are not immune and can be choosen for a cardEffect
-    public static ArrayList<Player> playerOption = new ArrayList<>();
-    //list of current players still in the round
 
     public static HashMap<String, Integer> playerScores = new HashMap<String, Integer>();
 
@@ -53,7 +49,8 @@ public class Game {
             isGameStarted = false;
             isRoundOver = true;
             isTurnOver = true;
-            return new GameEvent(GameEvent.GameEventType.GAME_INITIALIZED,"Print #help to see more information."); // TODO: print the available commands
+            return new GameEvent(GameEvent.GameEventType.GAME_INITIALIZED,"The Game was successfully initialized. " +
+                    "Use #help to see more information.");
         } else {
             return new GameEvent(GameEvent.GameEventType.ERROR, "A Game is already active, wait for it to finish!");
         }
@@ -124,7 +121,14 @@ public class Game {
 
     //später nach Server schieben damit es direkt die userCommand aus dem chat holen kann
     public GameEvent getHelp (User user){
-        return new GameEvent(GameEvent.GameEventType.INFO, "Game started! Print the following commands to receive further information:\n #score: see the current player scores. \n #cards: get information, about the distinct card effects.\n #history: see what cards have been played in this round.",user);
+        return new GameEvent(GameEvent.GameEventType.INFO, "The following commands are available:\n " +
+                "#create: initializes the so Players can join. \n" +
+                "#join: join the lobby if the game hasn't started yet. \n" +
+                "#start: start the game if there are at least 2 Players in the lobby. \n" +
+                "#discard <cardIndex> (<target>) (<guess>): discard card 1 or 2, target and guess are needed for some cards (see (#cards)) \n" +
+                "#score: see the current player scores. \n " +
+                "#cards: get information, about the distinct card effects.\n " +
+                "#history: see what cards have been played in this round.", user);
     }
 
     public GameEvent getScore (User user){

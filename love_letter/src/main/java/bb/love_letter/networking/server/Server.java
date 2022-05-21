@@ -67,7 +67,8 @@ public class Server {
     private void handleLoginRequest(User user, Socket socket) throws IOException {
         if (!clientList.containsClient(user)) {
             clientList.addClient(user, socket);
-            ServerEvent loginConfirmation = new ServerEvent("Welcome " + user.getName() + "!",
+            ServerEvent loginConfirmation = new ServerEvent("Welcome " + user.getName() + "! You can send " +
+                    "private messages with @username, and find more information about the Game by using #help!",
                     ServerEvent.ServerEventType.LOGIN_CONFIRMATION);
             ServerEvent newUserNotification = new ServerEvent(user.getName() + " joined the room!",
                     ServerEvent.ServerEventType.NEW_PLAYER_NOTIFICATION);
