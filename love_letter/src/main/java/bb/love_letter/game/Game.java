@@ -171,6 +171,7 @@ public class Game {
                 gameEvents.add(new GameEvent(INVALID_ACTION, "Please enter a valid card index!", player));
                 return gameEvents;
             }
+            System.out.println(card.getCardName());
             //Check if the card is PRINCESS
             if(checkIfPrincess(card)){
                 discardCard(action.getCardIndex(), player);
@@ -209,10 +210,10 @@ public class Game {
                                 gameEvents.add(((Baron) card).useBaron(player, targetPlayer));
                                 endTurn();
                             }else if(card instanceof Guard){
-                                discardCard(action.getCardIndex(), player);
                                 GameEvent gameEvent = ((Guard) card).useGuard(player, targetPlayer, action.getGuess());
                                 gameEvents.add(gameEvent);
                                 if (gameEvent.getGameEventType() == VALID_ACTION) {
+                                    discardCard(action.getCardIndex(), player);
                                     endTurn();
                                 }
                             }else if(card instanceof King){
