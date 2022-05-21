@@ -37,7 +37,7 @@ public class User implements Serializable {
 
         User other = (User) obj;
 
-        if(this.getName().equals(other.getName())) {
+        if(this.getName().equalsIgnoreCase(other.getName())) {
             return true;
         } else {
             return false;
