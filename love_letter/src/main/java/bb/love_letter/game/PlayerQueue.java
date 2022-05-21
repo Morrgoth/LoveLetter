@@ -22,7 +22,7 @@ public class PlayerQueue {
                 return new GameEvent(GameEvent.GameEventType.ERROR, " You have already joined the Game!", user);
             }
         } else {
-            return new GameEvent(GameEvent.GameEventType.ERROR, "The Game is already full! You cannot join.");
+            return new GameEvent(GameEvent.GameEventType.ERROR, "The Game is already full! You cannot join.", user);
         }
     }
 
