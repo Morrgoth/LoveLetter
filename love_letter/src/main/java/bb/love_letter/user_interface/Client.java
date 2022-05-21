@@ -7,8 +7,6 @@ import bb.love_letter.networking.client.NetworkConnection;
 import bb.love_letter.networking.data.Envelope;
 import bb.love_letter.networking.data.LoginRequest;
 import bb.love_letter.networking.data.ServerEvent;
-import bb.love_letter.user_interface.controller.ChatController;
-import bb.love_letter.user_interface.controller.LoginController;
 import bb.love_letter.user_interface.model.ChatModel;
 import bb.love_letter.user_interface.model.LoginModel;
 import bb.love_letter.user_interface.model_view.ChatViewModel;
@@ -91,11 +89,10 @@ public class Client extends Application {
 
     private void openLoginWindow(Stage stage) {
         loginModel = new LoginModel();
-        LoginView loginView = new LoginView(loginModel);
+        LoginView loginView = new LoginView();
         LoginViewModel loginViewModel=new LoginViewModel(this,loginModel,loginView);
         if (currentScene != null) {
             currentScene.getWindow().hide();
-
         }
         currentScene = new Scene(loginView.asParent(), 300, 350);
         currentScene.getStylesheets().add(getClass().getResource("/Chat.css").toExternalForm());
@@ -106,7 +103,7 @@ public class Client extends Application {
 
     private void openChatWindow(Stage stage) {
         chatModel = new ChatModel();
-        ChatView chatView = new ChatView(chatModel);
+        ChatView chatView = new ChatView();
         ChatViewModel chatViewModel = new ChatViewModel(this, chatModel, chatView);
         stage.setTitle("Chat");
         currentScene.getWindow().hide();

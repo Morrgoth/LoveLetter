@@ -6,6 +6,8 @@ import bb.love_letter.user_interface.view.LoginView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 public class LoginViewModel {
@@ -18,10 +20,6 @@ public class LoginViewModel {
         this.client=client;
         model = loginModel;
         view = loginView;
-        start();
-    }
-
-    public void start() {
         setupListeners();
         observeModelandUpdate();
     }
@@ -30,16 +28,38 @@ public class LoginViewModel {
         view.getButton().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                String ip = view.getIpField().getText();
-                int port = Integer.parseInt(view.getPortField().getText());
-                String username = view.getUsernameField().getText();
-                model.setIp(ip);
-                model.setPort(port);
-                model.setUsername(username);
-                requestLogin(ip, port, username);
+                submitLoginForm();
+            }
+        });
+
+        view.getIpField().setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.ENTER) {
+                    submitLoginForm();
+                }
+            }
+        });
+
+        view.getPortField().setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.ENTER) {
+                    submitLoginForm();
+                }
+            }
+        });
+
+        view.getUsernameField().setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.ENTER) {
+                    submitLoginForm();
+                }
             }
         });
     }
+
 
     private void observeModelandUpdate() {
         model.errorMessageProperty().addListener(new ChangeListener<String>() {
@@ -58,5 +78,21 @@ public class LoginViewModel {
         model.setUsername(username);
         client.login(ip, port, username);
     }
+
+    private void submitLoginForm() {
+        if (view.getIpField().getText() == null || view.getIpField().getText().trim().isEmpty()) {
+            model.setErrorMessage("Error: Missing IP address!");
+        } else if (view.getIpField().getText() == null || view.getPortField().getText().trim().isEmpty()) {
+            model.setErrorMessage("Error: Missing port number!");
+        } else if (view.getUsernameField().getText() == null || view.getUsernameField().getText().trim().isEmpty()) {
+            model.setErrorMessage("Error: Missing username!");
+        } else {
+            String ip = view.getIpField().getText();
+            int port = Integer.parseInt(view.getPortField().getText());
+            String username = view.getUsernameField().getText();
+            requestLogin(ip, port, username);
+        }
+    }
+
 
 }

@@ -1,11 +1,5 @@
 package bb.love_letter.user_interface.view;
 
-import bb.love_letter.user_interface.Client;
-import bb.love_letter.user_interface.controller.LoginController;
-import bb.love_letter.user_interface.model.LoginModel;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -13,7 +7,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -22,7 +15,6 @@ import javafx.scene.layout.GridPane;
  */
 public class LoginView {
     private  GridPane view;
-    public LoginModel model;
     //public  LoginController controller;
     private  TextField ipField;
     private  TextField portField;
@@ -47,8 +39,7 @@ public class LoginView {
     public  Button getButton(){
         return button;
     }
-    public LoginView(LoginModel model) {
-        this.model = model;
+    public LoginView() {
         buildUI();
     }
 

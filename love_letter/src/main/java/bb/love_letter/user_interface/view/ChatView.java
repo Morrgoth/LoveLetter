@@ -1,15 +1,9 @@
 package bb.love_letter.user_interface.view;
 
-import bb.love_letter.user_interface.controller.ChatController;
-import bb.love_letter.user_interface.model.ChatModel;
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -20,16 +14,12 @@ import javafx.scene.layout.RowConstraints;
  * @author Zeynab Baiani
  */
 public class ChatView {
-    public ChatModel model;
     private GridPane view;
     private TextField messageField;
     private Button sentbutton;
     private ListView<HBox> listView;
-    public ChatView (ChatModel model) {
-        this.model = model;
+    public ChatView () {
         buildUI();
-        setUpListeners();
-        //observeModelandUpdate();
     }
 
     private void buildUI() {
@@ -39,7 +29,7 @@ public class ChatView {
         messageField.setId("messageField");
         sentbutton = new Button("Send");
         sentbutton.setId("sentButton");
-        listView = new ListView<>(model.getHBoxObservableList());
+        listView = new ListView<>();
         listView.getStyleClass().add("listView");
         GridPane chatBox = new GridPane();
         chatBox.getStyleClass().add("chatbox");
@@ -60,25 +50,15 @@ public class ChatView {
         return view ;
     }
 
-    private void setUpListeners() {
-        sentbutton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                String message = messageField.getText();
-                model.setCurrentMessage(message);
-                messageField.setText("");
-            }
-        });
+    public Button getSentbutton() {
+        return sentbutton;
+    }
 
-        messageField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                if (keyEvent.getCode() == KeyCode.ENTER) {
-                    String message = messageField.getText();
-                    model.setCurrentMessage(message);
-                    messageField.setText("");
-                }
-            }
-        });
+    public TextField getMessageField() {
+        return messageField;
+    }
+
+    public ListView<HBox> getListView() {
+        return listView;
     }
 }

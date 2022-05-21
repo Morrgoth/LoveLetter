@@ -1,7 +1,6 @@
 package bb.love_letter.networking.client;
 
 import bb.love_letter.networking.data.ChatMessage;
-import bb.love_letter.user_interface.controller.ChatController;
 import bb.love_letter.user_interface.model.ChatModel;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

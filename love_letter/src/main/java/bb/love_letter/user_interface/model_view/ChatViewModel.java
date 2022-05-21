@@ -9,6 +9,10 @@ import bb.love_letter.user_interface.view.ChatMessageDisplayItem;
 import bb.love_letter.user_interface.view.ChatView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 
 
 public class ChatViewModel{
@@ -22,7 +26,31 @@ public class ChatViewModel{
         this.client = client;
         model = chatModel;
         view = chatView;
+        view.getListView().setItems(model.getHBoxObservableList());
+        setUpListeners();
         observeModelandUpdate();
+    }
+
+    private void setUpListeners() {
+        view.getSentbutton().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                String message = view.getMessageField().getText();
+                model.setCurrentMessage(message);
+                view.getMessageField().setText("");
+            }
+        });
+
+        view.getMessageField().setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.ENTER) {
+                    String message = view.getMessageField().getText();
+                    model.setCurrentMessage(message);
+                    view.getMessageField().setText("");
+                }
+            }
+        });
     }
 
     private void observeModelandUpdate() {
