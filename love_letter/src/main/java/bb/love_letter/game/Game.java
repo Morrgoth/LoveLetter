@@ -127,13 +127,13 @@ public class Game {
 
     //später nach Server schieben damit es direkt die userCommand aus dem chat holen kann
     public GameEvent getHelp (User user){
-        return new GameEvent(GameEvent.GameEventType.INFO, "The following commands are available:\n " +
+        return new GameEvent(GameEvent.GameEventType.INFO, "The following commands are available:\n" +
                 "#create: initializes the so Players can join. \n" +
                 "#join: join the lobby if the game hasn't started yet. \n" +
                 "#start: start the game if there are at least 2 Players in the lobby. \n" +
                 "#discard <cardIndex> (<target>) (<guess>): discard card 1 or 2, target and guess are needed for some cards (see (#cards)) \n" +
-                "#score: see the current player scores. \n " +
-                "#cards: get information, about the distinct card effects.\n " +
+                "#score: see the current player scores. \n" +
+                "#cards: get information, about the distinct card effects.\n" +
                 "#hand: check the card(s) you currently have in your hand. \n" +
                 "#history: see what cards have been played in this round.", user);
     }
