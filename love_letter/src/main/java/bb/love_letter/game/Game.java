@@ -255,7 +255,7 @@ public class Game {
                     }
                 } else {
                     gameEvents.add(new GameEvent(VALID_ACTION, player.getName() + " discarded the " + card.getCardName() +
-                            "without action!"));
+                            " without action!"));
                     endTurn();
                 }
             }
@@ -309,7 +309,7 @@ public class Game {
         }
     }
 
-    private ArrayList<Player>  findRoundWinner() {
+    private ArrayList<Player> findRoundWinner() {
         ArrayList <Player> roundWinner = new ArrayList<>();
         ArrayList<Player> playersInRound = playerQueue.getPlayersInRound();
         if (playerQueue.getPlayersInRound().size() == 1) {
