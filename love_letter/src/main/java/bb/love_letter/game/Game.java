@@ -120,6 +120,7 @@ public class Game {
             isRoundOver = false;
             deck.reset();
             playerQueue.resetRound();
+            history.clear();
             GameEvent discardNotification = withdrawFirstCards();
             if (discardNotification != null) {
                 gameEvents.add(discardNotification);
