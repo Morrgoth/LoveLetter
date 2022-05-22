@@ -83,12 +83,15 @@ public class Command {
         else if (content.charAt(0) == '@'){
             content =  content.substring(1);
             String [] parts = content.split(" ", 2);
-            String target = parts [0];
-            String message = parts[1];
-            this.targetUser = new User(target);
-            privateMessage = new ChatMessage(chatMessage.getSender(), message, true);
-            return CommandType.PRIVATE_MESSAGE_COMMAND;
-
+            if (parts.length == 2) {
+                String target = parts [0];
+                String message = parts[1];
+                this.targetUser = new User(target);
+                privateMessage = new ChatMessage(chatMessage.getSender(), message, true);
+                return CommandType.PRIVATE_MESSAGE_COMMAND;
+            } else {
+                return CommandType.EMPTY_COMMAND;
+            }
         }
         else if (content.charAt(0) =='#') {
             content =  content.substring(1);
