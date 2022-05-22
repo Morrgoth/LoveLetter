@@ -1,3 +1,8 @@
+# Running Instructions
+**Running the server**: `java -jar server.jar`
+
+**Running the client**: `java -jar client.jar`
+
 # Informationen
 Hallo Blinde Bonbons,
 
