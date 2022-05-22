@@ -1,0 +1,12 @@
+module:bb.love_letter
+bb.love_letter.game
+bb.love_letter.game.characters
+bb.love_letter.networking.client
+bb.love_letter.networking.data
+bb.love_letter.networking.server
+bb.love_letter.networking.type_adapters
+bb.love_letter.user_interface
+bb.love_letter.user_interface.model
+bb.love_letter.user_interface.model_view
+bb.love_letter.user_interface.test
+bb.love_letter.user_interface.view
