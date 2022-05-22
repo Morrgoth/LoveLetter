@@ -3,6 +3,8 @@
 
 **Running the client**: `java -jar client.jar`
 
+**Running the client on a Mac with Apple Silicon**: `java -jar client-m1.jar`
+
 # Informationen
 Hallo Blinde Bonbons,
 
