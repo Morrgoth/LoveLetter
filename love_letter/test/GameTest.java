@@ -15,15 +15,15 @@ public class GameTest {
     @BeforeEach
     void init() {
         game = new Game();
-        game.init();
+        game.init(new User("alice"));
     }
 
     @Test
     public void testInit() {
         Game newGame = new Game();
-        GameEvent gameEvent = newGame.init();
+        GameEvent gameEvent = newGame.init(new User("alice"));
         assertSame(GameEvent.GameEventType.GAME_INITIALIZED, gameEvent.getGameEventType());
-        GameEvent secondInit = newGame.init();
+        GameEvent secondInit = newGame.init(new User("alice"));
         assertSame(GameEvent.GameEventType.ERROR, secondInit.getGameEventType());
         assertEquals("A Game is already active, wait for it to finish!", secondInit.getMessage());
     }
@@ -49,9 +49,10 @@ public class GameTest {
 
     @Test
     public void testAddPlayer_GameAlreadyStarted() {
-        game.addPlayer(new User("alice"));
+        User alice = new User("alice");
+        game.addPlayer(alice);
         game.addPlayer(new User("bob"));
-        game.startGame();
+        game.startGame(alice);
         User user = new User("cedric");
         GameEvent gameEvent = game.addPlayer(user);
         assertSame(GameEvent.GameEventType.ERROR, gameEvent.getGameEventType());
@@ -61,8 +62,9 @@ public class GameTest {
 
     @Test
     public void testStartGame_1Player() {
-        game.addPlayer(new User("alice"));
-        ArrayList<GameEvent> gameEvents = game.startGame();
+        User alice = new User("alice");
+        game.addPlayer(alice);
+        ArrayList<GameEvent> gameEvents = game.startGame(alice);
         assertEquals(1, gameEvents.size());
         GameEvent gameEvent = gameEvents.get(0);
         assertSame(GameEvent.GameEventType.ERROR, gameEvent.getGameEventType());
@@ -71,19 +73,21 @@ public class GameTest {
 
     @Test
     public void testStartGame_2Players() {
-        game.addPlayer(new User("alice"));
+        User alice = new User("alice");
+        game.addPlayer(alice);
         game.addPlayer(new User("bob"));
-        ArrayList<GameEvent> gameEvents = game.startGame();
+        ArrayList<GameEvent> gameEvents = game.startGame(alice);
         assertSame(GameEvent.GameEventType.GAME_STARTED, gameEvents.get(0).getGameEventType());
         assertEquals("A new game has started!", gameEvents.get(0).getMessage());
     }
 
     @Test
     public void testStartGame_AlreadyStarted() {
-        game.addPlayer(new User("alice"));
+        User alice = new User("alice");
+        game.addPlayer(alice);
         game.addPlayer(new User("bob"));
-        game.startGame();
-        ArrayList<GameEvent> gameEvents = game.startGame();
+        game.startGame(alice);
+        ArrayList<GameEvent> gameEvents = game.startGame(alice);
         assertEquals(1, gameEvents.size());
         GameEvent gameEvent = gameEvents.get(0);
         assertSame(GameEvent.GameEventType.ERROR, gameEvent.getGameEventType());
@@ -96,7 +100,7 @@ public class GameTest {
         game.addPlayer(user1);
         User user2 = new User("bob");
         game.addPlayer(user2);
-        game.startGame();
+        game.startGame(user1);
         ArrayList<GameEvent> gameEvents = game.startRound();
         assertEquals(2, gameEvents.size());
         assertSame(GameEvent.GameEventType.DISCARD_NOTIFICATION, gameEvents.get(0).getGameEventType());
@@ -115,7 +119,7 @@ public class GameTest {
         game.addPlayer(user2);
         User user3 = new User("cedric");
         game.addPlayer(user3);
-        game.startGame();
+        game.startGame(user1);
         ArrayList<GameEvent> gameEvents = game.startRound();
         assertEquals(1, gameEvents.size());
         assertEquals(12, game.getDeck().getDeck().size());
@@ -127,9 +131,10 @@ public class GameTest {
     }
 
     @Test void testStartRound_RoundNotOver() {
-        game.addPlayer(new User("alice"));
+        User alice = new User("alice");
+        game.addPlayer(alice);
         game.addPlayer(new User("bob"));
-        game.startGame();
+        game.startGame(alice);
         game.startRound();
         ArrayList<GameEvent> gameEvents = game.startRound();
         assertEquals(1, gameEvents.size());
@@ -139,9 +144,10 @@ public class GameTest {
 
     @Test
     public void testStartTurn() {
-        game.addPlayer(new User("alice"));
+        User alice = new User("alice");
+        game.addPlayer(alice);
         game.addPlayer(new User("bob"));
-        game.startGame();
+        game.startGame(alice);
         game.startRound();
         ArrayList<GameEvent> gameEvents = game.startTurn();
         assertEquals(4, gameEvents.size());
@@ -155,9 +161,10 @@ public class GameTest {
 
     @Test
     public void testStartTurn_NotYetOver() {
-        game.addPlayer(new User("alice"));
+        User alice = new User("alice");
+        game.addPlayer(alice);
         game.addPlayer(new User("bob"));
-        game.startGame();
+        game.startGame(alice);
         game.startRound();
         game.startTurn();
         ArrayList<GameEvent> gameEvents = game.startTurn();
@@ -168,9 +175,10 @@ public class GameTest {
 
     @Test
     public void testFinishTurn_TurnOver() {
-        game.addPlayer(new User("alice"));
+        User alice = new User("alice");
+        game.addPlayer(alice);
         game.addPlayer(new User("bob"));
-        game.startGame();
+        game.startGame(alice);
         game.startRound();
         game.startTurn();
         game.endTurn();
@@ -181,9 +189,10 @@ public class GameTest {
 
     @Test
     public void testFinishTurn_TurnNotOver() {
-        game.addPlayer(new User("alice"));
+        User alice = new User("alice");
+        game.addPlayer(alice);
         game.addPlayer(new User("bob"));
-        game.startGame();
+        game.startGame(alice);
         game.startRound();
         game.startTurn();
         GameEvent gameEvent = game.finishTurn();
@@ -193,10 +202,11 @@ public class GameTest {
 
     @Test
     public void testEliminatePlayer_CurrentPlayer() {
-        game.addPlayer(new User("alice"));
+        User alice = new User("alice");
+        game.addPlayer(alice);
         game.addPlayer(new User("bob"));
         game.addPlayer(new User("cedric"));
-        game.startGame();
+        game.startGame(alice);
         game.startRound();
         game.startTurn();
         game.getPlayerQueue().getCurrentPlayer().eliminate();
@@ -208,10 +218,11 @@ public class GameTest {
 
     @Test
     public void testEliminatePlayer_OtherPlayer() {
-        game.addPlayer(new User("alice"));
+        User alice = new User("alice");
+        game.addPlayer(alice);
         game.addPlayer(new User("bob"));
         game.addPlayer(new User("cedric"));
-        game.startGame();
+        game.startGame(alice);
         game.startRound();
         game.startTurn();
         game.getPlayerQueue().getPlayersInRound().get(1).eliminate();
@@ -227,9 +238,10 @@ public class GameTest {
 
     @Test
     public void testFinishTurn_RoundOver_1() {
-        game.addPlayer(new User("alice"));
+        User alice = new User("alice");
+        game.addPlayer(alice);
         game.addPlayer(new User("bob"));
-        game.startGame();
+        game.startGame(alice);
         game.startRound();
         game.startTurn();
         game.getPlayerQueue().getCurrentPlayer().eliminate();
@@ -241,9 +253,10 @@ public class GameTest {
 
     @Test
     public void testFinishTurn_RoundOver_2() {
-        game.addPlayer(new User("alice"));
+        User alice = new User("alice");
+        game.addPlayer(alice);
         game.addPlayer(new User("bob"));
-        game.startGame();
+        game.startGame(alice);
         game.startRound();
         game.startTurn();
         game.getPlayerQueue().getPlayersInRound().get(1).eliminate();
@@ -262,9 +275,10 @@ public class GameTest {
 
     @Test
     public void testFinishTurn_GameOver() {
-        game.addPlayer(new User("alice"));
+        User alice = new User("alice");
+        game.addPlayer(alice);
         game.addPlayer(new User("bob"));
-        game.startGame();
+        game.startGame(alice);
         game.startRound();
         game.startTurn();
         game.getPlayerQueue().getCurrentPlayer().setScore(6);

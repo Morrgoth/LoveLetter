@@ -134,7 +134,7 @@ public class Server {
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
                 broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.CREATE) {
-                GameEvent gameEvent = game.init();
+                GameEvent gameEvent = game.init(command.getUser());
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
                 broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.JOIN) {
@@ -142,7 +142,7 @@ public class Server {
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
                 broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.START) {
-                ArrayList<GameEvent> startGameEvents = game.startGame();
+                ArrayList<GameEvent> startGameEvents = game.startGame(command.getUser());
                 for (GameEvent startGameEvent: startGameEvents) {
                     broadcast(new ServerEvent(startGameEvent).toEnvelope(), asUserArray(startGameEvent.getTarget()),null);
                 }

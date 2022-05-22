@@ -58,7 +58,7 @@ public class Game {
      * Initializes the lobby so Users can join and handles possible errors
      * @return Notification to be forwarded to the Server
      */
-    public GameEvent init() {
+    public GameEvent init(User user) {
         System.out.println(isGameOver);
         System.out.println(isGameStarted);
         if (isGameOver && isGameStarted) {
@@ -72,7 +72,7 @@ public class Game {
             return new GameEvent(GameEvent.GameEventType.GAME_INITIALIZED,"The Game was successfully initialized. " +
                     "Use #help to see more information.");
         } else {
-            return new GameEvent(GameEvent.GameEventType.ERROR, "A Game is already active, wait for it to finish!");
+            return new GameEvent(GameEvent.GameEventType.ERROR, "A Game is already active, wait for it to finish!", user);
         }
     }
     /**
@@ -94,7 +94,7 @@ public class Game {
      * Initializes the Game, after calling this no one else can join the game until it is over, and handles possible errors
      * @return Notifications to be forwarded to the Server
      */
-    public ArrayList<GameEvent> startGame() {
+    public ArrayList<GameEvent> startGame(User user) {
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
         if (!isGameStarted) {
             if (playerQueue.getPlayerCount() >= 2) {
@@ -103,10 +103,10 @@ public class Game {
                 gameEvents.addAll(startRound());
             } else {
                 gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "At least 2 Players must be in the lobby " +
-                        "for the game to start!"));
+                        "for the game to start!", user));
             }
         } else {
-            gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "A Game has already started, wait for it to end!"));
+            gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "A Game has already started, wait for it to end!", user));
         }
         return gameEvents;
     }
@@ -177,7 +177,11 @@ public class Game {
      * @return The Notification to be forwarded to the User who requested the info
      */
     public GameEvent getScore (User user){
-        return new GameEvent(GameEvent.GameEventType.INFO, playerQueue.printScores(), user);
+        if (isGameStarted && !isGameOver) {
+            return new GameEvent(GameEvent.GameEventType.INFO, playerQueue.printScores(), user);
+        } else {
+            return new GameEvent(INFO, "No game is in progress!", user);
+        }
     }
     /**
      * @param user The user who requested the information regarding the cards
@@ -199,8 +203,16 @@ public class Game {
      * @return The Notification to be forwarded to the User who requested their hand
      */
     public GameEvent getHand (User user){
-        String message = "Here is your current Hand: \n" + playerQueue.getPlayerByName(user.getName()).printHand();
-        return new GameEvent(INFO, message, user);
+        if (isGameStarted && !isGameOver) {
+            if (playerQueue.getPlayerByName(user.getName()).getInGame()) {
+                String message = "Here is your current Hand: \n" + playerQueue.getPlayerByName(user.getName()).printHand();
+                return new GameEvent(INFO, message, user);
+            } else {
+                return new GameEvent(INFO, "You are already eliminated, wait for the next round to start!", user);
+            }
+        } else {
+            return new GameEvent(INFO, "No game is in progress!", user);
+        }
     }
 
     /**
@@ -208,13 +220,17 @@ public class Game {
      * @return The Notification to be forwarded to the User who requested the history
      */
     public GameEvent getHistory (User user){
-        StringBuilder message = new StringBuilder();
-        for (int i = 0; i < history.size(); i++) {
-            message.append(i).append(": ")
-                    .append(history.get(i).getCardName())
-                    .append("\n");
+        if (isGameStarted && !isGameOver) {
+            StringBuilder message = new StringBuilder();
+            for (int i = 0; i < history.size(); i++) {
+                message.append(i).append(": ")
+                        .append(history.get(i).getCardName())
+                        .append("\n");
+            }
+            return new GameEvent(GameEvent.GameEventType.INFO, message.toString(), user);
+        } else {
+            return new GameEvent(INFO, "No game is in progress!", user);
         }
-        return new GameEvent(GameEvent.GameEventType.INFO, message.toString(), user);
     }
 
     /**
