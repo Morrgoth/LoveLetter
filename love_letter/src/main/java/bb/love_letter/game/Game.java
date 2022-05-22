@@ -277,10 +277,10 @@ public class Game {
                         if(!targetPlayer.isImmune() && targetPlayer.getInGame()){
                             if(card instanceof Baron){
                                 discardCard(action.getCardIndex(), player);
-                                gameEvents.add(((Baron) card).useBaron(player, targetPlayer));
+                                gameEvents.add(((Baron) card).useBaron(player, targetPlayer, history));
                                 endTurn();
                             }else if(card instanceof Guard){
-                                GameEvent gameEvent = ((Guard) card).useGuard(player, targetPlayer, action.getGuess());
+                                GameEvent gameEvent = ((Guard) card).useGuard(player, targetPlayer, action.getGuess(), history);
                                 gameEvents.add(gameEvent);
                                 if (gameEvent.getGameEventType() == VALID_ACTION) {
                                     discardCard(action.getCardIndex(), player);
@@ -475,6 +475,8 @@ public class Game {
         ArrayList<GameEvent> princeEvent = new ArrayList<>();
         if(checkIfPrincess(targetPlayer.getCard1())){
             targetPlayer.setInGame(false);
+            history.add(targetPlayer.getCard1());
+            targetPlayer.setCard1(null);
             princeEvent.add(new GameEvent(CARD_EFFECT, targetPlayer.getName() + " has a Princess and was eliminated"));
         }else{
             princeEvent.add(new GameEvent(CARD_EFFECT, targetPlayer.getName() + " discarded a " +
