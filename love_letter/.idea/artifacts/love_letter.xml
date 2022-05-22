@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="love_letter">
+    <output-path>$PROJECT_DIR$/out/artifacts/love_letter</output-path>
+    <root id="root">
+      <element id="archive" name="love_letter.jar">
+        <element id="module-output" name="love_letter" />
+      </element>
+    </root>
+  </artifact>
+</component>
