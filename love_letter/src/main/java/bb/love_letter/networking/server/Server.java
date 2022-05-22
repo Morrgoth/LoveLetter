@@ -168,6 +168,11 @@ public class Server {
                 for (GameEvent gameEvent: extraEvents) {
                     broadcast(new ServerEvent(gameEvent).toEnvelope(), asUserArray(gameEvent.getTarget()),null);
                 }
+            } else if (command.getGameCommandType() == Command.GameCommandType.ERROR) {
+                System.out.println("COMMAND ERROR");
+                ServerEvent serverEvent = new ServerEvent("The game command you sent was not correct, please try again",
+                        ServerEvent.ServerEventType.GAME_EVENT);
+                broadcast(serverEvent.toEnvelope(), asUserArray(command.getUser()), null);
             }
         }
     }

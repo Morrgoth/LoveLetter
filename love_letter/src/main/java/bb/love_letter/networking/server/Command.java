@@ -121,10 +121,14 @@ public class Command {
             }
             else if (command.equals("hand")) {
                 this.gameCommandType = GameCommandType.HAND;
+            } else {
+                this.gameCommandType = GameCommandType.ERROR;
             }
             return CommandType.GAME_COMMAND;
         }
-        else {return CommandType.EMPTY_COMMAND;}
+        else {
+            return CommandType.EMPTY_COMMAND;
+        }
 
     }
 
@@ -145,8 +149,9 @@ public class Command {
                 this.gameAction = new GameAction(Integer.parseInt(parts[1]), parts[2], parts[3]);
             }
         }
-        else {this.gameCommandType = GameCommandType.ERROR;}
-
+        else {
+            this.gameCommandType = GameCommandType.ERROR;
+        }
     }
 
     /**
@@ -155,8 +160,10 @@ public class Command {
      * @return
      */
     private  boolean checkCommandSyntax (String[] parts){
-        if (parts[1].matches("\\d+")){
-            return true;
+        if (parts.length >= 2) {
+            if (parts[1].matches("\\d+")){
+                return true;
+            }
         }
         return false;
     }
