@@ -134,7 +134,7 @@ public class Server {
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
                 broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.CREATE) {
-                GameEvent gameEvent = game.init();
+                GameEvent gameEvent = game.init(command.getUser());
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
                 broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.JOIN) {
@@ -142,7 +142,7 @@ public class Server {
                 ServerEvent serverEvent = new ServerEvent(gameEvent);
                 broadcast(serverEvent.toEnvelope(), asUserArray(gameEvent.getTarget()),null);
             } else if (command.getGameCommandType()== Command.GameCommandType.START) {
-                ArrayList<GameEvent> startGameEvents = game.startGame();
+                ArrayList<GameEvent> startGameEvents = game.startGame(command.getUser());
                 for (GameEvent startGameEvent: startGameEvents) {
                     broadcast(new ServerEvent(startGameEvent).toEnvelope(), asUserArray(startGameEvent.getTarget()),null);
                 }
@@ -168,6 +168,11 @@ public class Server {
                 for (GameEvent gameEvent: extraEvents) {
                     broadcast(new ServerEvent(gameEvent).toEnvelope(), asUserArray(gameEvent.getTarget()),null);
                 }
+            } else if (command.getGameCommandType() == Command.GameCommandType.ERROR) {
+                System.out.println("COMMAND ERROR");
+                ServerEvent serverEvent = new ServerEvent("The game command you sent was not correct, please try again",
+                        ServerEvent.ServerEventType.GAME_EVENT);
+                broadcast(serverEvent.toEnvelope(), asUserArray(command.getUser()), null);
             }
         }
     }

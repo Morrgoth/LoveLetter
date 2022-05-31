@@ -58,7 +58,7 @@ public class Game {
      * Initializes the lobby so Users can join and handles possible errors
      * @return Notification to be forwarded to the Server
      */
-    public GameEvent init() {
+    public GameEvent init(User user) {
         System.out.println(isGameOver);
         System.out.println(isGameStarted);
         if (isGameOver && isGameStarted) {
@@ -72,7 +72,7 @@ public class Game {
             return new GameEvent(GameEvent.GameEventType.GAME_INITIALIZED,"The Game was successfully initialized. " +
                     "Use #help to see more information.");
         } else {
-            return new GameEvent(GameEvent.GameEventType.ERROR, "A Game is already active, wait for it to finish!");
+            return new GameEvent(GameEvent.GameEventType.ERROR, "A Game is already active, wait for it to finish!", user);
         }
     }
     /**
@@ -94,7 +94,7 @@ public class Game {
      * Initializes the Game, after calling this no one else can join the game until it is over, and handles possible errors
      * @return Notifications to be forwarded to the Server
      */
-    public ArrayList<GameEvent> startGame() {
+    public ArrayList<GameEvent> startGame(User user) {
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
         if (!isGameStarted) {
             if (playerQueue.getPlayerCount() >= 2) {
@@ -103,10 +103,10 @@ public class Game {
                 gameEvents.addAll(startRound());
             } else {
                 gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "At least 2 Players must be in the lobby " +
-                        "for the game to start!"));
+                        "for the game to start!", user));
             }
         } else {
-            gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "A Game has already started, wait for it to end!"));
+            gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "A Game has already started, wait for it to end!", user));
         }
         return gameEvents;
     }
@@ -120,6 +120,7 @@ public class Game {
             isRoundOver = false;
             deck.reset();
             playerQueue.resetRound();
+            history.clear();
             GameEvent discardNotification = withdrawFirstCards();
             if (discardNotification != null) {
                 gameEvents.add(discardNotification);
@@ -176,7 +177,11 @@ public class Game {
      * @return The Notification to be forwarded to the User who requested the info
      */
     public GameEvent getScore (User user){
-        return new GameEvent(GameEvent.GameEventType.INFO, playerQueue.printScores(), user);
+        if (isGameStarted && !isGameOver) {
+            return new GameEvent(GameEvent.GameEventType.INFO, playerQueue.printScores(), user);
+        } else {
+            return new GameEvent(INFO, "No game is in progress!", user);
+        }
     }
     /**
      * @param user The user who requested the information regarding the cards
@@ -198,8 +203,16 @@ public class Game {
      * @return The Notification to be forwarded to the User who requested their hand
      */
     public GameEvent getHand (User user){
-        String message = "Here is your current Hand: \n" + playerQueue.getPlayerByName(user.getName()).printHand();
-        return new GameEvent(INFO, message, user);
+        if (isGameStarted && !isGameOver) {
+            if (playerQueue.getPlayerByName(user.getName()).getInGame()) {
+                String message = "Here is your current Hand: \n" + playerQueue.getPlayerByName(user.getName()).printHand();
+                return new GameEvent(INFO, message, user);
+            } else {
+                return new GameEvent(INFO, "You are already eliminated, wait for the next round to start!", user);
+            }
+        } else {
+            return new GameEvent(INFO, "No game is in progress!", user);
+        }
     }
 
     /**
@@ -207,13 +220,17 @@ public class Game {
      * @return The Notification to be forwarded to the User who requested the history
      */
     public GameEvent getHistory (User user){
-        StringBuilder message = new StringBuilder();
-        for (int i = 0; i < history.size(); i++) {
-            message.append(i).append(": ")
-                    .append(history.get(i).getCardName())
-                    .append("\n");
+        if (isGameStarted && !isGameOver) {
+            StringBuilder message = new StringBuilder();
+            for (int i = 0; i < history.size(); i++) {
+                message.append(i).append(": ")
+                        .append(history.get(i).getCardName())
+                        .append("\n");
+            }
+            return new GameEvent(GameEvent.GameEventType.INFO, message.toString(), user);
+        } else {
+            return new GameEvent(INFO, "No game is in progress!", user);
         }
-        return new GameEvent(GameEvent.GameEventType.INFO, message.toString(), user);
     }
 
     /**
@@ -223,116 +240,120 @@ public class Game {
      * @return The Notification to be forwarded to the Server
      */
     public ArrayList<GameEvent> playCard(User user, GameAction action) {
-        System.out.println(action.getCardIndex() + " " + action.getTarget() + " " + action.getGuess());
         ArrayList<GameEvent> gameEvents = new ArrayList<>();
-        if (!playerQueue.getPlayerByName(user.getName()).getInGame()) {
-            gameEvents.add(new GameEvent(INVALID_ACTION, "You are eliminated, wait for the next round to start!", user));
-            return gameEvents;
-        }
-        if (playerQueue.getCurrentPlayer().getName().equals(user.getName())) {
-            Player player = playerQueue.getCurrentPlayer();
-            Cards card = null;
-            if(action.getCardIndex() == 1){
-                card = player.getCard1();
-            }else if(action.getCardIndex() == 2){
-                card = player.getCard2();
-            } else {
-                gameEvents.add(new GameEvent(INVALID_ACTION, "Please enter a valid card index!", player));
+        if (isGameStarted && !isGameOver) {
+            if (!playerQueue.getPlayerByName(user.getName()).getInGame()) {
+                gameEvents.add(new GameEvent(INVALID_ACTION, "You are eliminated, wait for the next round to start!", user));
                 return gameEvents;
             }
-            System.out.println(card.getCardName());
-            //Check if the card is PRINCESS
-            if(checkIfPrincess(card)){
-                discardCard(action.getCardIndex(), player);
-                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
-                        " discarded the Princess and was eliminated"));
-                player.setInGame(false);
-                endTurn();
-            }//Check if the player has COUNTESS and PRINCE or KING at the same time
-            else if(checkIfCountess(player.getCard1(), player.getCard2())){
-                if(player.getCard1() instanceof Countess){
-                    discardCard(1, player);
-                }else {
-                    discardCard(2, player);
-                }
-                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName()
-                        + " discarded the Countess"));
-                endTurn();
-            }//Discard Countess without King or Prince in hand
-            else if(card instanceof Countess){
-                discardCard(action.getCardIndex(), player);
-                gameEvents.add(new GameEvent(VALID_ACTION, player.getName() + " discarded the Countess"));
-                endTurn();
-            }
-            else if(card instanceof Handmaid){
-                discardCard(action.getCardIndex(), player);
-                gameEvents.add(((Handmaid) card).useHandmaid(player));
-                endTurn();
-            }//Exclude the effect of COUNTESS, PRINCESS and HANDMAID
-            else{
-                if(playerQueue.existsChoosablePlayer()) {
-                    Player targetPlayer = playerQueue.getPlayerByName(action.getTarget());
-                    if(targetPlayer != null){
-                        if(!targetPlayer.isImmune() && targetPlayer.getInGame()){
-                            if(card instanceof Baron){
-                                discardCard(action.getCardIndex(), player);
-                                gameEvents.add(((Baron) card).useBaron(player, targetPlayer));
-                                endTurn();
-                            }else if(card instanceof Guard){
-                                GameEvent gameEvent = ((Guard) card).useGuard(player, targetPlayer, action.getGuess());
-                                gameEvents.add(gameEvent);
-                                if (gameEvent.getGameEventType() == VALID_ACTION) {
-                                    discardCard(action.getCardIndex(), player);
-                                    endTurn();
-                                }
-                            }else if(card instanceof King){
-                                discardCard(action.getCardIndex(), player);
-                                gameEvents.add(((King) card).useKing(player, targetPlayer));
-                                gameEvents.add(new GameEvent(GameEvent.GameEventType.CARD_EFFECT,
-                                        "You switched hands with " +
-                                                targetPlayer.getName() + ", you got a " + player.getCard1().getCardName(), player));
-                                gameEvents.add(new GameEvent(GameEvent.GameEventType.CARD_EFFECT,
-                                        "You switched hands with " +
-                                                player.getName() + ", you got a " + targetPlayer.getCard1().getCardName(), targetPlayer));
-                                endTurn();
-                            }else if(card instanceof Prince){
-                                discardCard(action.getCardIndex(), player);
-                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
-                                        " discarded the Prince and targeted " + targetPlayer.getName()));
-                                ArrayList<GameEvent> princeEvent = usePrince(player, targetPlayer);
-                                for(int i = 0; i<princeEvent.size(); i++){
-                                    gameEvents.add(princeEvent.get(i));
-                                }
-                                endTurn();
-                            }else if(card instanceof Priest){
-                                discardCard(action.getCardIndex(), player);
-                                gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
-                                        " discarded the Priest and targeted " + targetPlayer.getName()));
-                                gameEvents.add(((Priest) card).usePriest(player, targetPlayer));
-                                endTurn();
-                            }
-                        }else if(targetPlayer.isImmune()){
-                            gameEvents.add(new GameEvent(INVALID_ACTION, targetPlayer.getName() +
-                                    " is immune, you cannot target them.", player));
-                        }else if (!targetPlayer.getInGame()){
-                            gameEvents.add(new GameEvent(INVALID_ACTION, targetPlayer.getName() +
-                                    " is eliminated, you cannot target them.", player));
-                        }
-
-                    }else{
-                        gameEvents.add(new GameEvent(INVALID_ACTION, "Please enter a (valid) target player.", player));
-                    }
+            if (playerQueue.getCurrentPlayer().getName().equals(user.getName())) {
+                Player player = playerQueue.getCurrentPlayer();
+                Cards card = null;
+                if(action.getCardIndex() == 1){
+                    card = player.getCard1();
+                }else if(action.getCardIndex() == 2){
+                    card = player.getCard2();
                 } else {
+                    gameEvents.add(new GameEvent(INVALID_ACTION, "Please enter a valid card index!", player));
+                    return gameEvents;
+                }
+                System.out.println(card.getCardName());
+                //Check if the card is PRINCESS
+                if(checkIfPrincess(card)){
                     discardCard(action.getCardIndex(), player);
-                    gameEvents.add(new GameEvent(VALID_ACTION, player.getName() + " discarded the " + card.getCardName() +
-                            " without action!"));
+                    gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
+                            " discarded the Princess and was eliminated"));
+                    player.setInGame(false);
+                    endTurn();
+                }//Check if the player has COUNTESS and PRINCE or KING at the same time
+                else if(checkIfCountess(player.getCard1(), player.getCard2())){
+                    if(player.getCard1() instanceof Countess){
+                        discardCard(1, player);
+                    }else {
+                        discardCard(2, player);
+                    }
+                    gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName()
+                            + " discarded the Countess"));
+                    endTurn();
+                }//Discard Countess without King or Prince in hand
+                else if(card instanceof Countess){
+                    discardCard(action.getCardIndex(), player);
+                    gameEvents.add(new GameEvent(VALID_ACTION, player.getName() + " discarded the Countess"));
                     endTurn();
                 }
-            }
+                else if(card instanceof Handmaid){
+                    discardCard(action.getCardIndex(), player);
+                    gameEvents.add(((Handmaid) card).useHandmaid(player));
+                    endTurn();
+                }//Exclude the effect of COUNTESS, PRINCESS and HANDMAID
+                else{
+                    if(playerQueue.existsChoosablePlayer()) {
+                        Player targetPlayer = playerQueue.getPlayerByName(action.getTarget());
+                        if(targetPlayer != null){
+                            if(!targetPlayer.isImmune() && targetPlayer.getInGame()){
+                                if(card instanceof Baron){
+                                    discardCard(action.getCardIndex(), player);
+                                    gameEvents.add(((Baron) card).useBaron(player, targetPlayer, history));
+                                    endTurn();
+                                }else if(card instanceof Guard){
+                                    GameEvent gameEvent = ((Guard) card).useGuard(player, targetPlayer, action.getGuess(), history);
+                                    gameEvents.add(gameEvent);
+                                    if (gameEvent.getGameEventType() == VALID_ACTION) {
+                                        discardCard(action.getCardIndex(), player);
+                                        endTurn();
+                                    }
+                                }else if(card instanceof King){
+                                    discardCard(action.getCardIndex(), player);
+                                    gameEvents.add(((King) card).useKing(player, targetPlayer));
+                                    gameEvents.add(new GameEvent(GameEvent.GameEventType.CARD_EFFECT,
+                                            "You switched hands with " +
+                                                    targetPlayer.getName() + ", you got a " + player.getCard1().getCardName(), player));
+                                    gameEvents.add(new GameEvent(GameEvent.GameEventType.CARD_EFFECT,
+                                            "You switched hands with " +
+                                                    player.getName() + ", you got a " + targetPlayer.getCard1().getCardName(), targetPlayer));
+                                    endTurn();
+                                }else if(card instanceof Prince){
+                                    discardCard(action.getCardIndex(), player);
+                                    gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
+                                            " discarded the Prince and targeted " + targetPlayer.getName()));
+                                    ArrayList<GameEvent> princeEvent = usePrince(player, targetPlayer);
+                                    for(int i = 0; i<princeEvent.size(); i++){
+                                        gameEvents.add(princeEvent.get(i));
+                                    }
+                                    endTurn();
+                                }else if(card instanceof Priest){
+                                    discardCard(action.getCardIndex(), player);
+                                    gameEvents.add(new GameEvent(GameEvent.GameEventType.VALID_ACTION, player.getName() +
+                                            " discarded the Priest and targeted " + targetPlayer.getName()));
+                                    gameEvents.add(((Priest) card).usePriest(player, targetPlayer));
+                                    endTurn();
+                                }
+                            }else if(targetPlayer.isImmune()){
+                                gameEvents.add(new GameEvent(INVALID_ACTION, targetPlayer.getName() +
+                                        " is immune, you cannot target them.", player));
+                            }else if (!targetPlayer.getInGame()){
+                                gameEvents.add(new GameEvent(INVALID_ACTION, targetPlayer.getName() +
+                                        " is eliminated, you cannot target them.", player));
+                            }
 
+                        }else{
+                            gameEvents.add(new GameEvent(INVALID_ACTION, "Please enter a (valid) target player.", player));
+                        }
+                    } else {
+                        discardCard(action.getCardIndex(), player);
+                        gameEvents.add(new GameEvent(VALID_ACTION, player.getName() + " discarded the " + card.getCardName() +
+                                " without action!"));
+                        endTurn();
+                    }
+                }
+
+            } else {
+                gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "It is not your turn. It is the turn of " +
+                        playerQueue.getCurrentPlayer().getName() + "!", user));
+            }
         } else {
-            gameEvents.add(new GameEvent(GameEvent.GameEventType.ERROR, "It is not your turn. It is the turn of " +
-                    playerQueue.getCurrentPlayer().getName() + "!", user));
+            gameEvents.add(new GameEvent(INFO, "No game is in progress!", user));
+            return gameEvents;
         }
         return gameEvents;
     }
@@ -474,6 +495,8 @@ public class Game {
         ArrayList<GameEvent> princeEvent = new ArrayList<>();
         if(checkIfPrincess(targetPlayer.getCard1())){
             targetPlayer.setInGame(false);
+            history.add(targetPlayer.getCard1());
+            targetPlayer.setCard1(null);
             princeEvent.add(new GameEvent(CARD_EFFECT, targetPlayer.getName() + " has a Princess and was eliminated"));
         }else{
             princeEvent.add(new GameEvent(CARD_EFFECT, targetPlayer.getName() + " discarded a " +

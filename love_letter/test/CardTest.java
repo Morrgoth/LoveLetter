@@ -15,11 +15,12 @@ public class CardTest {
     @BeforeEach
     void init() {
         game = new Game();
-        game.init();
-        game.addPlayer(new User("alice"));
+        User alice = new User("alice");
+        game.init(alice);
+        game.addPlayer(alice);
         game.addPlayer(new User("bob"));
         game.addPlayer(new User("cedric"));
-        game.startGame();
+        game.startGame(new User("alice"));
         game.startRound();
         game.startTurn();
     }

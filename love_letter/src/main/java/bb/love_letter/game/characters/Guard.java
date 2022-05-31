@@ -4,6 +4,8 @@ import bb.love_letter.game.Game;
 import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
 
+import java.util.ArrayList;
+
 /**
  * Strength: 1
  * AmountInDeck: 5
@@ -38,12 +40,14 @@ public class Guard extends Cards {
      * @param chosenCard The guess of sourcePlayer. It is not case-sensitive.
      * @return
      */
-    public GameEvent useGuard(Player sourcePlayer,Player chosenPlayer, String chosenCard) {
+    public GameEvent useGuard(Player sourcePlayer, Player chosenPlayer, String chosenCard, ArrayList<Cards> history) {
         if (chosenCard != null) {
             if (!chosenCard.equalsIgnoreCase("Guard")) {
                 if (isValidGuess(chosenCard)) {
                     if (chosenPlayer.getCard1().getCardName().equalsIgnoreCase(chosenCard)) {
                         chosenPlayer.setInGame(false);
+                        history.add(chosenPlayer.getCard1());
+                        chosenPlayer.setCard1(null);
                         return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
                                 " discarded the Guard, and targeted " + chosenPlayer.getName() + " and guessed " + chosenCard
                                 + "; " + chosenPlayer.getName() + " was eliminated");

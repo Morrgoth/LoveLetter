@@ -4,6 +4,8 @@ import bb.love_letter.game.Game;
 import bb.love_letter.game.GameEvent;
 import bb.love_letter.game.Player;
 
+import java.util.ArrayList;
+
 
 /**
  * Strength: 3
@@ -30,7 +32,7 @@ public class Baron extends Cards {
     public int getCardPoints() {
         return cardPoints;
     }
-    public GameEvent useBaron(Player sourcePlayer, Player targetPlayer) {
+    public GameEvent useBaron(Player sourcePlayer, Player targetPlayer, ArrayList<Cards> history) {
         Cards sourcePlayerCard1 = sourcePlayer.getCard1();
         Cards targetPlayerCard1 = targetPlayer.getCard1();
 
@@ -40,12 +42,16 @@ public class Baron extends Cards {
         if (sourceCardValue > targetCardValue) {
             Game.history.add(targetPlayerCard1);
             targetPlayer.setInGame(false);
+            history.add(targetPlayer.getCard1());
+            targetPlayer.setCard1(null);
             return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
                     " discarded the Baron, and targeted " + targetPlayer.getName() + "; " + targetPlayer.getName() + " was eliminated");
         }
         else if(sourceCardValue < targetCardValue){
             Game.history.add(sourcePlayerCard1);
             sourcePlayer.setInGame(false);
+            history.add(sourcePlayer.getCard1());
+            sourcePlayer.setCard1(null);
             return new GameEvent(GameEvent.GameEventType.VALID_ACTION, sourcePlayer.getName() +
                     " discarded the Baron, and targeted " + targetPlayer.getName() + "; " + sourcePlayer.getName() + " was eliminated");
         }else{
